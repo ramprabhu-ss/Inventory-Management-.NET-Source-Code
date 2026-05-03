@@ -1,0 +1,680 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- https://go.microsoft.com/fwlink/?LinkID=208121. -->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>D:\Projects\New\InventoryManagement\InventoryManagement\bin\app.publish\</_PublishTargetUrl>
+    <History>True|2026-05-02T18:41:28.9449348Z||;True|2026-05-02T19:13:34.7831596+05:30||;True|2026-05-01T16:30:26.6560552+05:30||;True|2026-05-01T14:48:58.0312649+05:30||;True|2026-05-01T13:57:13.1824274+05:30||;True|2026-05-01T12:51:06.8561555+05:30||;True|2026-04-30T23:18:41.6166394+05:30||;True|2026-04-30T22:20:41.7079900+05:30||;True|2026-04-28T22:26:45.6810303+05:30||;True|2026-04-28T20:13:28.6321612+05:30||;True|2026-04-28T19:46:58.8613540+05:30||;True|2026-04-27T21:55:45.1456556+05:30||;True|2026-04-27T21:55:20.3629546+05:30||;True|2026-04-27T21:48:14.9596149+05:30||;True|2026-04-27T19:09:25.8001886+05:30||;True|2026-04-26T18:45:07.6342204+05:30||;True|2026-04-26T18:33:47.8484053+05:30||;True|2026-04-26T18:20:24.1579809+05:30||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="About.aspx">
+      <publishTime>04/25/2026 22:16:56</publishTime>
+    </File>
+    <File Include="Area.aspx">
+      <publishTime>04/26/2026 18:43:16</publishTime>
+    </File>
+    <File Include="AreaMaster.aspx">
+      <publishTime>04/28/2026 19:38:28</publishTime>
+    </File>
+    <File Include="bin/Antlr3.Runtime.dll">
+      <publishTime>09/10/2013 16:29:20</publishTime>
+    </File>
+    <File Include="bin/Antlr3.Runtime.pdb">
+      <publishTime>09/10/2013 16:29:20</publishTime>
+    </File>
+    <File Include="bin/BouncyCastle.Cryptography.dll">
+      <publishTime>07/31/2025 16:49:54</publishTime>
+    </File>
+    <File Include="bin/Google.Protobuf.dll">
+      <publishTime>08/14/2025 22:32:50</publishTime>
+    </File>
+    <File Include="bin/Google.Protobuf.pdb">
+      <publishTime>08/14/2025 21:59:52</publishTime>
+    </File>
+    <File Include="bin/InventoryManagement.dll">
+      <publishTime>05/03/2026 00:11:16</publishTime>
+    </File>
+    <File Include="bin/InventoryManagement.IL.dll">
+      <publishTime>05/03/2026 00:11:13</publishTime>
+    </File>
+    <File Include="bin/InventoryManagement.IL.dll.config">
+      <publishTime>04/26/2026 17:49:44</publishTime>
+    </File>
+    <File Include="bin/InventoryManagement.IL.pdb">
+      <publishTime>05/03/2026 00:11:13</publishTime>
+    </File>
+    <File Include="bin/InventoryManagement.pdb">
+      <publishTime>05/03/2026 00:11:16</publishTime>
+    </File>
+    <File Include="bin/K4os.Compression.LZ4.dll">
+      <publishTime>03/18/2024 03:26:16</publishTime>
+    </File>
+    <File Include="bin/K4os.Compression.LZ4.Streams.dll">
+      <publishTime>03/18/2024 03:26:18</publishTime>
+    </File>
+    <File Include="bin/K4os.Hash.xxHash.dll">
+      <publishTime>11/08/2022 23:38:14</publishTime>
+    </File>
+    <File Include="bin/Microsoft.AspNet.FriendlyUrls.dll">
+      <publishTime>07/30/2013 16:57:30</publishTime>
+    </File>
+    <File Include="bin/Microsoft.AspNet.Web.Optimization.WebForms.dll">
+      <publishTime>02/11/2014 15:26:04</publishTime>
+    </File>
+    <File Include="bin/Microsoft.ScriptManager.MSAjax.dll">
+      <publishTime>09/06/2013 11:20:12</publishTime>
+    </File>
+    <File Include="bin/Microsoft.ScriptManager.WebForms.dll">
+      <publishTime>09/06/2013 11:20:22</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Infrastructure.dll">
+      <publishTime>04/11/2022 19:09:46</publishTime>
+    </File>
+    <File Include="bin/MySql.Data.dll">
+      <publishTime>04/08/2026 06:13:18</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.dll">
+      <publishTime>03/08/2023 07:09:56</publishTime>
+    </File>
+    <File Include="bin/System.Buffers.dll">
+      <publishTime>02/19/2020 15:35:18</publishTime>
+    </File>
+    <File Include="bin/System.IO.Pipelines.dll">
+      <publishTime>02/15/2022 22:40:38</publishTime>
+    </File>
+    <File Include="bin/System.Memory.dll">
+      <publishTime>02/13/2025 05:22:04</publishTime>
+    </File>
+    <File Include="bin/System.Numerics.Vectors.dll">
+      <publishTime>02/13/2025 05:22:04</publishTime>
+    </File>
+    <File Include="bin/System.Runtime.CompilerServices.Unsafe.dll">
+      <publishTime>10/23/2021 05:10:18</publishTime>
+    </File>
+    <File Include="bin/System.Threading.Tasks.Extensions.dll">
+      <publishTime>02/19/2020 15:35:18</publishTime>
+    </File>
+    <File Include="bin/System.Web.Optimization.dll">
+      <publishTime>02/11/2014 15:26:04</publishTime>
+    </File>
+    <File Include="bin/WebGrease.dll">
+      <publishTime>01/23/2014 13:57:34</publishTime>
+    </File>
+    <File Include="bin/ZstdSharp.dll">
+      <publishTime>07/17/2025 22:44:10</publishTime>
+    </File>
+    <File Include="Bundle.config">
+      <publishTime>04/25/2026 22:16:56</publishTime>
+    </File>
+    <File Include="Contact.aspx">
+      <publishTime>04/25/2026 22:16:56</publishTime>
+    </File>
+    <File Include="Content/bootstrap-grid.css">
+      <publishTime>04/25/2026 22:17:14</publishTime>
+    </File>
+    <File Include="Content/bootstrap-grid.css.map">
+      <publishTime>04/25/2026 22:17:14</publishTime>
+    </File>
+    <File Include="Content/bootstrap-grid.min.css">
+      <publishTime>04/25/2026 22:17:14</publishTime>
+    </File>
+    <File Include="Content/bootstrap-grid.min.css.map">
+      <publishTime>04/25/2026 22:17:14</publishTime>
+    </File>
+    <File Include="Content/bootstrap-grid.rtl.css">
+      <publishTime>04/25/2026 22:17:14</publishTime>
+    </File>
+    <File Include="Content/bootstrap-grid.rtl.css.map">
+      <publishTime>04/25/2026 22:17:14</publishTime>
+    </File>
+    <File Include="Content/bootstrap-grid.rtl.min.css">
+      <publishTime>04/25/2026 22:17:14</publishTime>
+    </File>
+    <File Include="Content/bootstrap-grid.rtl.min.css.map">
+      <publishTime>04/25/2026 22:17:14</publishTime>
+    </File>
+    <File Include="Content/bootstrap-reboot.css">
+      <publishTime>04/25/2026 22:17:14</publishTime>
+    </File>
+    <File Include="Content/bootstrap-reboot.css.map">
+      <publishTime>04/25/2026 22:17:14</publishTime>
+    </File>
+    <File Include="Content/bootstrap-reboot.min.css">
+      <publishTime>04/25/2026 22:17:14</publishTime>
+    </File>
+    <File Include="Content/bootstrap-reboot.min.css.map">
+      <publishTime>04/25/2026 22:17:14</publishTime>
+    </File>
+    <File Include="Content/bootstrap-reboot.rtl.css">
+      <publishTime>04/25/2026 22:17:14</publishTime>
+    </File>
+    <File Include="Content/bootstrap-reboot.rtl.css.map">
+      <publishTime>04/25/2026 22:17:14</publishTime>
+    </File>
+    <File Include="Content/bootstrap-reboot.rtl.min.css">
+      <publishTime>04/25/2026 22:17:14</publishTime>
+    </File>
+    <File Include="Content/bootstrap-reboot.rtl.min.css.map">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Content/bootstrap-utilities.css">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Content/bootstrap-utilities.css.map">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Content/bootstrap-utilities.min.css">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Content/bootstrap-utilities.min.css.map">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Content/bootstrap-utilities.rtl.css">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Content/bootstrap-utilities.rtl.css.map">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Content/bootstrap-utilities.rtl.min.css">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Content/bootstrap-utilities.rtl.min.css.map">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Content/bootstrap.css">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Content/bootstrap.css.map">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Content/bootstrap.min.css">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Content/bootstrap.min.css.map">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Content/bootstrap.rtl.css">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Content/bootstrap.rtl.css.map">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Content/bootstrap.rtl.min.css">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Content/bootstrap.rtl.min.css.map">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Content/Site.css">
+      <publishTime>04/25/2026 22:16:56</publishTime>
+    </File>
+    <File Include="Default.aspx">
+      <publishTime>04/27/2026 19:06:04</publishTime>
+    </File>
+    <File Include="DeliveryInformation.aspx">
+      <publishTime>05/03/2026 00:08:02</publishTime>
+    </File>
+    <File Include="favicon.ico">
+      <publishTime>04/25/2026 22:16:56</publishTime>
+    </File>
+    <File Include="Global.asax">
+      <publishTime>04/25/2026 22:22:45</publishTime>
+    </File>
+    <File Include="SalesEntryForm.aspx">
+      <publishTime>05/01/2026 11:37:48</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap.bundle.js">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap.bundle.js.map">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap.bundle.min.js">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap.bundle.min.js.map">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap.esm.js">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap.esm.js.map">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap.esm.min.js">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap.esm.min.js.map">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap.js">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap.js.map">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap.min.js">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap.min.js.map">
+      <publishTime>04/25/2026 22:17:13</publishTime>
+    </File>
+    <File Include="Scripts/jquery-3.7.0.js">
+      <publishTime>04/25/2026 22:17:00</publishTime>
+    </File>
+    <File Include="Scripts/jquery-3.7.0.min.js">
+      <publishTime>04/25/2026 22:17:00</publishTime>
+    </File>
+    <File Include="Scripts/jquery-3.7.0.min.map">
+      <publishTime>04/25/2026 22:17:00</publishTime>
+    </File>
+    <File Include="Scripts/jquery-3.7.0.slim.js">
+      <publishTime>04/25/2026 22:17:00</publishTime>
+    </File>
+    <File Include="Scripts/jquery-3.7.0.slim.min.js">
+      <publishTime>04/25/2026 22:17:00</publishTime>
+    </File>
+    <File Include="Scripts/jquery-3.7.0.slim.min.map">
+      <publishTime>04/25/2026 22:17:00</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.combobox.min.js.map">
+      <publishTime>04/26/2026 21:20:07</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.draganddrop.min.js.map">
+      <publishTime>04/26/2026 21:20:06</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.dropdownbutton.min.js">
+      <publishTime>04/26/2026 21:20:06</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.dropdownbutton.min.js.map">
+      <publishTime>04/26/2026 21:20:06</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.dropdownlist.min.js">
+      <publishTime>04/26/2026 21:20:06</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.dropdownlist.min.js.map">
+      <publishTime>04/26/2026 21:20:06</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.editable.min.js">
+      <publishTime>04/26/2026 21:20:05</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.editable.min.js.map">
+      <publishTime>04/26/2026 21:20:05</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.floatinglabel.min.js">
+      <publishTime>04/26/2026 21:20:05</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.floatinglabel.min.js.map">
+      <publishTime>04/26/2026 21:20:05</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.fx.min.js">
+      <publishTime>04/26/2026 21:20:05</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.fx.min.js.map">
+      <publishTime>04/26/2026 21:20:05</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.html.base.min.js">
+      <publishTime>04/26/2026 21:20:05</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.html.base.min.js.map">
+      <publishTime>04/26/2026 21:20:05</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.html.button.min.js">
+      <publishTime>04/26/2026 21:20:05</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.html.button.min.js.map">
+      <publishTime>04/26/2026 21:20:05</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.html.chip.min.js">
+      <publishTime>04/26/2026 21:20:05</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.html.chip.min.js.map">
+      <publishTime>04/26/2026 21:20:05</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.html.chiplist.min.js">
+      <publishTime>04/26/2026 21:20:05</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.html.chiplist.min.js.map">
+      <publishTime>04/26/2026 21:20:05</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.html.icon.min.js">
+      <publishTime>04/26/2026 21:20:05</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.html.icon.min.js.map">
+      <publishTime>04/26/2026 21:20:05</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.html.input.min.js">
+      <publishTime>04/26/2026 21:20:05</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.html.input.min.js.map">
+      <publishTime>04/26/2026 21:20:04</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.icons.min.js">
+      <publishTime>04/26/2026 21:20:04</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.icons.min.js.map">
+      <publishTime>04/26/2026 21:20:04</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.label.min.js">
+      <publishTime>04/26/2026 21:20:04</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.label.min.js.map">
+      <publishTime>04/26/2026 21:20:04</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.licensing.min.js">
+      <publishTime>04/26/2026 21:20:04</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.licensing.min.js.map">
+      <publishTime>04/26/2026 21:20:04</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.list.min.js">
+      <publishTime>04/26/2026 21:20:04</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.list.min.js.map">
+      <publishTime>04/26/2026 21:20:04</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.listbox.min.js">
+      <publishTime>04/26/2026 21:20:04</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.listbox.min.js.map">
+      <publishTime>04/26/2026 21:20:04</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.listview.min.js">
+      <publishTime>04/26/2026 21:20:04</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.listview.min.js.map">
+      <publishTime>04/26/2026 21:20:04</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.loader.min.js">
+      <publishTime>04/26/2026 21:20:04</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.loader.min.js.map">
+      <publishTime>04/26/2026 21:20:04</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.maskedtextbox.min.js">
+      <publishTime>04/26/2026 21:20:04</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.maskedtextbox.min.js.map">
+      <publishTime>04/26/2026 21:20:04</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.menu.min.js">
+      <publishTime>04/26/2026 21:20:03</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.menu.min.js.map">
+      <publishTime>04/26/2026 21:20:03</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.mobile.scroller.min.js">
+      <publishTime>04/26/2026 21:20:03</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.mobile.scroller.min.js.map">
+      <publishTime>04/26/2026 21:20:03</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.multiselect.min.js">
+      <publishTime>04/26/2026 21:20:03</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.multiselect.min.js.map">
+      <publishTime>04/26/2026 21:20:03</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.notification.min.js">
+      <publishTime>04/26/2026 21:20:03</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.notification.min.js.map">
+      <publishTime>04/26/2026 21:20:03</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.numerictextbox.min.js">
+      <publishTime>04/26/2026 21:20:03</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.numerictextbox.min.js.map">
+      <publishTime>04/26/2026 21:20:03</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.pager.min.js">
+      <publishTime>04/26/2026 21:20:03</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.pager.min.js.map">
+      <publishTime>04/26/2026 21:20:03</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.panelbar.min.js">
+      <publishTime>04/26/2026 21:20:03</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.panelbar.min.js.map">
+      <publishTime>04/26/2026 21:20:02</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.popup.min.js">
+      <publishTime>04/26/2026 21:20:02</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.popup.min.js.map">
+      <publishTime>04/26/2026 21:20:02</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.progressbar.min.js">
+      <publishTime>04/26/2026 21:20:02</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.progressbar.min.js.map">
+      <publishTime>04/26/2026 21:20:02</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.resizable.min.js">
+      <publishTime>04/26/2026 21:20:02</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.resizable.min.js.map">
+      <publishTime>04/26/2026 21:20:02</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.responsivepanel.min.js">
+      <publishTime>04/26/2026 21:20:02</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.responsivepanel.min.js.map">
+      <publishTime>04/26/2026 21:20:02</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.router.min.js">
+      <publishTime>04/26/2026 21:20:02</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.router.min.js.map">
+      <publishTime>04/26/2026 21:20:02</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.selectable.min.js">
+      <publishTime>04/26/2026 21:20:02</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.selectable.min.js.map">
+      <publishTime>04/26/2026 21:20:02</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.slider.min.js">
+      <publishTime>04/26/2026 21:20:02</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.slider.min.js.map">
+      <publishTime>04/26/2026 21:20:02</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.sortable.min.js">
+      <publishTime>04/26/2026 21:20:01</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.sortable.min.js.map">
+      <publishTime>04/26/2026 21:20:01</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.splitbutton.min.js">
+      <publishTime>04/26/2026 21:20:01</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.splitbutton.min.js.map">
+      <publishTime>04/26/2026 21:20:01</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.splitter.min.js">
+      <publishTime>04/26/2026 21:20:01</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.splitter.min.js.map">
+      <publishTime>04/26/2026 21:20:01</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.tabstrip.min.js">
+      <publishTime>04/26/2026 21:20:01</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.tabstrip.min.js.map">
+      <publishTime>04/26/2026 21:20:01</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.textarea.min.js">
+      <publishTime>04/26/2026 21:20:01</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.textarea.min.js.map">
+      <publishTime>04/26/2026 21:20:01</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.textbox.min.js">
+      <publishTime>04/26/2026 21:20:01</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.textbox.min.js.map">
+      <publishTime>04/26/2026 21:20:01</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.timepicker.min.js">
+      <publishTime>04/26/2026 21:20:01</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.timepicker.min.js.map">
+      <publishTime>04/26/2026 21:20:01</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.timezones.min.js">
+      <publishTime>04/26/2026 21:20:01</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.timezones.min.js.map">
+      <publishTime>04/26/2026 21:20:00</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.togglebutton.min.js">
+      <publishTime>04/26/2026 21:20:00</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.togglebutton.min.js.map">
+      <publishTime>04/26/2026 21:20:00</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.toggleinputbase.min.js">
+      <publishTime>04/26/2026 21:20:00</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.toggleinputbase.min.js.map">
+      <publishTime>04/26/2026 21:20:00</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.toolbar.min.js">
+      <publishTime>04/26/2026 21:20:00</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.toolbar.min.js.map">
+      <publishTime>04/26/2026 21:20:00</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.tooltip.min.js">
+      <publishTime>04/26/2026 21:20:00</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.tooltip.min.js.map">
+      <publishTime>04/26/2026 21:20:00</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.touch.min.js">
+      <publishTime>04/26/2026 21:20:00</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.touch.min.js.map">
+      <publishTime>04/26/2026 21:20:00</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.ui.core.min.js">
+      <publishTime>04/26/2026 21:20:00</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.ui.core.min.js.map">
+      <publishTime>04/26/2026 21:19:59</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.userevents.min.js">
+      <publishTime>04/26/2026 21:19:59</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.userevents.min.js.map">
+      <publishTime>04/26/2026 21:19:59</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.validator.min.js">
+      <publishTime>04/26/2026 21:19:59</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.validator.min.js.map">
+      <publishTime>04/26/2026 21:19:59</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.view.min.js">
+      <publishTime>04/26/2026 21:19:59</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.view.min.js.map">
+      <publishTime>04/26/2026 21:19:59</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.virtuallist.min.js">
+      <publishTime>04/26/2026 21:19:59</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.virtuallist.min.js.map">
+      <publishTime>04/26/2026 21:19:59</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.window.min.js">
+      <publishTime>04/26/2026 21:19:59</publishTime>
+    </File>
+    <File Include="Scripts/kendo/2026.1.415/kendo.window.min.js.map">
+      <publishTime>04/26/2026 21:19:59</publishTime>
+    </File>
+    <File Include="Scripts/modernizr-2.8.3.js">
+      <publishTime>04/25/2026 22:17:09</publishTime>
+    </File>
+    <File Include="Scripts/popper.min.js">
+      <publishTime>04/27/2026 19:53:45</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/DetailsView.js">
+      <publishTime>04/25/2026 22:17:17</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/Focus.js">
+      <publishTime>04/25/2026 22:17:17</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/GridView.js">
+      <publishTime>04/25/2026 22:17:17</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/Menu.js">
+      <publishTime>04/25/2026 22:17:17</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MenuStandards.js">
+      <publishTime>04/25/2026 22:17:17</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MSAjax/MicrosoftAjax.js">
+      <publishTime>04/25/2026 22:17:16</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MSAjax/MicrosoftAjaxApplicationServices.js">
+      <publishTime>04/25/2026 22:17:16</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MSAjax/MicrosoftAjaxComponentModel.js">
+      <publishTime>04/25/2026 22:17:16</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MSAjax/MicrosoftAjaxCore.js">
+      <publishTime>04/25/2026 22:17:16</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MSAjax/MicrosoftAjaxGlobalization.js">
+      <publishTime>04/25/2026 22:17:16</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MSAjax/MicrosoftAjaxHistory.js">
+      <publishTime>04/25/2026 22:17:16</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MSAjax/MicrosoftAjaxNetwork.js">
+      <publishTime>04/25/2026 22:17:16</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MSAjax/MicrosoftAjaxSerialization.js">
+      <publishTime>04/25/2026 22:17:16</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MSAjax/MicrosoftAjaxTimer.js">
+      <publishTime>04/25/2026 22:17:16</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MSAjax/MicrosoftAjaxWebForms.js">
+      <publishTime>04/25/2026 22:17:16</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MSAjax/MicrosoftAjaxWebServices.js">
+      <publishTime>04/25/2026 22:17:16</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/SmartNav.js">
+      <publishTime>04/25/2026 22:17:17</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/TreeView.js">
+      <publishTime>04/25/2026 22:17:17</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/WebForms.js">
+      <publishTime>04/25/2026 22:17:17</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/WebParts.js">
+      <publishTime>04/25/2026 22:17:16</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/WebUIValidation.js">
+      <publishTime>04/25/2026 22:17:16</publishTime>
+    </File>
+    <File Include="Site.Master">
+      <publishTime>05/01/2026 14:01:11</publishTime>
+    </File>
+    <File Include="Site.Mobile.Master">
+      <publishTime>04/25/2026 22:17:18</publishTime>
+    </File>
+    <File Include="ViewSwitcher.ascx">
+      <publishTime>04/25/2026 22:17:18</publishTime>
+    </File>
+    <File Include="web.config">
+      <publishTime>04/27/2026 19:09:17</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

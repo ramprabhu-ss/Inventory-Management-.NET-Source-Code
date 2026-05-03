@@ -1,0 +1,120 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Projects\\New\\InventoryManagement\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D9D62C80-E994-4615-82FB-A7DCDA75BCFC}|InventoryManagement\\InventoryManagement.csproj|D:\\Projects\\New\\InventoryManagement\\inventorymanagement\\deliveryinformation.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{D9D62C80-E994-4615-82FB-A7DCDA75BCFC}|InventoryManagement\\InventoryManagement.csproj|solutionrelative:inventorymanagement\\deliveryinformation.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D9D62C80-E994-4615-82FB-A7DCDA75BCFC}|InventoryManagement\\InventoryManagement.csproj|d:\\projects\\new\\inventorymanagement\\inventorymanagement\\deliveryinformation.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D9D62C80-E994-4615-82FB-A7DCDA75BCFC}|InventoryManagement\\InventoryManagement.csproj|solutionrelative:inventorymanagement\\deliveryinformation.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8B9E5272-4DF3-469D-BF8C-C8B7C4184BDE}|InventoryManagement.IL\\InventoryManagement.IL.csproj|D:\\Projects\\New\\InventoryManagement\\inventorymanagement.il\\clsdeliveryinformation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8B9E5272-4DF3-469D-BF8C-C8B7C4184BDE}|InventoryManagement.IL\\InventoryManagement.IL.csproj|solutionrelative:inventorymanagement.il\\clsdeliveryinformation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8B9E5272-4DF3-469D-BF8C-C8B7C4184BDE}|InventoryManagement.IL\\InventoryManagement.IL.csproj|D:\\Projects\\New\\InventoryManagement\\inventorymanagement.il\\clsutility.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8B9E5272-4DF3-469D-BF8C-C8B7C4184BDE}|InventoryManagement.IL\\InventoryManagement.IL.csproj|solutionrelative:inventorymanagement.il\\clsutility.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8B9E5272-4DF3-469D-BF8C-C8B7C4184BDE}|InventoryManagement.IL\\InventoryManagement.IL.csproj|D:\\Projects\\New\\InventoryManagement\\inventorymanagement.il\\clsareamaster.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8B9E5272-4DF3-469D-BF8C-C8B7C4184BDE}|InventoryManagement.IL\\InventoryManagement.IL.csproj|solutionrelative:inventorymanagement.il\\clsareamaster.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D9D62C80-E994-4615-82FB-A7DCDA75BCFC}|InventoryManagement\\InventoryManagement.csproj|D:\\Projects\\New\\InventoryManagement\\inventorymanagement\\areamaster.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D9D62C80-E994-4615-82FB-A7DCDA75BCFC}|InventoryManagement\\InventoryManagement.csproj|solutionrelative:inventorymanagement\\areamaster.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ClsDeliveryInformation.cs",
+              "DocumentMoniker": "D:\\Projects\\New\\InventoryManagement\\InventoryManagement.IL\\ClsDeliveryInformation.cs",
+              "RelativeDocumentMoniker": "InventoryManagement.IL\\ClsDeliveryInformation.cs",
+              "ToolTip": "D:\\Projects\\New\\InventoryManagement\\InventoryManagement.IL\\ClsDeliveryInformation.cs",
+              "RelativeToolTip": "InventoryManagement.IL\\ClsDeliveryInformation.cs",
+              "ViewState": "AgIAAE4AAAAAAAAAAAAowFcAAACKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-01T06:08:04.237Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DeliveryInformation.aspx.cs",
+              "DocumentMoniker": "D:\\Projects\\New\\InventoryManagement\\InventoryManagement\\DeliveryInformation.aspx.cs",
+              "RelativeDocumentMoniker": "InventoryManagement\\DeliveryInformation.aspx.cs",
+              "ToolTip": "D:\\Projects\\New\\InventoryManagement\\InventoryManagement\\DeliveryInformation.aspx.cs",
+              "RelativeToolTip": "InventoryManagement\\DeliveryInformation.aspx.cs",
+              "ViewState": "AgIAAD8BAAAAAAAAAAAnwE0BAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-01T05:55:58.887Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DeliveryInformation.aspx",
+              "DocumentMoniker": "D:\\Projects\\New\\InventoryManagement\\InventoryManagement\\DeliveryInformation.aspx",
+              "RelativeDocumentMoniker": "InventoryManagement\\DeliveryInformation.aspx",
+              "ToolTip": "D:\\Projects\\New\\InventoryManagement\\InventoryManagement\\DeliveryInformation.aspx",
+              "RelativeToolTip": "InventoryManagement\\DeliveryInformation.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2026-05-01T05:45:30.726Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AreaMaster.aspx.cs",
+              "DocumentMoniker": "D:\\Projects\\New\\InventoryManagement\\InventoryManagement\\AreaMaster.aspx.cs",
+              "RelativeDocumentMoniker": "InventoryManagement\\AreaMaster.aspx.cs",
+              "ToolTip": "D:\\Projects\\New\\InventoryManagement\\InventoryManagement\\AreaMaster.aspx.cs",
+              "RelativeToolTip": "InventoryManagement\\AreaMaster.aspx.cs",
+              "ViewState": "AgIAAEYAAAAAAAAAAAAcwFQAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-01T05:59:16.917Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ClsUtility.cs",
+              "DocumentMoniker": "D:\\Projects\\New\\InventoryManagement\\InventoryManagement.IL\\ClsUtility.cs",
+              "RelativeDocumentMoniker": "InventoryManagement.IL\\ClsUtility.cs",
+              "ToolTip": "D:\\Projects\\New\\InventoryManagement\\InventoryManagement.IL\\ClsUtility.cs",
+              "RelativeToolTip": "InventoryManagement.IL\\ClsUtility.cs",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAowD8AAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-01T06:21:49.236Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ClsAreaMaster.cs",
+              "DocumentMoniker": "D:\\Projects\\New\\InventoryManagement\\InventoryManagement.IL\\ClsAreaMaster.cs",
+              "RelativeDocumentMoniker": "InventoryManagement.IL\\ClsAreaMaster.cs",
+              "ToolTip": "D:\\Projects\\New\\InventoryManagement\\InventoryManagement.IL\\ClsAreaMaster.cs",
+              "RelativeToolTip": "InventoryManagement.IL\\ClsAreaMaster.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-01T06:12:02.075Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
