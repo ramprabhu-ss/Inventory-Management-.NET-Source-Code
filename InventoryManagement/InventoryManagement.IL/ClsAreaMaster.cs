@@ -71,9 +71,9 @@ namespace InventoryManagement.IL
                 sqlQueryBuilder.Append("SELECT area_id, area_name, ZIPCODE FROM area_master ORDER BY area_name");
                 dt = objUtilitiy.GetDataTable(sqlQueryBuilder.ToString());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
 
             return dt;
@@ -97,9 +97,9 @@ namespace InventoryManagement.IL
 
                 return TransactionStatus;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -121,9 +121,9 @@ namespace InventoryManagement.IL
 
                 return TransactionStatus;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -141,9 +141,9 @@ namespace InventoryManagement.IL
 
                 return TransactionStatus;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 

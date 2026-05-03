@@ -21,9 +21,9 @@ namespace InventoryManagement
                     BindGridView();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -42,9 +42,9 @@ namespace InventoryManagement
                 BindGridView();
                 //Response.Redirect("~/AreaMaster.aspx");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -55,9 +55,9 @@ namespace InventoryManagement
                 ViewState["dtAreaMaster"] = null;
                 Response.Redirect("~/AreaMaster.aspx");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -160,9 +160,9 @@ namespace InventoryManagement
                 // Re-bind the data source to refresh the grid view
                 BindGridView();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -196,9 +196,9 @@ namespace InventoryManagement
                 txtAreaName.Text = "";
                 txtZipCode.Text = "";
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -215,9 +215,9 @@ namespace InventoryManagement
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
     }

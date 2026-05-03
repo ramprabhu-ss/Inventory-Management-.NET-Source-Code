@@ -91,9 +91,9 @@ namespace InventoryManagement.IL
                 sqlCommand.ExecuteNonQuery();
                 CloseConnection();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 

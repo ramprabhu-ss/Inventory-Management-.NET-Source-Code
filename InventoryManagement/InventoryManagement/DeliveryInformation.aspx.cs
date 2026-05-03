@@ -1,6 +1,8 @@
 ﻿using InventoryManagement.IL;
 using System;
+using System.Collections;
 using System.Data;
+using System.Text;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
@@ -11,6 +13,8 @@ namespace InventoryManagement
     {
         readonly ClsDeliveryInformation objDeliveryInformation = new ClsDeliveryInformation();
         DataTable dtDeliveryInfo = new DataTable();
+        double footerTotalQuantity = 0;
+        double footerTotalAmount = 0;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -19,38 +23,16 @@ namespace InventoryManagement
                 if (!IsPostBack)
                 {
                     TxtDeliveryDate.Text = DateTime.Now.Date.ToString("yyyy-MM-dd");
+                    TxtDeliveryDate.Attributes["max"] = DateTime.Now.ToString("yyyy-MM-dd");
 
                     // Load product details for product dropdown in gridview
                     ViewState["dtProducts"] = objDeliveryInformation.GetProducts();
-
-                    // Set initial row structure for gridview
-                    /*
-                    DataTable dt = AddNewRow_1();
-                    GrdDeliveryInfo.DataSource = dt;
-                    GrdDeliveryInfo.DataBind();
-                    */
                     BindGridView();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
-            }
-        }
-
-        protected void TxtDeliveryDate_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (TxtDeliveryDate.Text == DateTime.Now.Date.ToString("yyyy-MM-dd"))
-                {
-                    ViewState["dtDeliveryInfo"] = null;
-                    BindGridView();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
+                throw;
             }
         }
 
@@ -58,6 +40,12 @@ namespace InventoryManagement
         {
             try
             {
+                ArrayList arrListDeliveryInfo = new ArrayList();
+                ArrayList arrListDeliveryDetail = new ArrayList();
+                StringBuilder sqlQueryBuilder = new StringBuilder();
+                string CreatedBy = "1"; // Session["UserId"].ToString();
+                string CreatedOn = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
                 foreach (GridViewRow row in GrdDeliveryInfo.Rows)
                 {
                     if (row.RowType == DataControlRowType.DataRow)
@@ -67,16 +55,57 @@ namespace InventoryManagement
                         DropDownList GrdDdlProduct = (DropDownList)row.FindControl("GrdDdlProduct"); // For TemplateFields
                         TextBox GrdTxtQuantity = (TextBox)row.FindControl("GrdTxtQuantity");
                         TextBox GrdTxtPrice = (TextBox)row.FindControl("GrdTxtPrice");
-                        Label GrdLblTotalAmount = (Label)row.FindControl("GrdLblTotalAmount");
+                        TextBox GrdTxtTotalAmount = (TextBox)row.FindControl("GrdTxtTotalAmount");
                         TextBox GrdTxtRemarks = (TextBox)row.FindControl("GrdTxtRemarks");
 
+                        double quantity, price, totalAmount = 0;
+                        if (GrdTxtQuantity.Text != "" && GrdTxtPrice.Text != "")
+                        {
+                            quantity = Convert.ToDouble(GrdTxtQuantity.Text);
+                            price = Convert.ToDouble(GrdTxtPrice.Text);
+                            totalAmount = (quantity * price);
+                        }
+
                         // Process each row (e.g., add to a list or update database)
+                        /*
+                        objDeliveryInformation.Param_ProductId = GrdDdlProduct.SelectedValue;
+                        objDeliveryInformation.Param_Quantity = GrdTxtQuantity.Text;
+                        objDeliveryInformation.Param_Price = GrdTxtPrice.Text;
+                        objDeliveryInformation.Param_TotalAmount = GrdTxtTotalAmount.Text;
+                        objDeliveryInformation.Param_Remarks = GrdTxtRemarks.Text;
+                        objDeliveryInformation.Param_CreatedBy = "user";
+                        objDeliveryInformation.Param_created_at = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                        */
+
+                        /*sqlQueryBuilder.Append("INSERT INTO delivery_inf (Delivery_ID, DeliveryDate, EmployeeID, Total_Amount, ");
+                        sqlQueryBuilder.Append("Total_Quantity, CreatedBy, created_at) VALUES ");
+                        sqlQueryBuilder.Append("(@Delivery_ID, @DeliveryDate, @EmployeeID, @Total_Amount, @Total_Quantity, @CreatedBy, @created_at)");*/
+
+                        /*MySqlCommand sqlCommand = new MySqlCommand(sqlQueryBuilder.ToString());
+                        sqlCommand.Parameters.AddWithValue("@Delivery_ID", "1");
+                        sqlCommand.Parameters.AddWithValue("@DeliveryDate", TxtDeliveryDate.Text);
+                        sqlCommand.Parameters.AddWithValue("@EmployeeID", CreatedBy);
+                        sqlCommand.Parameters.AddWithValue("@Total_Amount", GrdTxtTotalAmount.Text);
+                        sqlCommand.Parameters.AddWithValue("@Total_Quantity", GrdTxtQuantity.Text);
+                        sqlCommand.Parameters.AddWithValue("@CreatedBy", CreatedBy);
+                        sqlCommand.Parameters.AddWithValue("@created_at", CreatedOn);*/
+
+                        if (GrdDdlProduct.SelectedValue != "" && GrdTxtQuantity.Text != "" && GrdTxtPrice.Text != "")
+                        {
+                            arrListDeliveryInfo.Add("@Delivery_ID,'" + TxtDeliveryDate.Text + "','" + CreatedBy + "','" + totalAmount + "','"
+                                + GrdTxtQuantity.Text + "','" + CreatedBy + "','" + CreatedOn + "'");
+
+                            arrListDeliveryDetail.Add("@Detail_ID,@Delivery_ID,'" + TxtDeliveryDate.Text + "','" + CreatedBy + "','"
+                                + GrdDdlProduct.SelectedValue + "','" + "','" + CreatedOn + "'");
+                        }
                     }
                 }
+
+                ShowResult(objDeliveryInformation.InitiateTransaction(arrListDeliveryInfo, arrListDeliveryDetail));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -87,9 +116,9 @@ namespace InventoryManagement
                 ViewState["dtDeliveryInfo"] = null;
                 Response.Redirect("~/DeliveryInformation.aspx");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -115,17 +144,17 @@ namespace InventoryManagement
                         TextBox GrdTxtPrice = (TextBox)GrdDeliveryInfo.Rows[i].FindControl("GrdTxtPrice");
                         dt.Rows[i]["Price"] = (GrdTxtPrice.Text == "") ? "" : GrdTxtPrice.Text;
 
-                        Label GrdLblTotalAmount = (Label)GrdDeliveryInfo.Rows[i].FindControl("GrdLblTotalAmount");
+                        TextBox GrdTxtTotalAmount = (TextBox)GrdDeliveryInfo.Rows[i].FindControl("GrdTxtTotalAmount");
                         if (GrdTxtQuantity.Text != "" && GrdTxtPrice.Text != "")
                         {
-                            Double quantity = Convert.ToDouble(GrdTxtQuantity.Text);
-                            Double price = Convert.ToDouble(GrdTxtPrice.Text);
-                            Double totalAmount = (quantity * price);
+                            double quantity = Convert.ToDouble(GrdTxtQuantity.Text);
+                            double price = Convert.ToDouble(GrdTxtPrice.Text);
+                            double totalAmount = (quantity * price);
                             dt.Rows[i]["TotalAmount"] = totalAmount;
                         }
                         else
                         {
-                            dt.Rows[i]["TotalAmount"] = "";
+                            dt.Rows[i]["TotalAmount"] = "0.00";
                         }
 
                         TextBox GrdTxtRemarks = (TextBox)GrdDeliveryInfo.Rows[i].FindControl("GrdTxtRemarks");
@@ -139,9 +168,9 @@ namespace InventoryManagement
                 GrdDeliveryInfo.DataSource = (DataTable)ViewState["dtDeliveryInfo"];
                 GrdDeliveryInfo.DataBind();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -172,9 +201,9 @@ namespace InventoryManagement
                 GrdDeliveryInfo.DataSource = dt;
                 GrdDeliveryInfo.DataBind();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -199,13 +228,15 @@ namespace InventoryManagement
                         GrdDdlProduct.Items.Insert(0, new ListItem("-- Select --", ""));
 
                         // Set the selected value based on the current row data
-                        GrdDdlProduct.SelectedValue = DataBinder.Eval(e.Row.DataItem, "ProductID").ToString();
+                        GrdDdlProduct.SelectedValue = DataBinder.Eval(e.Row.DataItem, "ProductId").ToString();
                     }
 
                     TextBox GrdTxtQuantity = (TextBox)e.Row.FindControl("GrdTxtQuantity");
                     if (GrdTxtQuantity != null)
                     {
                         GrdTxtQuantity.Text = DataBinder.Eval(e.Row.DataItem, "Quantity").ToString();
+                        if (GrdTxtQuantity.Text != "")
+                            footerTotalQuantity = footerTotalQuantity + Convert.ToDouble(GrdTxtQuantity.Text);
                     }
 
                     TextBox GrdTxtPrice = (TextBox)e.Row.FindControl("GrdTxtPrice");
@@ -214,10 +245,19 @@ namespace InventoryManagement
                         GrdTxtPrice.Text = DataBinder.Eval(e.Row.DataItem, "Price").ToString();
                     }
 
-                    Label GrdLblTotalAmount = (Label)e.Row.FindControl("GrdLblTotalAmount");
-                    if (GrdLblTotalAmount != null)
+                    TextBox GrdTxtTotalAmount = (TextBox)e.Row.FindControl("GrdTxtTotalAmount");
+                    if (GrdTxtTotalAmount != null)
                     {
-                        GrdLblTotalAmount.Text = DataBinder.Eval(e.Row.DataItem, "TotalAmount").ToString();
+                        //GrdTxtTotalAmount.Text = DataBinder.Eval(e.Row.DataItem, "TotalAmount").ToString();
+                        double quantity, price, totalAmount = 0;
+                        if (GrdTxtQuantity.Text != "" && GrdTxtPrice.Text != "")
+                        {
+                            quantity = Convert.ToDouble(GrdTxtQuantity.Text);
+                            price = Convert.ToDouble(GrdTxtPrice.Text);
+                            totalAmount = (quantity * price);
+                            footerTotalAmount = footerTotalAmount + totalAmount;
+                            GrdTxtTotalAmount.Text = Convert.ToString(totalAmount);
+                        }
                     }
 
                     TextBox GrdTxtRemarks = (TextBox)e.Row.FindControl("GrdTxtRemarks");
@@ -231,15 +271,13 @@ namespace InventoryManagement
                 if (e.Row.RowType == DataControlRowType.Footer)
                 {
                     // Access cells by index and set text
-                    //Label GrdLblTotalAmount = (Label)e.Row.FindControl("GrdLblTotalAmount");
-
-                    //e.Row.Cells[2].Text = "Total Amount:";
-                    //e.Row.Cells[4].Text = GrdLblTotalAmount.Text; // You can use a calculated variable here
+                    e.Row.Cells[2].Text = Convert.ToString(footerTotalQuantity);
+                    e.Row.Cells[4].Text = Convert.ToString(footerTotalAmount); // You can use a calculated variable here
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -273,9 +311,9 @@ namespace InventoryManagement
                 // 3. Save back to ViewState and rebind
                 ViewState["dtDeliveryInfo"] = dt;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
 
             return dt;
@@ -287,15 +325,11 @@ namespace InventoryManagement
             {
                 if (ViewState["dtDeliveryInfo"] == null)
                 {
-                    dtDeliveryInfo = objDeliveryInformation.GetDeliveryInformation(TxtDeliveryDate.Text);
+                    dtDeliveryInfo = objDeliveryInformation.GetDeliveryDetails(TxtDeliveryDate.Text);
                     ViewState["dtDeliveryInfo"] = dtDeliveryInfo;
                 }
-                /*else
-                 {
-                     dtDeliveryInfo = (DataTable)ViewState["dtDeliveryInfo"];
-                 }*/
 
-                // Set initial row structure for gridview
+                // Set initial row structure for gridview if no records found for the selected date
                 if (dtDeliveryInfo == null || dtDeliveryInfo.Rows.Count == 0)
                 {
                     dtDeliveryInfo = AddNewRow();
@@ -304,9 +338,9 @@ namespace InventoryManagement
                 GrdDeliveryInfo.DataSource = dtDeliveryInfo;
                 GrdDeliveryInfo.DataBind();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -316,22 +350,33 @@ namespace InventoryManagement
             {
                 if (transactionStatus == 1)
                 {
-
+                    successAlert.Visible = true;
+                    // Execute server logic here, then show the popup
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "Popup", "$('#successMessageModal').modal('show');", true);
+                    ClientScript.RegisterStartupScript(this.GetType(), "Popup", "$('#successMessageModal').modal('show');", true);
                 }
                 else
                 {
-
+                    successAlert.Visible = false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
         protected void BtnView_Click(object sender, EventArgs e)
         {
-
+            try
+            {
+                ViewState["dtDeliveryInfo"] = null;
+                BindGridView();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

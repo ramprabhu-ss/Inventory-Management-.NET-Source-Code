@@ -6,14 +6,6 @@
     <script src="Scripts/bootstrap.bundle.min.js"></script>
 
     <script>
-        /*
-        $(document).ready(function () {
-            $(event).on("input", function () {
-                console.log("Value changed to: " + $(event).val());
-            });
-        });
-        */
-
         function calculateQuantity() {
 
             $(document).ready(function () {
@@ -40,8 +32,8 @@
                         totalAmount = Math.round((quantity * price), 2);
                     }
 
-                    var GrdLblTotalAmount = row.find("[id*=GrdLblTotalAmount]");
-                    GrdLblTotalAmount.text(totalAmount);
+                    var GrdTxtTotalAmount = row.find("[id*=GrdTxtTotalAmount]");
+                    GrdTxtTotalAmount.val(totalAmount);
 
                     // Use .val() if the target is another TextBox
                     // row.find("[id*=txtPrice]").val(newValue);
@@ -77,8 +69,8 @@
                         totalAmount = Math.round((quantity * price), 2);
                     }
 
-                    var GrdLblTotalAmount = row.find("[id*=GrdLblTotalAmount]");
-                    GrdLblTotalAmount.text(totalAmount);
+                    var GrdTxtTotalAmount = row.find("[id*=GrdTxtTotalAmount]");
+                    GrdTxtTotalAmount.val(totalAmount);
 
                     // Use .val() if the target is another TextBox
                     // row.find("[id*=txtPrice]").val(newValue);
@@ -113,11 +105,11 @@
                     <asp:Label ID="LblDate" runat="server" Text="Delivery Date:" class="form-label" Style="vertical-align: middle;"></asp:Label>
                 </div>
                 <div class="col-2" style="width: 15%;">
-                    <asp:TextBox ID="TxtDeliveryDate" runat="server" class="form-control form-control-sm" TextMode="Date"></asp:TextBox>
+                    <asp:TextBox ID="TxtDeliveryDate" runat="server" TextMode="Date" CssClass="form-control form-control-sm"></asp:TextBox>
 
                 </div>
                 <div class="col-2" style="width: 15%;">
-                    <asp:Button ID="BtnView" runat="server" Text="View" class="btn btn-primary btn-sm" ></asp:Button>
+                    <asp:Button ID="BtnView" runat="server" Text="View" OnClick="BtnView_Click" class="btn btn-primary btn-sm"></asp:Button>
                 </div>
             </div>
         </div>
@@ -143,24 +135,31 @@
                             <asp:Button ID="btnDeleteRow" runat="server" Text="Delete Row" OnClick="btnDeleteRow_Click" class="btn btn-secondary btn-sm" />
                         </FooterTemplate>
                     </asp:TemplateField>
-                    <asp:TemplateField HeaderText="Quantity" HeaderStyle-CssClass="bg-primary text-white">
+                    <asp:TemplateField HeaderText="Quantity" HeaderStyle-CssClass="bg-primary text-white" FooterStyle-HorizontalAlign="Right">
                         <ItemTemplate>
-                            <asp:TextBox ID="GrdTxtQuantity" runat="server" TextMode="Number" onkeypress="calculateQuantity();" class="form-control alignRight" TabIndex="2"></asp:TextBox>
+                            <asp:TextBox ID="GrdTxtQuantity" runat="server" TextMode="Number" EnableViewState="true" onkeypress="calculateQuantity();" class="form-control alignRight" TabIndex="2"></asp:TextBox>
                         </ItemTemplate>
+                        <FooterTemplate>
+                            <asp:Label ID="LblFooterTotalQuantity" runat="server" Text="Total Quantity: " class="form-label"></asp:Label>
+                        </FooterTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Price" HeaderStyle-CssClass="bg-primary text-white">
                         <ItemTemplate>
-                            <asp:TextBox ID="GrdTxtPrice" runat="server" TextMode="Number" onkeypress="calculatePrice();" class="form-control alignRight" TabIndex="3"></asp:TextBox>
+                            <asp:TextBox ID="GrdTxtPrice" runat="server" TextMode="Number" EnableViewState="true" onkeypress="calculatePrice();" class="form-control alignRight" TabIndex="3"></asp:TextBox>
                         </ItemTemplate>
                     </asp:TemplateField>
-                    <asp:TemplateField HeaderText="Total Amount" HeaderStyle-CssClass="bg-primary text-white" ItemStyle-HorizontalAlign="Right" ItemStyle-VerticalAlign="Middle">
+                    <asp:TemplateField HeaderText="Total Amount" HeaderStyle-CssClass="bg-primary text-white" FooterStyle-HorizontalAlign="Right">
                         <ItemTemplate>
-                            <asp:Label ID="GrdLblTotalAmount" runat="server" Text="0.00" class="form-label" TabIndex="4"></asp:Label>
+                            <%--<asp:Label ID="GrdLblTotalAmount" runat="server" Text="0.00" EnableViewState="true" class="form-label" TabIndex="4"></asp:Label>--%>
+                            <asp:TextBox ID="GrdTxtTotalAmount" runat="server" TextMode="Number" EnableViewState="true" ReadOnly="true" class="form-control alignRight" TabIndex="4"></asp:TextBox>
                         </ItemTemplate>
+                        <FooterTemplate>
+                            <asp:Label ID="LblFooterTotalAmount" runat="server" Text="Total Amount: " class="form-label"></asp:Label>
+                        </FooterTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Remarks" HeaderStyle-CssClass="bg-primary text-white">
                         <ItemTemplate>
-                            <asp:TextBox ID="GrdTxtRemarks" runat="server" class="form-control" TabIndex="5"></asp:TextBox>
+                            <asp:TextBox ID="GrdTxtRemarks" runat="server" EnableViewState="true" class="form-control" TabIndex="5"></asp:TextBox>
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>
@@ -177,6 +176,31 @@
                     <asp:Button ID="BtnReset" runat="server" Text="Reset" OnClick="BtnReset_Click" class="btn btn-secondary btn-sm" />
                 </div>
 
+            </div>
+        </div>
+
+        <div id="successAlert" runat="server" class="alert alert-dismissible alert-success" visible="false">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <strong>Submitted Successfully!</strong>
+        </div>
+
+        <div class="modal" id="successMessageModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Success</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Submitted Successfully!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success">Ok</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
