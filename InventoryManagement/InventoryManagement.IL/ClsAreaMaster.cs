@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Data;
+using System.Data.SqlClient;
 using System.Text;
 
 namespace InventoryManagement.IL
@@ -9,7 +10,7 @@ namespace InventoryManagement.IL
     {
         readonly ClsUtility objUtilitiy = new ClsUtility();
         StringBuilder sqlQueryBuilder;
-        MySqlCommand sqlCommand;
+        MySqlCommand sqlCommand = new MySqlCommand();
         int TransactionStatus;
 
         private string area_id;
@@ -93,7 +94,9 @@ namespace InventoryManagement.IL
                 sqlCommand.Parameters.AddWithValue("@created_at", objAreaMaster.CREATED_AT);
                 sqlCommand.Parameters.AddWithValue("@ZIPCODE", objAreaMaster.ZIPCODE);
 
+                objUtilitiy.BeginTransaction();
                 TransactionStatus = objUtilitiy.ExecuteNonQueryTransaction(sqlCommand);
+                objUtilitiy.CommitTransaction();
 
                 return TransactionStatus;
             }
@@ -117,7 +120,9 @@ namespace InventoryManagement.IL
                 sqlCommand.Parameters.AddWithValue("@updated_at", objAreaMaster.UPDATED_AT);
                 sqlCommand.Parameters.AddWithValue("@ZIPCODE", objAreaMaster.ZIPCODE);
 
+                objUtilitiy.BeginTransaction();
                 TransactionStatus = objUtilitiy.ExecuteNonQueryTransaction(sqlCommand);
+                objUtilitiy.CommitTransaction();
 
                 return TransactionStatus;
             }
@@ -137,7 +142,9 @@ namespace InventoryManagement.IL
                 sqlCommand = new MySqlCommand(sqlQueryBuilder.ToString());
                 sqlCommand.Parameters.AddWithValue("@area_id", objAreaMaster.AREA_ID);
 
+                objUtilitiy.BeginTransaction();
                 TransactionStatus = objUtilitiy.ExecuteNonQueryTransaction(sqlCommand);
+                objUtilitiy.CommitTransaction();
 
                 return TransactionStatus;
             }

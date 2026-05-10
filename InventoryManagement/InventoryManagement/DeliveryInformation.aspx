@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Delivery Information" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="DeliveryInformation.aspx.cs" Inherits="InventoryManagement.DeliveryInformation" %>
+﻿<%@ Page Title="Delivery Information" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="DeliveryInformation.aspx.cs" Inherits="InventoryManagement.DeliveryInformation" MaintainScrollPositionOnPostback="true" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <script src="Scripts/jquery-3.7.0.min.js"></script>
@@ -64,13 +64,16 @@
                     // 3. Update the target control value
                     var totalAmount = 0.00;
                     if (GrdTxtQuantity.val() != "" && GrdTxtPrice != "") {
-                        var quantity = GrdTxtQuantity.val();
-                        var price = parseFloat(GrdTxtPrice);
+                        var quantity = Math.round(GrdTxtQuantity.val(),2);
+                        var price = Math.round(GrdTxtPrice,2);
                         totalAmount = Math.round((quantity * price), 2);
                     }
 
                     var GrdTxtTotalAmount = row.find("[id*=GrdTxtTotalAmount]");
                     GrdTxtTotalAmount.val(totalAmount);
+                    //debugger;
+                    //var q = $("[id*=LblFooterTotalAmount]").val() + totalAmount;
+                    //$("#LblFooterTotalAmount").val(q);
 
                     // Use .val() if the target is another TextBox
                     // row.find("[id*=txtPrice]").val(newValue);
@@ -88,6 +91,12 @@
 
         .alignRight {
             text-align: right;
+        }
+
+        .alignFooterTextRight {
+            /*padding: 1% 2.8% 0% 0% !important;*/
+            text-align: right !important;
+            font-weight: bold !important;
         }
 
         .removeGridFooterBorder {
@@ -140,7 +149,7 @@
                             <asp:TextBox ID="GrdTxtQuantity" runat="server" TextMode="Number" EnableViewState="true" onkeypress="calculateQuantity();" class="form-control alignRight" TabIndex="2"></asp:TextBox>
                         </ItemTemplate>
                         <FooterTemplate>
-                            <asp:Label ID="LblFooterTotalQuantity" runat="server" Text="Total Quantity: " class="form-label"></asp:Label>
+                            <asp:Label ID="LblFooterTotalQuantity" runat="server" Text="Total Quantity: " class="form-label alignFooterTextRight"></asp:Label>
                         </FooterTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Price" HeaderStyle-CssClass="bg-primary text-white">
@@ -154,7 +163,7 @@
                             <asp:TextBox ID="GrdTxtTotalAmount" runat="server" TextMode="Number" EnableViewState="true" ReadOnly="true" class="form-control alignRight" TabIndex="4"></asp:TextBox>
                         </ItemTemplate>
                         <FooterTemplate>
-                            <asp:Label ID="LblFooterTotalAmount" runat="server" Text="Total Amount: " class="form-label"></asp:Label>
+                            <asp:Label ID="LblFooterTotalAmount" runat="server" Text="Total Amount: " class="form-label alignFooterTextRight"></asp:Label>
                         </FooterTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Remarks" HeaderStyle-CssClass="bg-primary text-white">
@@ -165,8 +174,40 @@
                 </Columns>
                 <FooterStyle CssClass="removeGridFooterBorder" />
             </asp:GridView>
+            <hr />
+        </div>
 
-
+        <div class="table-responsive">
+            <asp:GridView ID="GrdPaymentMode" runat="server" AutoGenerateColumns="false" EnableViewState="true" ShowHeaderWhenEmpty="true"
+                ShowFooter="true" OnRowDataBound="GrdPaymentMode_RowDataBound" Width="40%" CssClass="table table-striped table-bordered table-hover">
+                <Columns>
+                    <asp:TemplateField HeaderText="" HeaderStyle-CssClass="bg-primary text-white" ItemStyle-HorizontalAlign="Center" ItemStyle-VerticalAlign="Middle">
+                        <ItemTemplate>
+                            <div class="form-check">
+                                <input id="GrdCheckBoxSelect" runat="server" class="form-check-input" type="checkbox" value="">
+                            </div>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Payment Mode" HeaderStyle-CssClass="bg-primary text-white">
+                        <ItemTemplate>
+                            <asp:DropDownList ID="GrdDdlPaymentMode" runat="server" AutoPostBack="false" EnableViewState="true" class="form-select" TabIndex="1">
+                            </asp:DropDownList>
+                        </ItemTemplate>
+                        <FooterTemplate>
+                            <asp:Button ID="btnPaymentAddRow" runat="server" Text="Add Row" OnClick="btnPaymentAddRow_Click" class="btn btn-secondary btn-sm" />
+                            <asp:Button ID="btnPaymentDeleteRow" runat="server" Text="Delete Row" OnClick="btnPaymentDeleteRow_Click" class="btn btn-secondary btn-sm" />
+                        </FooterTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Amount" HeaderStyle-CssClass="bg-primary text-white" FooterStyle-HorizontalAlign="Right">
+                        <ItemTemplate>
+                            <asp:TextBox ID="GrdTxtAmount" runat="server" TextMode="Number" EnableViewState="true" class="form-control alignRight" TabIndex="2"></asp:TextBox>
+                        </ItemTemplate>
+                        <FooterTemplate>
+                            <asp:Label ID="LblFooterAmount" runat="server" Text="Total Amount: " class="form-label alignFooterTextRight"></asp:Label>
+                        </FooterTemplate>
+                    </asp:TemplateField>
+                </Columns>
+            </asp:GridView>
         </div>
 
         <div class="text-center">
@@ -175,7 +216,6 @@
                     <asp:Button ID="BtnSave" runat="server" Text="Save" OnClick="BtnSave_Click" class="btn btn-primary btn-sm" />
                     <asp:Button ID="BtnReset" runat="server" Text="Reset" OnClick="BtnReset_Click" class="btn btn-secondary btn-sm" />
                 </div>
-
             </div>
         </div>
 

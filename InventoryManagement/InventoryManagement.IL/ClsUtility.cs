@@ -1,14 +1,18 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Data;
 using System.Configuration;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
 
 namespace InventoryManagement.IL
 {
     public class ClsUtility
     {
         public static string connectionString = ConfigurationManager.ConnectionStrings["dbConnectionName"].ToString();
-        public MySqlConnection sqlConnection;
+        static MySqlConnection sqlConnection;
+        static MySqlCommand sqlCommand = new MySqlCommand();
+        static MySqlTransaction sqlTransaction;
 
         public void OpenConnection()
         {
@@ -17,9 +21,7 @@ namespace InventoryManagement.IL
                 sqlConnection = new MySqlConnection(connectionString);
 
                 if (sqlConnection.State == ConnectionState.Open)
-                {
                     sqlConnection.Close();
-                }
 
                 sqlConnection.Open();
             }
@@ -33,10 +35,7 @@ namespace InventoryManagement.IL
         {
             try
             {
-                if (sqlConnection.State == ConnectionState.Open)
-                {
-                    sqlConnection.Close();
-                }
+                sqlConnection.Close();
             }
             catch (Exception)
             {
@@ -50,10 +49,8 @@ namespace InventoryManagement.IL
 
             try
             {
-                OpenConnection();
-                MySqlDataAdapter sqlDataAdapter = new MySqlDataAdapter(sqlQuery, sqlConnection);
+                MySqlDataAdapter sqlDataAdapter = new MySqlDataAdapter(sqlQuery, connectionString);
                 sqlDataAdapter.Fill(dataTable);
-                CloseConnection();
             }
             catch (Exception)
             {
@@ -69,10 +66,8 @@ namespace InventoryManagement.IL
 
             try
             {
-                OpenConnection();
-                MySqlDataAdapter sqlDataAdapter = new MySqlDataAdapter(sqlQuery, sqlConnection);
+                MySqlDataAdapter sqlDataAdapter = new MySqlDataAdapter(sqlQuery, connectionString);
                 sqlDataAdapter.Fill(dataSet);
-                CloseConnection();
             }
             catch (Exception)
             {
@@ -82,12 +77,12 @@ namespace InventoryManagement.IL
             return dataSet;
         }
 
-        public void ExecuteNonQuery(MySqlCommand sqlCommand)
+        public void ExecuteNonQuery(string sqlQuery)
         {
             try
             {
                 OpenConnection();
-                sqlCommand.Connection = sqlConnection;
+                sqlCommand.CommandText = sqlQuery;
                 sqlCommand.ExecuteNonQuery();
                 CloseConnection();
             }
@@ -97,14 +92,14 @@ namespace InventoryManagement.IL
             }
         }
 
-        public int ExecuteNonQueryTransaction(MySqlCommand sqlCommand)
+        public int ExecuteNonQueryTransaction(string sqlQuery)
         {
             int TransactionStatus;
 
             try
             {
                 OpenConnection();
-                sqlCommand.Connection = sqlConnection;
+                sqlCommand.CommandText = sqlQuery;
                 TransactionStatus = sqlCommand.ExecuteNonQuery();
                 CloseConnection();
             }
@@ -114,6 +109,57 @@ namespace InventoryManagement.IL
             }
 
             return TransactionStatus;
+        }
+
+        public int ExecuteNonQueryTransaction(MySqlCommand sqlCommandNew)
+        {
+            int TransactionStatus = 0;
+
+            try
+            {
+                sqlCommand.CommandText = sqlCommandNew.CommandText;
+                sqlCommand.Parameters.Clear();
+                foreach (MySqlParameter param in sqlCommandNew.Parameters)
+                {
+                    // The ICloneable interface provides a Clone() method
+                    sqlCommand.Parameters.Add(((ICloneable)param).Clone());
+                }
+                TransactionStatus = sqlCommand.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                //throw;
+            }
+            return TransactionStatus;
+        }
+
+        public void BeginTransaction()
+        {
+            try
+            {
+                OpenConnection();
+                sqlTransaction = sqlConnection.BeginTransaction();
+                sqlCommand.Connection = sqlConnection;
+                sqlCommand.Transaction = sqlTransaction;
+            }
+            catch (Exception)
+            {
+                sqlTransaction.Rollback();
+            }
+        }
+
+        public void CommitTransaction()
+        {
+            try
+            {
+                sqlTransaction.Commit();
+                CloseConnection();
+            }
+            catch (Exception)
+            {
+                sqlTransaction.Rollback();
+                CloseConnection();
+            }
         }
     }
 }
