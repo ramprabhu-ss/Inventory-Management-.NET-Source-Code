@@ -2,7 +2,6 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <script src="Scripts/jquery-3.7.0.min.js"></script>
-    <link href="Content/bootstrap.min.css" rel="stylesheet" />
     <script src="Scripts/bootstrap.bundle.min.js"></script>
 
     <script>
@@ -64,8 +63,8 @@
                     // 3. Update the target control value
                     var totalAmount = 0.00;
                     if (GrdTxtQuantity.val() != "" && GrdTxtPrice != "") {
-                        var quantity = Math.round(GrdTxtQuantity.val(),2);
-                        var price = Math.round(GrdTxtPrice,2);
+                        var quantity = Math.round(GrdTxtQuantity.val(), 2);
+                        var price = Math.round(GrdTxtPrice, 2);
                         totalAmount = Math.round((quantity * price), 2);
                     }
 
@@ -108,16 +107,28 @@
     <main class="shadow p-3 mb-5 bg-white rounded pageBody">
         <h4 id="title"><%: Title %></h4>
 
-        <div class="">
+        <div class="table-responsive">
             <div class="row p-2">
                 <div class="col-2" style="width: 10%;">
                     <asp:Label ID="LblDate" runat="server" Text="Delivery Date:" class="form-label" Style="vertical-align: middle;"></asp:Label>
                 </div>
                 <div class="col-2" style="width: 15%;">
-                    <asp:TextBox ID="TxtDeliveryDate" runat="server" TextMode="Date" CssClass="form-control form-control-sm"></asp:TextBox>
-
+                    <asp:TextBox ID="TxtDeliveryDate" runat="server" TextMode="Date" CssClass="form-control form-control-sm" TabIndex="1"></asp:TextBox>
+                    <asp:RequiredFieldValidator ID="RequiredFieldValidatorTxtDeliveryDate" runat="server" ControlToValidate="TxtDeliveryDate" ErrorMessage="Delivery Date is required." CssClass="text-danger" Display="Dynamic" />
                 </div>
-                <div class="col-2" style="width: 15%;">
+                <div class="col-3" style="width: 30%;">
+                    <div class="row">
+                        <div class="col-4" style="display: flex; align-items: center; padding-right: 0;">
+                            <asp:Label ID="LblEmployee" runat="server" Text="Employee ID:" class="form-label" Style="vertical-align: middle; margin-bottom: 0;"></asp:Label>
+                        </div>
+                        <div class="col-8" style="padding-left: 5px;">
+                            <asp:DropDownList ID="DdlEmployeeId" runat="server" AutoPostBack="false" EnableViewState="true" CssClass="form-control form-select-sm" TabIndex="2">
+                            </asp:DropDownList>
+                            <asp:RequiredFieldValidator ID="RequiredFieldValidatorDdlEmployeeId" runat="server" ControlToValidate="DdlEmployeeId" InitialValue="" ErrorMessage="Employee ID is required." CssClass="text-danger" Display="Dynamic" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2" style="width: 10%;">
                     <asp:Button ID="BtnView" runat="server" Text="View" OnClick="BtnView_Click" class="btn btn-primary btn-sm"></asp:Button>
                 </div>
             </div>
@@ -219,30 +230,61 @@
             </div>
         </div>
 
-        <div id="successAlert" runat="server" class="alert alert-dismissible alert-success" visible="false">
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            <strong>Submitted Successfully!</strong>
-        </div>
-
-        <div class="modal" id="successMessageModal">
-            <div class="modal-dialog" role="document">
+        <div class="modal fade" id="mandatoryMessageModal" tabindex="-1" aria-labelledby="mandatoryMessageModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Success</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true"></span>
-                        </button>
+                        <h5 class="modal-title text-danger" id="mandatoryMessageModalLabel">Please fill the mandatory field!</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Submitted Successfully!</p>
+                        <p id="mandatoryMessageContent">This is a mandatory message.</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success">Ok</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="successMessageModal" tabindex="-1" aria-labelledby="successMessageModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-success" id="successMessageModalLabel">Success!</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="successMessageContent">Saved successfully!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="btnAlert" type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function showMandatoryMessage(message) {
+                // Set the message content dynamically
+                document.getElementById('mandatoryMessageContent').innerText = message;
+                // Show the modal
+                var modal = new bootstrap.Modal(document.getElementById('mandatoryMessageModal'));
+                modal.show();
+            }
+            function showSuccessMessage(message, alertType) {
+                // Set the message content dynamically
+                document.getElementById('successMessageContent').innerText = message;
+                if (alertType == "Error") {
+                    document.getElementById('successMessageModalLabel').innerText = alertType;
+                    document.getElementById('successMessageModalLabel').className = "modal-title text-danger";
+                    document.getElementById('btnAlert').className = "btn btn-danger";
+                }
+                // Show the modal
+                var modal = new bootstrap.Modal(document.getElementById('successMessageModal'));
+                modal.show();
+            }
+        </script>
     </main>
 
 </asp:Content>

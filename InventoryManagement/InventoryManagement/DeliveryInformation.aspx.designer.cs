@@ -33,6 +33,42 @@ namespace InventoryManagement
         protected global::System.Web.UI.WebControls.TextBox TxtDeliveryDate;
 
         /// <summary>
+        /// RequiredFieldValidatorTxtDeliveryDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidatorTxtDeliveryDate;
+
+        /// <summary>
+        /// LblEmployee control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LblEmployee;
+
+        /// <summary>
+        /// DdlEmployeeId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DdlEmployeeId;
+
+        /// <summary>
+        /// RequiredFieldValidatorDdlEmployeeId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidatorDdlEmployeeId;
+
+        /// <summary>
         /// BtnView control.
         /// </summary>
         /// <remarks>
@@ -76,14 +112,5 @@ namespace InventoryManagement
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button BtnReset;
-
-        /// <summary>
-        /// successAlert control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl successAlert;
     }
 }

@@ -30,14 +30,15 @@ namespace InventoryManagement.IL
             return ds;
         }
 
-        public DataSet GetDeliveryDetails(string entryDate)
+        public DataSet GetDeliveryDetails(string DeliveryDate, string EmployeeId)
         {
             DataSet ds;
             try
             {
                 sqlQueryBuilder = new StringBuilder();
-                sqlQueryBuilder.Append("CALL DEL_INF_GET_DELIVERY_INFORMATION ('@DeliveryDate');");
-                sqlQueryBuilder.Replace("@DeliveryDate", entryDate);
+                sqlQueryBuilder.Append("CALL DEL_INF_GET_DELIVERY_INFORMATION ('@DeliveryDate', @EmployeeId);");
+                sqlQueryBuilder.Replace("@DeliveryDate", DeliveryDate);
+                sqlQueryBuilder.Replace("@EmployeeId", EmployeeId);
                 ds = objUtilitiy.GetDataSet(sqlQueryBuilder.ToString());
             }
             catch (Exception)
@@ -127,8 +128,6 @@ namespace InventoryManagement.IL
                     }
 
                     objUtilitiy.CommitTransaction();
-                    //sqlCommand = new MySqlCommand(sqlQueryBuilder.ToString());
-                    //TransactionStatus = objUtilitiy.ExecuteNonQueryTransaction(sqlCommand.CommandText);
                 }
             }
             catch (Exception)
