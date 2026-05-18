@@ -8,17 +8,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%: Page.Title %></title>
 
+    <!-- Load jQuery first -->
+    <script src="Scripts/jquery-3.7.0.min.js"></script>
+    <!-- Load Popper.js (required for Bootstrap dropdowns) -->
+    <script src="Scripts/popper.min.js"></script>
+    <!-- Load Bootstrap JavaScript -->
+    <script src="Scripts/bootstrap.bundle.min.js"></script>
+
     <asp:PlaceHolder runat="server">
         <%: Scripts.Render("~/bundles/modernizr") %>
-        <script src="Scripts/popper.min.js"></script>
     </asp:PlaceHolder>
 
     <webopt:BundleReference runat="server" Path="~/Content/css" />
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-    <script src="Scripts/jquery-3.7.0.min.js"></script>
     <link href="Content/bootstrap.min.css" rel="stylesheet" />
-    <script src="Scripts/bootstrap.bundle.min.js"></script>
 
+    <!-- Fallback script to check if jQuery and Bootstrap are loaded -->
+    <script>
+        if (typeof jQuery === 'undefined') {
+            console.error('jQuery is not loaded. Please check the script reference.');
+        }
+        if (typeof bootstrap === 'undefined') {
+            console.error('Bootstrap is not loaded. Please check the script reference.');
+        }
+    </script>
 </head>
 <body>
     <form runat="server">
@@ -41,43 +54,41 @@
             </Scripts>
         </asp:ScriptManager>
 
-        <%--<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary text-white">--%>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary text-white">
             <div class="container-fluid">
-                <a class="navbar-brand" runat="server" href="~/">Inventory</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarColor01">
                     <ul class="navbar-nav me-auto">
                         <%--<li class="nav-item">
-                            <a class="nav-link active" href="~/">Home<span class="visually-hidden">(current)</span></a>
-                        </li>--%>
-                        <li class="nav-item">
-                            <a class="nav-link" runat="server" href="~/AreaMaster">Area Master</a>
+                            <a class="nav-link" runat="server" href="~/AreaMaster.aspx">Area Master</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" runat="server" href="~/DeliveryInformation.aspx">Delivery Information</a>
-                        </li>
-                        <%--<li class="nav-item">
-                            <a class="nav-link" href="#">Features</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Pricing</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">About</a>
                         </li>--%>
-                        <%--<li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Masters</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Separated link</a>
+                                <a class="dropdown-item" href="AreaMaster.aspx">Area Master</a>
+                                <a class="dropdown-item" href="#">Customer Master</a>
                             </div>
-                        </li>--%>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Transactions</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="DeliveryInformation.aspx">Delivery Information</a>
+                            </div>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Reports</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="DeliveryInformationReport.aspx">Delivery Information</a>
+                            </div>
+                        </li>
                     </ul>
                 </div>
 
@@ -87,7 +98,6 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">Hello! Ram</a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <%--<li>Profile</li>--%>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
@@ -99,37 +109,12 @@
                         </li>
                     </ul>
                 </div>
-
             </div>
         </nav>
-
-        <%--<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary text-white">
-            <div class="container">
-                <a class="navbar-brand" runat="server" href="~/">Inventory</a>
-                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">--%>
-        <%--<li class="nav-item"><a class="nav-link" runat="server" href="~/">Home</a></li>--%>
-        <%--<li class="nav-item"><a class="nav-link" runat="server" href="~/About">About</a></li>--%>
-        <%--<li class="nav-item"><a class="nav-link" runat="server" href="~/Contact">Contact</a></li>--%>
-        <%--<li class="nav-item"><a class="nav-link" runat="server" href="~/AreaMaster">Area Master</a></li>--%>
-        <%--<li class="nav-item"><a class="nav-link" runat="server" href="~/DeliveryInformation.aspx">Salees Entry</a></li>--%>
-        <%--<li class="nav-item"><a class="nav-link" runat="server" href="~/Area">Area</a></li>--%>
-        <%--</ul>
-                </div>
-            </div>
-        </nav>--%>
 
         <div class="body-content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
-            <%--<hr />--%>
-            <%--<footer>
-                <p>&copy; <%: DateTime.Now.Year %> - My ASP.NET Application</p>
-            </footer>--%>
         </div>
     </form>
     <asp:PlaceHolder runat="server">

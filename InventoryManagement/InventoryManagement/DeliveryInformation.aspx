@@ -1,85 +1,81 @@
 ﻿<%@ Page Title="Delivery Information" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="DeliveryInformation.aspx.cs" Inherits="InventoryManagement.DeliveryInformation" MaintainScrollPositionOnPostback="true" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+
+    <!-- Load jQuery first -->
     <script src="Scripts/jquery-3.7.0.min.js"></script>
+    <!-- Load Popper.js (required for Bootstrap dropdowns) -->
+    <script src="Scripts/popper.min.js"></script>
+    <!-- Load Bootstrap JavaScript -->
     <script src="Scripts/bootstrap.bundle.min.js"></script>
 
     <script>
-        function calculateQuantity() {
-
+        function calculateTotalAmount() {
             $(document).ready(function () {
-                // Select all textboxes within the GridView by partial ID match
+                // Attach keypress event to Quantity and Price textboxes
+                $("[id*=GrdDeliveryInfo] [id*=GrdTxtQuantity], [id*=GrdDeliveryInfo] [id*=GrdTxtPrice]").on("keyup", function () {
+                    // Get the current row of the triggered textbox
+                    var row = $(this).closest("tr");
+
+                    // Get Quantity and Price values
+                    var quantity = parseFloat(row.find("[id*=GrdTxtQuantity]").val()) || 0;
+                    var price = parseFloat(row.find("[id*=GrdTxtPrice]").val()) || 0;
+
+                    // Calculate total amount
+                    var totalAmount = (quantity * price).toFixed(2);
+
+                    // Set the total amount in the TotalAmount textbox
+                    row.find("[id*=GrdTxtTotalAmount]").val(totalAmount);
+                });
+            });
+        }
+
+        function calculateRunningTotals() {
+            $(document).ready(function () {
+                // Attach keypress event to Quantity textboxes
                 $("[id*=GrdDeliveryInfo] [id*=GrdTxtQuantity]").on("keyup", function () {
+                    var totalQuantity = 0;
 
-                    var GrdTxtQuantity = $(this).val();
-                    //if (GrdTxtQuantity == "")
-                    //GrdTxtQuantity = "0.00";
+                    // Iterate through all Quantity textboxes to calculate the total
+                    $("[id*=GrdDeliveryInfo] [id*=GrdTxtQuantity]").each(function () {
+                        totalQuantity += parseFloat($(this).val()) || 0;
+                    });
 
-                    // 1. Get the current row of the triggered textbox
-                    var row = $(this).closest("tr");
-
-                    // 2. Find the other control in the same row
-                    var GrdTxtPrice = row.find("[id*=GrdTxtPrice]");
-                    //if (GrdTxtPrice.val() == "")
-                    //GrdTxtPrice.val("0.00");
-
-                    // 3. Update the target control value
-                    var totalAmount = 0.00;
-                    if (GrdTxtQuantity != "" && GrdTxtPrice.val() != "") {
-                        var quantity = GrdTxtQuantity;
-                        var price = parseFloat(GrdTxtPrice.val());
-                        totalAmount = Math.round((quantity * price), 2);
-                    }
-
-                    var GrdTxtTotalAmount = row.find("[id*=GrdTxtTotalAmount]");
-                    GrdTxtTotalAmount.val(totalAmount);
-
-                    // Use .val() if the target is another TextBox
-                    // row.find("[id*=txtPrice]").val(newValue);
+                    // Update the footer label with the total quantity
+                    $("[id*=LblFooterTotalQuantity]").text("Total Quantity: " + totalQuantity.toFixed(2));
                 });
-            });
-        }
 
-        function calculatePrice() {
-
-            $(document).ready(function () {
-                // Select all textboxes within the GridView by partial ID match
+                // Attach keypress event to Price textboxes
                 $("[id*=GrdDeliveryInfo] [id*=GrdTxtPrice]").on("keyup", function () {
-                    //$(this).on("keyup", function () {
+                    var totalAmount = 0;
 
-                    var GrdTxtPrice = $(this).val();
-                    //if (GrdTxtPrice == "")
-                    //GrdTxtPrice = "0.00";
+                    // Iterate through all TotalAmount textboxes to calculate the total
+                    $("[id*=GrdDeliveryInfo] [id*=GrdTxtTotalAmount]").each(function () {
+                        totalAmount += parseFloat($(this).val()) || 0;
+                    });
 
-                    // 1. Get the current row of the triggered textbox
-                    var row = $(this).closest("tr");
+                    // Update the footer label with the total quantity
+                    $("[id*=LblFooterTotalAmount]").text("Total Amount: " + totalAmount.toFixed(2));
+                });
 
-                    // 2. Find the other control in the same row
-                    var GrdTxtQuantity = row.find("[id*=GrdTxtQuantity]");
-                    //if (GrdTxtQuantity.val() == "")
-                    //GrdTxtQuantity.val("0.00");
+                // Attach keypress event to TotalAmount textboxes
+                $("[id*=GrdPaymentMode] [id*=GrdTxtAmount]").on("keyup", function () {
+                    var totalAmount = 0;
 
+                    // Iterate through all TotalAmount textboxes to calculate the total
+                    $("[id*=GrdPaymentMode] [id*=GrdTxtAmount]").each(function () {
+                        totalAmount += parseFloat($(this).val()) || 0;
+                    });
 
-                    // 3. Update the target control value
-                    var totalAmount = 0.00;
-                    if (GrdTxtQuantity.val() != "" && GrdTxtPrice != "") {
-                        var quantity = Math.round(GrdTxtQuantity.val(), 2);
-                        var price = Math.round(GrdTxtPrice, 2);
-                        totalAmount = Math.round((quantity * price), 2);
-                    }
-
-                    var GrdTxtTotalAmount = row.find("[id*=GrdTxtTotalAmount]");
-                    GrdTxtTotalAmount.val(totalAmount);
-                    //debugger;
-                    //var q = $("[id*=LblFooterTotalAmount]").val() + totalAmount;
-                    //$("#LblFooterTotalAmount").val(q);
-
-                    // Use .val() if the target is another TextBox
-                    // row.find("[id*=txtPrice]").val(newValue);
+                    // Update the footer label with the total amount
+                    $("[id*=LblFooterAmount]").text("Total Amount: " + totalAmount.toFixed(2));
                 });
             });
         }
 
+        // Call the functions to attach the events
+        calculateTotalAmount();
+        calculateRunningTotals();
     </script>
 
     <style type="text/css">
@@ -107,7 +103,7 @@
     <main class="shadow p-3 mb-5 bg-white rounded pageBody">
         <h4 id="title"><%: Title %></h4>
 
-        <div class="table-responsive">
+        <div class="">
             <div class="row p-2">
                 <div class="col-2" style="width: 10%;">
                     <asp:Label ID="LblDate" runat="server" Text="Delivery Date:" class="form-label" Style="vertical-align: middle;"></asp:Label>
@@ -130,6 +126,10 @@
                 </div>
                 <div class="col-2" style="width: 10%;">
                     <asp:Button ID="BtnView" runat="server" Text="View" OnClick="BtnView_Click" class="btn btn-primary btn-sm"></asp:Button>
+                </div>
+                <div class="col-2" style="width: 15%;">
+                    <asp:Label ID="LblDelivery_Id" runat="server" Text="Delivery ID:" class="form-label" Style="vertical-align: middle;"></asp:Label>
+                    <asp:Label ID="LblDeliveryId" runat="server" Text="" class="form-label" Style="vertical-align: middle;"></asp:Label>
                 </div>
             </div>
         </div>
@@ -157,15 +157,15 @@
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Quantity" HeaderStyle-CssClass="bg-primary text-white" FooterStyle-HorizontalAlign="Right">
                         <ItemTemplate>
-                            <asp:TextBox ID="GrdTxtQuantity" runat="server" TextMode="Number" EnableViewState="true" onkeypress="calculateQuantity();" class="form-control alignRight" TabIndex="2"></asp:TextBox>
+                            <asp:TextBox ID="GrdTxtQuantity" runat="server" TextMode="Number" EnableViewState="true" class="form-control alignRight" TabIndex="2"></asp:TextBox>
                         </ItemTemplate>
                         <FooterTemplate>
-                            <asp:Label ID="LblFooterTotalQuantity" runat="server" Text="Total Quantity: " class="form-label alignFooterTextRight"></asp:Label>
+                            <asp:Label ID="LblFooterTotalQuantity" runat="server" class="form-label alignFooterTextRight"></asp:Label>
                         </FooterTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Price" HeaderStyle-CssClass="bg-primary text-white">
                         <ItemTemplate>
-                            <asp:TextBox ID="GrdTxtPrice" runat="server" TextMode="Number" EnableViewState="true" onkeypress="calculatePrice();" class="form-control alignRight" TabIndex="3"></asp:TextBox>
+                            <asp:TextBox ID="GrdTxtPrice" runat="server" TextMode="Number" EnableViewState="true" class="form-control alignRight" TabIndex="3"></asp:TextBox>
                         </ItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Total Amount" HeaderStyle-CssClass="bg-primary text-white" FooterStyle-HorizontalAlign="Right">
@@ -174,7 +174,7 @@
                             <asp:TextBox ID="GrdTxtTotalAmount" runat="server" TextMode="Number" EnableViewState="true" ReadOnly="true" class="form-control alignRight" TabIndex="4"></asp:TextBox>
                         </ItemTemplate>
                         <FooterTemplate>
-                            <asp:Label ID="LblFooterTotalAmount" runat="server" Text="Total Amount: " class="form-label alignFooterTextRight"></asp:Label>
+                            <asp:Label ID="LblFooterTotalAmount" runat="server" class="form-label alignFooterTextRight"></asp:Label>
                         </FooterTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Remarks" HeaderStyle-CssClass="bg-primary text-white">
@@ -214,17 +214,20 @@
                             <asp:TextBox ID="GrdTxtAmount" runat="server" TextMode="Number" EnableViewState="true" class="form-control alignRight" TabIndex="2"></asp:TextBox>
                         </ItemTemplate>
                         <FooterTemplate>
-                            <asp:Label ID="LblFooterAmount" runat="server" Text="Total Amount: " class="form-label alignFooterTextRight"></asp:Label>
+                            <asp:Label ID="LblFooterAmount" runat="server" class="form-label alignFooterTextRight"></asp:Label>
                         </FooterTemplate>
                     </asp:TemplateField>
                 </Columns>
             </asp:GridView>
+            <hr />
         </div>
 
         <div class="text-center">
             <div class="row p-2">
                 <div class="col-12">
                     <asp:Button ID="BtnSave" runat="server" Text="Save" OnClick="BtnSave_Click" class="btn btn-primary btn-sm" />
+                    <asp:Button ID="BtnModify" runat="server" Text="Modify" OnClick="BtnModify_Click" class="btn btn-primary btn-sm" />
+                    <asp:Button ID="BtnDelete" runat="server" Text="Delete" OnClientClick="showDeleteConfirmMessage(); return false;" OnClick="BtnDelete_Click" class="btn btn-danger btn-sm" />
                     <asp:Button ID="BtnReset" runat="server" Text="Reset" OnClick="BtnReset_Click" class="btn btn-secondary btn-sm" />
                 </div>
             </div>
@@ -264,6 +267,27 @@
             </div>
         </div>
 
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-danger" id="confirmDeleteModalLabel">Confirm Delete</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete this record?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button id="btnConfirmDelete" type="button" class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <asp:HiddenField ID="HFieldTransactionType" runat="server" />
+        </div>
         <script>
             function showMandatoryMessage(message) {
                 // Set the message content dynamically
@@ -272,6 +296,7 @@
                 var modal = new bootstrap.Modal(document.getElementById('mandatoryMessageModal'));
                 modal.show();
             }
+
             function showSuccessMessage(message, alertType) {
                 // Set the message content dynamically
                 document.getElementById('successMessageContent').innerText = message;
@@ -284,6 +309,24 @@
                 var modal = new bootstrap.Modal(document.getElementById('successMessageModal'));
                 modal.show();
             }
+
+            function showDeleteConfirmMessage() {
+                // Show the delete confirmation modal
+                var modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+                modal.show();
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                document.getElementById('btnConfirmDelete').addEventListener('click', function () {
+                    __doPostBack('<%= BtnDelete.UniqueID %>', '');
+                });
+            });
+
+            // Trigger Reset button click when OK button in successMessageModal is clicked
+            document.getElementById('btnAlert').addEventListener('click', function () {
+                document.getElementById('<%= BtnReset.ClientID %>').click();
+            });
+
         </script>
     </main>
 

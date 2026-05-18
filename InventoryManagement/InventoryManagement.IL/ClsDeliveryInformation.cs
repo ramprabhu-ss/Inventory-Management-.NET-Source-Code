@@ -4,14 +4,15 @@ using System.Collections;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace InventoryManagement.IL
 {
     public class ClsDeliveryInformation
     {
         public ClsUtility objUtilitiy = new ClsUtility();
+        MySqlCommand sqlCommand = new MySqlCommand();
         StringBuilder sqlQueryBuilder;
-        MySqlCommand sqlCommand;
 
         public DataSet GetMasters()
         {
@@ -52,34 +53,46 @@ namespace InventoryManagement.IL
         public int InitiateTransaction(ArrayList arrListDeliveryInfo, ArrayList arrListDeliveryDetail, ArrayList arrListPaymentDetail)
         {
             int TransactionStatus = 0;
+            int Delivery_ID;
 
             try
             {
                 if (arrListDeliveryInfo.Count > 0 && arrListDeliveryDetail.Count > 0 && arrListPaymentDetail.Count > 0)
                 {
+                    sqlQueryBuilder = new StringBuilder();
+                    sqlQueryBuilder.Append("SELECT (MAX(IFNULL(DELIVERY_ID,0)) + 1) AS DELIVERY_ID FROM DELIVERY_INF");
+                    DataTable dt = objUtilitiy.GetDataTable(sqlQueryBuilder.ToString());
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        Delivery_ID = Convert.ToInt32(dt.Rows[0]["DELIVERY_ID"]);
+                    }
+                    else
+                    {
+                        Delivery_ID = 1; // Start from 1 if there are no records
+                    }
+
                     objUtilitiy.BeginTransaction();
 
                     for (int i = 0; i < arrListDeliveryInfo.Count; i++)
                     {
                         DeliveryMaster objDeliveryMaster = (DeliveryMaster)arrListDeliveryInfo[i];
-                        
+
                         sqlQueryBuilder = new StringBuilder();
-                        sqlQueryBuilder.Append("INSERT INTO delivery_inf (Delivery_ID, DeliveryDate, EmployeeID, Total_Amount, ");
-                        sqlQueryBuilder.Append("Total_Quantity, CreatedBy, created_at) VALUES (@Delivery_ID, @DeliveryDate, ");
+                        sqlQueryBuilder.Append("INSERT INTO delivery_inf (DeliveryDate, EmployeeID, Total_Amount, ");
+                        sqlQueryBuilder.Append("Total_Quantity, CreatedBy, created_at) VALUES (@DeliveryDate, ");
                         sqlQueryBuilder.Append("@EmployeeID, @Total_Amount, @Total_Quantity, @CreatedBy, @created_at);\n");
 
                         sqlCommand = new MySqlCommand(sqlQueryBuilder.ToString());
-                        sqlCommand.Parameters.AddWithValue("@Delivery_ID", "");
-                        sqlCommand.Parameters.AddWithValue("@DeliveryDate", objDeliveryMaster.Param_DeliveryDate);
-                        sqlCommand.Parameters.AddWithValue("@EmployeeID", objDeliveryMaster.Param_EmployeeID);
-                        sqlCommand.Parameters.AddWithValue("@Total_Amount", objDeliveryMaster.Param_TotalAmount);
-                        sqlCommand.Parameters.AddWithValue("@Total_Quantity", objDeliveryMaster.Param_TotalQuantity);
-                        sqlCommand.Parameters.AddWithValue("@CreatedBy", objDeliveryMaster.Param_CreatedBy);
-                        sqlCommand.Parameters.AddWithValue("@created_at", objDeliveryMaster.Param_created_at);
+                        //sqlCommand.CommandText = sqlQueryBuilder.ToString();
+                        sqlCommand.Parameters.AddWithValue("@DeliveryDate", objDeliveryMaster.DeliveryDate);
+                        sqlCommand.Parameters.AddWithValue("@EmployeeID", objDeliveryMaster.EmployeeID);
+                        sqlCommand.Parameters.AddWithValue("@Total_Amount", objDeliveryMaster.TotalAmount);
+                        sqlCommand.Parameters.AddWithValue("@Total_Quantity", objDeliveryMaster.TotalQuantity);
+                        sqlCommand.Parameters.AddWithValue("@CreatedBy", objDeliveryMaster.CreatedBy);
+                        sqlCommand.Parameters.AddWithValue("@created_at", objDeliveryMaster.created_at);
 
                         TransactionStatus = objUtilitiy.ExecuteNonQueryTransaction(sqlCommand);
                         sqlCommand.Parameters.Clear();
-                        sqlQueryBuilder = new StringBuilder();
                     }
 
                     for (int i = 0; i < arrListDeliveryDetail.Count; i++)
@@ -91,18 +104,17 @@ namespace InventoryManagement.IL
                         sqlQueryBuilder.Append("ProductID, QuantityOutForDelivery, Price, created_at) VALUES (@Delivery_ID, ");
                         sqlQueryBuilder.Append("@DeliveryDate, @EmployeeID, @ProductID, @QuantityOutForDelivery, @Price, @created_at);\n");
 
-                        sqlCommand = new MySqlCommand(sqlQueryBuilder.ToString());
-                        sqlCommand.Parameters.AddWithValue("@Detail_ID", "396");
-                        sqlCommand.Parameters.AddWithValue("@Delivery_ID", "");
-                        sqlCommand.Parameters.AddWithValue("@DeliveryDate", objDeliveryDetails.Param_DeliveryDate);
-                        sqlCommand.Parameters.AddWithValue("@EmployeeID", objDeliveryDetails.Param_EmployeeID);
-                        sqlCommand.Parameters.AddWithValue("@ProductID", objDeliveryDetails.Param_ProductId);
-                        sqlCommand.Parameters.AddWithValue("@QuantityOutForDelivery", objDeliveryDetails.Param_Quantity);
-                        sqlCommand.Parameters.AddWithValue("@Price", objDeliveryDetails.Param_Price);
-                        sqlCommand.Parameters.AddWithValue("@created_at", objDeliveryDetails.Param_created_at);
+                        objUtilitiy.sqlCommand.CommandText = sqlQueryBuilder.ToString();
+                        objUtilitiy.sqlCommand.Parameters.AddWithValue("@Delivery_ID", Delivery_ID);
+                        objUtilitiy.sqlCommand.Parameters.AddWithValue("@DeliveryDate", objDeliveryDetails.DeliveryDate);
+                        objUtilitiy.sqlCommand.Parameters.AddWithValue("@EmployeeID", objDeliveryDetails.EmployeeID);
+                        objUtilitiy.sqlCommand.Parameters.AddWithValue("@ProductID", objDeliveryDetails.ProductId);
+                        objUtilitiy.sqlCommand.Parameters.AddWithValue("@QuantityOutForDelivery", objDeliveryDetails.Quantity);
+                        objUtilitiy.sqlCommand.Parameters.AddWithValue("@Price", objDeliveryDetails.Price);
+                        objUtilitiy.sqlCommand.Parameters.AddWithValue("@created_at", objDeliveryDetails.created_at);
 
-                        TransactionStatus = objUtilitiy.ExecuteNonQueryTransaction(sqlCommand);
-                        sqlCommand.Parameters.Clear();
+                        TransactionStatus = objUtilitiy.ExecuteNonQueryTransaction();
+                        objUtilitiy.sqlCommand.Parameters.Clear();
                     }
 
                     for (int i = 0; i < arrListPaymentDetail.Count; i++)
@@ -110,21 +122,20 @@ namespace InventoryManagement.IL
                         PaymentDetails objPaymentDetails = (PaymentDetails)arrListPaymentDetail[i];
 
                         sqlQueryBuilder = new StringBuilder();
-                        sqlQueryBuilder.Append("INSERT INTO delivery_item_payment (Payment_ID, Delivery_ID, DeliveryDate, EmployeeID, ");
-                        sqlQueryBuilder.Append("PaymentMode, Amount, created_at) VALUES (@Payment_ID, @Delivery_ID, ");
+                        sqlQueryBuilder.Append("INSERT INTO delivery_item_payment (Delivery_ID, DeliveryDate, EmployeeID, ");
+                        sqlQueryBuilder.Append("PaymentMode, Amount, created_at) VALUES (@Delivery_ID, ");
                         sqlQueryBuilder.Append("@DeliveryDate, @EmployeeID, @PaymentMode, @Amount, @created_at);\n");
 
-                        sqlCommand = new MySqlCommand(sqlQueryBuilder.ToString());
-                        sqlCommand.Parameters.AddWithValue("@Payment_ID", "");
-                        sqlCommand.Parameters.AddWithValue("@Delivery_ID", "");
-                        sqlCommand.Parameters.AddWithValue("@DeliveryDate", objPaymentDetails.Param_DeliveryDate);
-                        sqlCommand.Parameters.AddWithValue("@EmployeeID", objPaymentDetails.Param_EmployeeID);
-                        sqlCommand.Parameters.AddWithValue("@PaymentMode", objPaymentDetails.Param_PaymentMode);
-                        sqlCommand.Parameters.AddWithValue("@Amount", objPaymentDetails.Param_Amount);
-                        sqlCommand.Parameters.AddWithValue("@created_at", objPaymentDetails.Param_created_at);
+                        objUtilitiy.sqlCommand.CommandText = sqlQueryBuilder.ToString();
+                        objUtilitiy.sqlCommand.Parameters.AddWithValue("@Delivery_ID", Delivery_ID);
+                        objUtilitiy.sqlCommand.Parameters.AddWithValue("@DeliveryDate", objPaymentDetails.DeliveryDate);
+                        objUtilitiy.sqlCommand.Parameters.AddWithValue("@EmployeeID", objPaymentDetails.EmployeeID);
+                        objUtilitiy.sqlCommand.Parameters.AddWithValue("@PaymentMode", objPaymentDetails.PaymentMode);
+                        objUtilitiy.sqlCommand.Parameters.AddWithValue("@Amount", objPaymentDetails.Amount);
+                        objUtilitiy.sqlCommand.Parameters.AddWithValue("@created_at", objPaymentDetails.created_at);
 
-                        TransactionStatus = objUtilitiy.ExecuteNonQueryTransaction(sqlCommand);
-                        sqlCommand.Parameters.Clear();
+                        TransactionStatus = objUtilitiy.ExecuteNonQueryTransaction();
+                        objUtilitiy.sqlCommand.Parameters.Clear();
                     }
 
                     objUtilitiy.CommitTransaction();
@@ -137,248 +148,267 @@ namespace InventoryManagement.IL
 
             return TransactionStatus;
         }
+
+        public int InsertTransaction(ArrayList arrListDeliveryInfo, ArrayList arrListDeliveryDetail, ArrayList arrListPaymentDetail)
+        {
+            int TransactionStatus = 0;
+
+            try
+            {
+                int Delivery_ID = 0;
+                sqlQueryBuilder = new StringBuilder();
+                sqlQueryBuilder.Append("SELECT (MAX(IFNULL(DELIVERY_ID,0)) + 1) AS DELIVERY_ID FROM DELIVERY_INF");
+
+                DataTable dt = objUtilitiy.GetDataTable(sqlQueryBuilder.ToString());
+                if (dt != null && dt.Rows.Count > 0)
+                    Delivery_ID = Convert.ToInt32(dt.Rows[0]["DELIVERY_ID"]);
+                else
+                    Delivery_ID = 1; // Start from 1 if there are no records
+
+                sqlQueryBuilder = new StringBuilder();
+
+                for (int i = 0; i < arrListDeliveryInfo.Count; i++)
+                {
+                    DeliveryMaster objDeliveryMaster = (DeliveryMaster)arrListDeliveryInfo[i];
+
+                    sqlQueryBuilder.Append("INSERT INTO delivery_inf (Delivery_ID, DeliveryDate, EmployeeID, Total_Amount, ");
+                    sqlQueryBuilder.Append("Total_Quantity, CreatedBy, created_at) VALUES (@Delivery_ID, '@DeliveryDate', ");
+                    sqlQueryBuilder.Append("@EmployeeID, @Total_Amount, @Total_Quantity,'@CreatedBy', '@created_at');\n");
+
+                    sqlQueryBuilder.Replace("@Delivery_ID", Convert.ToString(Delivery_ID));
+                    sqlQueryBuilder.Replace("@DeliveryDate", objDeliveryMaster.DeliveryDate);
+                    sqlQueryBuilder.Replace("@EmployeeID", objDeliveryMaster.EmployeeID);
+                    sqlQueryBuilder.Replace("@Total_Amount", objDeliveryMaster.TotalAmount);
+                    sqlQueryBuilder.Replace("@Total_Quantity", objDeliveryMaster.TotalQuantity);
+                    sqlQueryBuilder.Replace("@CreatedBy", objDeliveryMaster.CreatedBy);
+                    sqlQueryBuilder.Replace("@created_at", objDeliveryMaster.created_at);
+                }
+
+                for (int i = 0; i < arrListDeliveryDetail.Count; i++)
+                {
+                    DeliveryDetails objDeliveryDetails = (DeliveryDetails)arrListDeliveryDetail[i];
+
+                    sqlQueryBuilder.Append("INSERT INTO delivery_item_details (Delivery_ID, DeliveryDate, EmployeeID, ");
+                    sqlQueryBuilder.Append("ProductID, QuantityOutForDelivery, Price, created_at) VALUES (@Delivery_ID, ");
+                    sqlQueryBuilder.Append("'@DeliveryDate', @EmployeeID, @ProductID, @QuantityOutForDelivery, @Price, '@created_at');\n");
+
+                    sqlQueryBuilder.Replace("@Delivery_ID", Convert.ToString(Delivery_ID));
+                    sqlQueryBuilder.Replace("@DeliveryDate", objDeliveryDetails.DeliveryDate);
+                    sqlQueryBuilder.Replace("@EmployeeID", objDeliveryDetails.EmployeeID);
+                    sqlQueryBuilder.Replace("@ProductID", objDeliveryDetails.ProductId);
+                    sqlQueryBuilder.Replace("@QuantityOutForDelivery", objDeliveryDetails.Quantity);
+                    sqlQueryBuilder.Replace("@Price", objDeliveryDetails.Price);
+                    sqlQueryBuilder.Replace("@created_at", objDeliveryDetails.created_at);
+                }
+
+                for (int i = 0; i < arrListPaymentDetail.Count; i++)
+                {
+                    PaymentDetails objPaymentDetails = (PaymentDetails)arrListPaymentDetail[i];
+
+                    sqlQueryBuilder.Append("INSERT INTO delivery_item_payment (Delivery_ID, DeliveryDate, EmployeeID, ");
+                    sqlQueryBuilder.Append("PaymentMode, Amount, created_at) VALUES (@Delivery_ID, ");
+                    sqlQueryBuilder.Append("'@DeliveryDate', @EmployeeID, '@PaymentMode', @Amount, '@created_at');\n");
+
+                    sqlQueryBuilder.Replace("@Delivery_ID", Convert.ToString(Delivery_ID));
+                    sqlQueryBuilder.Replace("@DeliveryDate", objPaymentDetails.DeliveryDate);
+                    sqlQueryBuilder.Replace("@EmployeeID", objPaymentDetails.EmployeeID);
+                    sqlQueryBuilder.Replace("@PaymentMode", objPaymentDetails.PaymentMode);
+                    sqlQueryBuilder.Replace("@Amount", objPaymentDetails.Amount);
+                    sqlQueryBuilder.Replace("@created_at", objPaymentDetails.created_at);
+                }
+
+                if (sqlQueryBuilder.Length > 0)
+                {
+                    objUtilitiy.BeginTransaction();
+                    TransactionStatus = objUtilitiy.ExecuteNonQueryTransaction(sqlQueryBuilder.ToString());
+                    objUtilitiy.CommitTransaction();
+                }
+                else
+                {
+                    TransactionStatus = 0; // No data to insert
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return TransactionStatus;
+        }
+
+        public int UpdateTransaction(ArrayList arrListDeliveryInfo, ArrayList arrListDeliveryDetail, ArrayList arrListPaymentDetail)
+        {
+            int TransactionStatus = 0;
+
+            try
+            {
+                string Delivery_ID = "";
+                sqlQueryBuilder = new StringBuilder();
+
+                for (int i = 0; i < arrListDeliveryInfo.Count; i++)
+                {
+                    DeliveryMaster objDeliveryMaster = (DeliveryMaster)arrListDeliveryInfo[i];
+
+                    sqlQueryBuilder.Append("UPDATE delivery_inf SET DeliveryDate = '@DeliveryDate', EmployeeID = @EmployeeID, ");
+                    sqlQueryBuilder.Append("Total_Amount = @Total_Amount, Total_Quantity = @Total_Quantity, CreatedBy = '@CreatedBy', ");
+                    sqlQueryBuilder.Append("created_at = '@created_at' WHERE Delivery_ID = @Delivery_ID;\n");
+
+                    Delivery_ID = objDeliveryMaster.DeliveryId;
+                    sqlQueryBuilder.Replace("@Delivery_ID", Delivery_ID);
+                    sqlQueryBuilder.Replace("@DeliveryDate", objDeliveryMaster.DeliveryDate);
+                    sqlQueryBuilder.Replace("@EmployeeID", objDeliveryMaster.EmployeeID);
+                    sqlQueryBuilder.Replace("@Total_Amount", objDeliveryMaster.TotalAmount);
+                    sqlQueryBuilder.Replace("@Total_Quantity", objDeliveryMaster.TotalQuantity);
+                    sqlQueryBuilder.Replace("@CreatedBy", objDeliveryMaster.CreatedBy);
+                    sqlQueryBuilder.Replace("@created_at", objDeliveryMaster.created_at);
+                }
+
+                sqlQueryBuilder.Append("DELETE FROM delivery_item_details WHERE Delivery_ID = @Delivery_ID;\n");
+                sqlQueryBuilder.Replace("@Delivery_ID", Delivery_ID);
+
+                for (int i = 0; i < arrListDeliveryDetail.Count; i++)
+                {
+                    DeliveryDetails objDeliveryDetails = (DeliveryDetails)arrListDeliveryDetail[i];
+
+                    sqlQueryBuilder.Append("INSERT INTO delivery_item_details (Delivery_ID, DeliveryDate, EmployeeID, ");
+                    sqlQueryBuilder.Append("ProductID, QuantityOutForDelivery, Price, created_at) VALUES (@Delivery_ID, ");
+                    sqlQueryBuilder.Append("'@DeliveryDate', @EmployeeID, @ProductID, @QuantityOutForDelivery, @Price, '@created_at');\n");
+
+                    sqlQueryBuilder.Replace("@Delivery_ID", objDeliveryDetails.DeliveryId);
+                    sqlQueryBuilder.Replace("@DeliveryDate", objDeliveryDetails.DeliveryDate);
+                    sqlQueryBuilder.Replace("@EmployeeID", objDeliveryDetails.EmployeeID);
+                    sqlQueryBuilder.Replace("@ProductID", objDeliveryDetails.ProductId);
+                    sqlQueryBuilder.Replace("@QuantityOutForDelivery", objDeliveryDetails.Quantity);
+                    sqlQueryBuilder.Replace("@Price", objDeliveryDetails.Price);
+                    sqlQueryBuilder.Replace("@created_at", objDeliveryDetails.created_at);
+                }
+
+                sqlQueryBuilder.Append("DELETE FROM delivery_item_payment WHERE Delivery_ID = @Delivery_ID;\n");
+                sqlQueryBuilder.Replace("@Delivery_ID", Delivery_ID);
+
+                for (int i = 0; i < arrListPaymentDetail.Count; i++)
+                {
+                    PaymentDetails objPaymentDetails = (PaymentDetails)arrListPaymentDetail[i];
+
+                    sqlQueryBuilder.Append("INSERT INTO delivery_item_payment (Delivery_ID, DeliveryDate, EmployeeID, ");
+                    sqlQueryBuilder.Append("PaymentMode, Amount, created_at) VALUES (@Delivery_ID, ");
+                    sqlQueryBuilder.Append("'@DeliveryDate', @EmployeeID, '@PaymentMode', @Amount, '@created_at');\n");
+
+                    sqlQueryBuilder.Replace("@Delivery_ID", objPaymentDetails.DeliveryId);
+                    sqlQueryBuilder.Replace("@DeliveryDate", objPaymentDetails.DeliveryDate);
+                    sqlQueryBuilder.Replace("@EmployeeID", objPaymentDetails.EmployeeID);
+                    sqlQueryBuilder.Replace("@PaymentMode", objPaymentDetails.PaymentMode);
+                    sqlQueryBuilder.Replace("@Amount", objPaymentDetails.Amount);
+                    sqlQueryBuilder.Replace("@created_at", objPaymentDetails.created_at);
+                }
+
+                if (sqlQueryBuilder.Length > 0)
+                {
+                    objUtilitiy.BeginTransaction();
+                    TransactionStatus = objUtilitiy.ExecuteNonQueryTransaction(sqlQueryBuilder.ToString());
+                    objUtilitiy.CommitTransaction();
+                }
+                else
+                {
+                    TransactionStatus = 0; // No data to insert
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return TransactionStatus;
+        }
+
+        public int DeleteTransaction(string Delivery_ID)
+        {
+            int TransactionStatus = 0;
+
+            try
+            {
+                sqlQueryBuilder = new StringBuilder();
+
+                sqlQueryBuilder.Append("DELETE FROM delivery_inf WHERE Delivery_ID = @Delivery_ID;\n");
+                sqlQueryBuilder.Replace("@Delivery_ID", Delivery_ID);
+
+                sqlQueryBuilder.Append("DELETE FROM delivery_item_details WHERE Delivery_ID = @Delivery_ID;\n");
+                sqlQueryBuilder.Replace("@Delivery_ID", Delivery_ID);
+
+                sqlQueryBuilder.Append("DELETE FROM delivery_item_payment WHERE Delivery_ID = @Delivery_ID;\n");
+                sqlQueryBuilder.Replace("@Delivery_ID", Delivery_ID);
+
+                if (sqlQueryBuilder.Length > 0 && Delivery_ID != "")
+                {
+                    objUtilitiy.BeginTransaction();
+                    TransactionStatus = objUtilitiy.ExecuteNonQueryTransaction(sqlQueryBuilder.ToString());
+                    objUtilitiy.CommitTransaction();
+                }
+                else
+                {
+                    TransactionStatus = 0; // No data to insert
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return TransactionStatus;
+        }
+
+        public string SanitizeInput(string userInput)
+        {
+            if (string.IsNullOrEmpty(userInput)) return string.Empty;
+
+            // This regex replaces any character that is NOT a letter, number, or space
+            // It removes quotes, semicolons, dashes, and other injection vectors
+            return Regex.Replace(userInput, @"[^a-zA-Z0-9\s]", "");
+        }
     }
 
     public class DeliveryMaster
     {
-        private string DeliveryId;
-        private string DeliveryDate;
-        private string EmployeeID;
-        private string TotalQuantity;
-        private string TotalAmount;
-        private string created_at;
-        private string updated_at;
-        private string CreatedBy;
-        private string UpdatedBy;
-        private string TransactionType;
-
-        public string Param_DeliveryId
-        {
-            get { return DeliveryId; }
-            set { DeliveryId = value; }
-        }
-
-        public string Param_DeliveryDate
-        {
-            get { return DeliveryDate; }
-            set { DeliveryDate = value; }
-        }
-
-        public string Param_EmployeeID
-        {
-            get { return EmployeeID; }
-            set { EmployeeID = value; }
-        }
-
-        public string Param_TotalQuantity
-        {
-            get { return TotalQuantity; }
-            set { TotalQuantity = value; }
-        }
-
-        public string Param_TotalAmount
-        {
-            get { return TotalAmount; }
-            set { TotalAmount = value; }
-        }
-
-        public string Param_created_at
-        {
-            get { return created_at; }
-            set { created_at = value; }
-        }
-
-        public string Param_updated_at
-        {
-            get { return updated_at; }
-            set { updated_at = value; }
-        }
-
-        public string Param_CreatedBy
-        {
-            get { return CreatedBy; }
-            set { CreatedBy = value; }
-        }
-
-        public string Param_UpdatedBy
-        {
-            get { return UpdatedBy; }
-            set { UpdatedBy = value; }
-        }
-
-        public string Param_TransactionType
-        {
-            get { return TransactionType; }
-            set { TransactionType = value; }
-        }
+        public string DeliveryId { get; set; }
+        public string DeliveryDate { get; set; }
+        public string EmployeeID { get; set; }
+        public string TotalQuantity { get; set; }
+        public string TotalAmount { get; set; }
+        public string created_at { get; set; }
+        public string updated_at { get; set; }
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
+        public string TransactionType { get; set; }
     }
 
     public class DeliveryDetails
     {
-        private string DeliveryId;
-        private string DeliveryDate;
-        private string EmployeeID;
-        private string ProductId;
-        private string Quantity;
-        private string Price;
-        private string TotalAmount;
-        private string Remarks;
-        private string created_at;
-        private string updated_at;
-        private string CreatedBy;
-        private string UpdatedBy;
-        private string TransactionType;
-
-        public string Param_DeliveryId
-        {
-            get { return DeliveryId; }
-            set { DeliveryId = value; }
-        }
-
-        public string Param_DeliveryDate
-        {
-            get { return DeliveryDate; }
-            set { DeliveryDate = value; }
-        }
-
-        public string Param_EmployeeID
-        {
-            get { return EmployeeID; }
-            set { EmployeeID = value; }
-        }
-
-        public string Param_ProductId
-        {
-            get { return ProductId; }
-            set { ProductId = value; }
-        }
-
-        public string Param_Quantity
-        {
-            get { return Quantity; }
-            set { Quantity = value; }
-        }
-
-        public string Param_Price
-        {
-            get { return Price; }
-            set { Price = value; }
-        }
-
-        public string Param_TotalAmount
-        {
-            get { return TotalAmount; }
-            set { TotalAmount = value; }
-        }
-
-        public string Param_Remarks
-        {
-            get { return Remarks; }
-            set { Remarks = value; }
-        }
-
-        public string Param_created_at
-        {
-            get { return created_at; }
-            set { created_at = value; }
-        }
-
-        public string Param_updated_at
-        {
-            get { return updated_at; }
-            set { updated_at = value; }
-        }
-
-        public string Param_CreatedBy
-        {
-            get { return CreatedBy; }
-            set { CreatedBy = value; }
-        }
-
-        public string Param_UpdatedBy
-        {
-            get { return UpdatedBy; }
-            set { UpdatedBy = value; }
-        }
-
-        public string Param_TransactionType
-        {
-            get { return TransactionType; }
-            set { TransactionType = value; }
-        }
+        public string DeliveryId { get; set; }
+        public string DeliveryDate { get; set; }
+        public string EmployeeID { get; set; }
+        public string ProductId { get; set; }
+        public string Quantity { get; set; }
+        public string Price { get; set; }
+        public string TotalAmount { get; set; }
+        public string Remarks { get; set; }
+        public string created_at { get; set; }
+        public string updated_at { get; set; }
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
+        public string TransactionType { get; set; }
     }
 
     public class PaymentDetails
     {
-        private string DeliveryId;
-        private string DeliveryDate;
-        private string EmployeeID;
-        private string PaymentMode;
-        private string Amount;
-        private string created_at;
-        private string updated_at;
-        private string CreatedBy;
-        private string UpdatedBy;
-        private string TransactionType;
-
-        public string Param_DeliveryId
-        {
-            get { return DeliveryId; }
-            set { DeliveryId = value; }
-        }
-
-        public string Param_DeliveryDate
-        {
-            get { return DeliveryDate; }
-            set { DeliveryDate = value; }
-        }
-
-        public string Param_EmployeeID
-        {
-            get { return EmployeeID; }
-            set { EmployeeID = value; }
-        }
-
-        public string Param_PaymentMode
-        {
-            get { return PaymentMode; }
-            set { PaymentMode = value; }
-        }
-
-        public string Param_Amount
-        {
-            get { return Amount; }
-            set { Amount = value; }
-        }
-
-        public string Param_created_at
-        {
-            get { return created_at; }
-            set { created_at = value; }
-        }
-
-        public string Param_updated_at
-        {
-            get { return updated_at; }
-            set { updated_at = value; }
-        }
-
-        public string Param_CreatedBy
-        {
-            get { return CreatedBy; }
-            set { CreatedBy = value; }
-        }
-
-        public string Param_UpdatedBy
-        {
-            get { return UpdatedBy; }
-            set { UpdatedBy = value; }
-        }
-
-        public string Param_TransactionType
-        {
-            get { return TransactionType; }
-            set { TransactionType = value; }
-        }
+        public string DeliveryId { get; set; }
+        public string DeliveryDate { get; set; }
+        public string EmployeeID { get; set; }
+        public string PaymentMode { get; set; }
+        public string Amount { get; set; }
+        public string created_at { get; set; }
+        public string updated_at { get; set; }
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
+        public string TransactionType { get; set; }
     }
 }

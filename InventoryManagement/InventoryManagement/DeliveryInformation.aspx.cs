@@ -44,6 +44,7 @@ namespace InventoryManagement
                     }
 
                     BindDeliveryGridView();
+                    ShowOrHideButtons();
                 }
             }
             catch (Exception)
@@ -75,12 +76,8 @@ namespace InventoryManagement
                 ArrayList arrListDeliveryDetail = new ArrayList();
                 ArrayList arrListPaymentDetail = new ArrayList();
                 StringBuilder sqlQueryBuilder = new StringBuilder();
-                string CreatedBy = Convert.ToString(Session["UserId"]);
+                string CreatedBy = "1"; // Convert.ToString(Session["UserId"]);
                 string CreatedOn = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-
-                DeliveryMaster objDeliveryMaster = new DeliveryMaster();
-                DeliveryDetails objDeliveryDetails = new DeliveryDetails();
-                PaymentDetails objPaymentDetails = new PaymentDetails();
 
                 footerTotalQuantity = 0.00M;
                 footerTotalAmount = 0.00M;
@@ -90,6 +87,8 @@ namespace InventoryManagement
                 {
                     if (row.RowType == DataControlRowType.DataRow)
                     {
+                        DeliveryDetails objDeliveryDetails = new DeliveryDetails();
+
                         // Access data from each row
                         //string customerId = row.Cells[0].Text; // For BoundFields
                         DropDownList GrdDdlProduct = (DropDownList)row.FindControl("GrdDdlProduct"); // For TemplateFields
@@ -102,28 +101,25 @@ namespace InventoryManagement
 
                         if (GrdDdlProduct.SelectedValue != "" && GrdTxtQuantity.Text != "" && GrdTxtPrice.Text != "")
                         {
-                            if (GrdTxtQuantity.Text != "")
-                                footerTotalQuantity = Math.Round(footerTotalQuantity + Convert.ToDecimal(GrdTxtQuantity.Text), 2);
+                            footerTotalQuantity = Math.Round(footerTotalQuantity + Convert.ToDecimal(GrdTxtQuantity.Text), 2);
 
                             decimal quantity, price, totalAmount = 0.00M;
-                            if (GrdTxtQuantity.Text != "" && GrdTxtPrice.Text != "")
-                            {
-                                quantity = Convert.ToDecimal(GrdTxtQuantity.Text);
-                                price = Convert.ToDecimal(GrdTxtPrice.Text);
-                                totalAmount = Math.Round((quantity * price), 2);
-                                footerTotalAmount = footerTotalAmount + totalAmount;
-                            }
+                            quantity = Convert.ToDecimal(GrdTxtQuantity.Text);
+                            price = Convert.ToDecimal(GrdTxtPrice.Text);
+                            totalAmount = Math.Round((quantity * price), 2);
+                            GrdTxtTotalAmount.Text = Convert.ToString(totalAmount);
+                            footerTotalAmount = footerTotalAmount + totalAmount;
 
-                            objDeliveryDetails.Param_DeliveryId = "";
-                            objDeliveryDetails.Param_DeliveryDate = TxtDeliveryDate.Text.Trim();
-                            objDeliveryDetails.Param_EmployeeID = DdlEmployeeId.SelectedValue.Trim();
-                            objDeliveryDetails.Param_ProductId = GrdDdlProduct.SelectedValue.Trim();
-                            objDeliveryDetails.Param_Quantity = GrdTxtQuantity.Text.Trim();
-                            objDeliveryDetails.Param_Price = GrdTxtPrice.Text.Trim();
-                            objDeliveryDetails.Param_TotalAmount = GrdTxtTotalAmount.Text.Trim();
-                            objDeliveryDetails.Param_Remarks = GrdTxtRemarks.Text.Trim();
-                            objDeliveryDetails.Param_CreatedBy = CreatedBy;
-                            objDeliveryDetails.Param_created_at = CreatedOn;
+                            //objDeliveryDetails.DeliveryId = "";
+                            objDeliveryDetails.DeliveryDate = TxtDeliveryDate.Text.Trim();
+                            objDeliveryDetails.EmployeeID = DdlEmployeeId.SelectedValue.Trim();
+                            objDeliveryDetails.ProductId = GrdDdlProduct.SelectedValue.Trim();
+                            objDeliveryDetails.Quantity = GrdTxtQuantity.Text.Trim();
+                            objDeliveryDetails.Price = GrdTxtPrice.Text.Trim();
+                            objDeliveryDetails.TotalAmount = GrdTxtTotalAmount.Text.Trim();
+                            objDeliveryDetails.Remarks = GrdTxtRemarks.Text.Trim();
+                            objDeliveryDetails.CreatedBy = CreatedBy;
+                            objDeliveryDetails.created_at = CreatedOn;
                             arrListDeliveryDetail.Add(objDeliveryDetails);
                         }
                     }
@@ -132,13 +128,14 @@ namespace InventoryManagement
                 // Delivery Master - Capture the values from the form fields (outside the gridview)
                 if (TxtDeliveryDate.Text.Trim() != "" && DdlEmployeeId.SelectedValue.Trim() != "")
                 {
-                    objDeliveryMaster.Param_DeliveryId = "";
-                    objDeliveryMaster.Param_DeliveryDate = TxtDeliveryDate.Text.Trim();
-                    objDeliveryMaster.Param_EmployeeID = DdlEmployeeId.SelectedValue.Trim();
-                    objDeliveryMaster.Param_TotalQuantity = Convert.ToString(footerTotalQuantity);
-                    objDeliveryMaster.Param_TotalAmount = Convert.ToString(footerTotalAmount);
-                    objDeliveryMaster.Param_CreatedBy = CreatedBy;
-                    objDeliveryMaster.Param_created_at = CreatedOn;
+                    DeliveryMaster objDeliveryMaster = new DeliveryMaster();
+                    //objDeliveryMaster.DeliveryId = "";
+                    objDeliveryMaster.DeliveryDate = TxtDeliveryDate.Text.Trim();
+                    objDeliveryMaster.EmployeeID = DdlEmployeeId.SelectedValue.Trim();
+                    objDeliveryMaster.TotalQuantity = Convert.ToString(footerTotalQuantity);
+                    objDeliveryMaster.TotalAmount = Convert.ToString(footerTotalAmount);
+                    objDeliveryMaster.CreatedBy = CreatedBy;
+                    objDeliveryMaster.created_at = CreatedOn;
                     arrListDeliveryMaster.Add((DeliveryMaster)objDeliveryMaster);
                 }
 
@@ -147,25 +144,177 @@ namespace InventoryManagement
                 {
                     if (row.RowType == DataControlRowType.DataRow)
                     {
+                        PaymentDetails objPaymentDetails = new PaymentDetails();
                         DropDownList GrdDdlPaymentMode = (DropDownList)row.FindControl("GrdDdlPaymentMode"); // For TemplateFields
                         TextBox GrdTxtAmount = (TextBox)row.FindControl("GrdTxtAmount");
 
                         if (GrdDdlPaymentMode.SelectedValue != "" && GrdTxtAmount.Text != "")
                         {
-                            objPaymentDetails.Param_DeliveryId = "";
-                            objPaymentDetails.Param_DeliveryDate = TxtDeliveryDate.Text.Trim();
-                            objPaymentDetails.Param_EmployeeID = DdlEmployeeId.SelectedValue.Trim();
-                            objPaymentDetails.Param_PaymentMode = GrdDdlPaymentMode.SelectedValue.Trim();
-                            objPaymentDetails.Param_Amount = GrdTxtAmount.Text.Trim();
-                            objPaymentDetails.Param_CreatedBy = CreatedBy;
-                            objPaymentDetails.Param_created_at = CreatedOn;
+                            //objPaymentDetails.DeliveryId = "";
+                            objPaymentDetails.DeliveryDate = TxtDeliveryDate.Text.Trim();
+                            objPaymentDetails.EmployeeID = DdlEmployeeId.SelectedValue.Trim();
+                            objPaymentDetails.PaymentMode = GrdDdlPaymentMode.SelectedValue.Trim();
+                            objPaymentDetails.Amount = GrdTxtAmount.Text.Trim();
+                            objPaymentDetails.CreatedBy = CreatedBy;
+                            objPaymentDetails.created_at = CreatedOn;
                             arrListPaymentDetail.Add(objPaymentDetails);
                         }
                     }
                 }
 
-                ShowResult(objDeliveryInformation.InitiateTransaction(arrListDeliveryMaster, arrListDeliveryDetail, arrListPaymentDetail));
-                BtnReset.Click += new EventHandler(BtnReset_Click);
+                HFieldTransactionType.Value = "Save";
+                ShowResult(objDeliveryInformation.InsertTransaction(arrListDeliveryMaster, arrListDeliveryDetail, arrListPaymentDetail));
+                HFieldTransactionType.Value = "";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        protected void BtnModify_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Check if Delivery Date and Employee ID have values
+                if (string.IsNullOrWhiteSpace(TxtDeliveryDate.Text))
+                {
+                    // Show error message for Delivery Date
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "Popup", "showMandatoryMessage('Please select a Delivery Date.');", true);
+                    return;
+                }
+
+                if (DdlEmployeeId.SelectedValue == "0" || string.IsNullOrWhiteSpace(DdlEmployeeId.SelectedValue))
+                {
+                    // Show error message for Employee ID
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "Popup", "showMandatoryMessage('Please select an Employee ID.');", true);
+                    return;
+                }
+
+                ArrayList arrListDeliveryMaster = new ArrayList();
+                ArrayList arrListDeliveryDetail = new ArrayList();
+                ArrayList arrListPaymentDetail = new ArrayList();
+                StringBuilder sqlQueryBuilder = new StringBuilder();
+                string CreatedBy = "1"; // Convert.ToString(Session["UserId"]);
+                string CreatedOn = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+                footerTotalQuantity = 0.00M;
+                footerTotalAmount = 0.00M;
+
+                // Delivery Details - Iterate through each row of the gridview and capture the values
+                foreach (GridViewRow row in GrdDeliveryInfo.Rows)
+                {
+                    if (row.RowType == DataControlRowType.DataRow)
+                    {
+                        DeliveryDetails objDeliveryDetails = new DeliveryDetails();
+
+                        // Access data from each row
+                        //string customerId = row.Cells[0].Text; // For BoundFields
+                        DropDownList GrdDdlProduct = (DropDownList)row.FindControl("GrdDdlProduct"); // For TemplateFields
+                        TextBox GrdTxtQuantity = (TextBox)row.FindControl("GrdTxtQuantity");
+                        TextBox GrdTxtPrice = (TextBox)row.FindControl("GrdTxtPrice");
+                        TextBox GrdTxtTotalAmount = (TextBox)row.FindControl("GrdTxtTotalAmount");
+                        TextBox GrdTxtRemarks = (TextBox)row.FindControl("GrdTxtRemarks");
+
+                        // Process each row (e.g., add to a list or update database)
+
+                        if (GrdDdlProduct.SelectedValue != "" && GrdTxtQuantity.Text != "" && GrdTxtPrice.Text != "")
+                        {
+                            footerTotalQuantity = Math.Round(footerTotalQuantity + Convert.ToDecimal(GrdTxtQuantity.Text), 2);
+
+                            decimal quantity, price, totalAmount = 0.00M;
+                            quantity = Convert.ToDecimal(GrdTxtQuantity.Text);
+                            price = Convert.ToDecimal(GrdTxtPrice.Text);
+                            totalAmount = Math.Round((quantity * price), 2);
+                            GrdTxtTotalAmount.Text = Convert.ToString(totalAmount);
+                            footerTotalAmount = footerTotalAmount + totalAmount;
+
+                            objDeliveryDetails.DeliveryId = LblDeliveryId.Text.Trim();
+                            objDeliveryDetails.DeliveryDate = TxtDeliveryDate.Text.Trim();
+                            objDeliveryDetails.EmployeeID = DdlEmployeeId.SelectedValue.Trim();
+                            objDeliveryDetails.ProductId = GrdDdlProduct.SelectedValue.Trim();
+                            objDeliveryDetails.Quantity = GrdTxtQuantity.Text.Trim();
+                            objDeliveryDetails.Price = GrdTxtPrice.Text.Trim();
+                            objDeliveryDetails.TotalAmount = GrdTxtTotalAmount.Text.Trim();
+                            objDeliveryDetails.Remarks = GrdTxtRemarks.Text.Trim();
+                            objDeliveryDetails.CreatedBy = CreatedBy;
+                            objDeliveryDetails.created_at = CreatedOn;
+                            arrListDeliveryDetail.Add(objDeliveryDetails);
+                        }
+                    }
+                }
+
+                // Delivery Master - Capture the values from the form fields (outside the gridview)
+                if (TxtDeliveryDate.Text.Trim() != "" && DdlEmployeeId.SelectedValue.Trim() != "")
+                {
+                    DeliveryMaster objDeliveryMaster = new DeliveryMaster();
+
+                    objDeliveryMaster.DeliveryId = LblDeliveryId.Text.Trim(); ;
+                    objDeliveryMaster.DeliveryDate = TxtDeliveryDate.Text.Trim();
+                    objDeliveryMaster.EmployeeID = DdlEmployeeId.SelectedValue.Trim();
+                    objDeliveryMaster.TotalQuantity = Convert.ToString(footerTotalQuantity);
+                    objDeliveryMaster.TotalAmount = Convert.ToString(footerTotalAmount);
+                    objDeliveryMaster.CreatedBy = CreatedBy;
+                    objDeliveryMaster.created_at = CreatedOn;
+                    arrListDeliveryMaster.Add((DeliveryMaster)objDeliveryMaster);
+                }
+
+                // Payment Details - Iterate through each row of the gridview and capture the values
+                foreach (GridViewRow row in GrdPaymentMode.Rows)
+                {
+                    if (row.RowType == DataControlRowType.DataRow)
+                    {
+                        PaymentDetails objPaymentDetails = new PaymentDetails();
+                        DropDownList GrdDdlPaymentMode = (DropDownList)row.FindControl("GrdDdlPaymentMode"); // For TemplateFields
+                        TextBox GrdTxtAmount = (TextBox)row.FindControl("GrdTxtAmount");
+
+                        if (GrdDdlPaymentMode.SelectedValue != "" && GrdTxtAmount.Text != "")
+                        {
+                            objPaymentDetails.DeliveryId = LblDeliveryId.Text.Trim(); ;
+                            objPaymentDetails.DeliveryDate = TxtDeliveryDate.Text.Trim();
+                            objPaymentDetails.EmployeeID = DdlEmployeeId.SelectedValue.Trim();
+                            objPaymentDetails.PaymentMode = GrdDdlPaymentMode.SelectedValue.Trim();
+                            objPaymentDetails.Amount = GrdTxtAmount.Text.Trim();
+                            objPaymentDetails.CreatedBy = CreatedBy;
+                            objPaymentDetails.created_at = CreatedOn;
+                            arrListPaymentDetail.Add(objPaymentDetails);
+                        }
+                    }
+                }
+
+                HFieldTransactionType.Value = "Update";
+                ShowResult(objDeliveryInformation.UpdateTransaction(arrListDeliveryMaster, arrListDeliveryDetail, arrListPaymentDetail));
+                HFieldTransactionType.Value = "";
+                //ShowResult(objDeliveryInformation.InitiateTransaction(arrListDeliveryMaster, arrListDeliveryDetail, arrListPaymentDetail));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        protected void BtnDelete_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Check if Delivery Date and Employee ID have values
+                if (string.IsNullOrWhiteSpace(TxtDeliveryDate.Text))
+                {
+                    // Show error message for Delivery Date
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "Popup", "showMandatoryMessage('Please select a Delivery Date.');", true);
+                    return;
+                }
+
+                if (DdlEmployeeId.SelectedValue == "0" || string.IsNullOrWhiteSpace(DdlEmployeeId.SelectedValue))
+                {
+                    // Show error message for Employee ID
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "Popup", "showMandatoryMessage('Please select an Employee ID.');", true);
+                    return;
+                }
+
+                HFieldTransactionType.Value = "Delete";
+                ShowResult(objDeliveryInformation.DeleteTransaction(LblDeliveryId.Text.Trim()));
+                HFieldTransactionType.Value = "";
             }
             catch (Exception)
             {
@@ -179,7 +328,8 @@ namespace InventoryManagement
             {
                 ViewState["dtDeliveryInfo"] = null;
                 ViewState["dtPaymentInfo"] = null;
-                Response.Redirect("~/DeliveryInformation.aspx");
+                HFieldTransactionType.Value = "";
+                Response.Redirect("~/DeliveryInformation.aspx", true);
             }
             catch (Exception)
             {
@@ -316,7 +466,7 @@ namespace InventoryManagement
                     if (footerTotalQuantity > 0)
                     {
                         Label LblFooterTotalQuantity = (Label)e.Row.Cells[2].FindControl("LblFooterTotalQuantity");
-                        LblFooterTotalQuantity.Text = LblFooterTotalQuantity.Text + Convert.ToString(footerTotalQuantity);
+                        LblFooterTotalQuantity.Text = "Total Quantity: " + Convert.ToString(footerTotalQuantity);
                         //e.Row.Cells[2].Text = Convert.ToString(footerTotalQuantity);
                         e.Row.Cells[2].CssClass = "alignFooterTextRight";
                     }
@@ -324,7 +474,7 @@ namespace InventoryManagement
                     if (footerTotalAmount > 0)
                     {
                         Label LblFooterTotalAmount = (Label)e.Row.Cells[4].FindControl("LblFooterTotalAmount");
-                        LblFooterTotalAmount.Text = LblFooterTotalAmount.Text + Convert.ToString(footerTotalAmount);
+                        LblFooterTotalAmount.Text = "Total Amount: " + Convert.ToString(footerTotalAmount);
                         //e.Row.Cells[4].Text = Convert.ToString(footerTotalAmount);
                         e.Row.Cells[4].CssClass = "alignFooterTextRight";
                     }
@@ -387,8 +537,13 @@ namespace InventoryManagement
                     ds = objDeliveryInformation.GetDeliveryDetails(TxtDeliveryDate.Text, DdlEmployeeId.SelectedValue.Trim());
                     if (ds != null && ds.Tables.Count > 0)
                     {
-                        dtDeliveryInfo = ds.Tables[0];
-                        dtPaymentInfo = ds.Tables[1];
+                        if (ds.Tables[0].Rows.Count > 0)
+                            LblDeliveryId.Text = ds.Tables[0].Rows[0]["Delivery_ID"].ToString();
+                        else
+                            LblDeliveryId.Text = "";
+
+                        dtDeliveryInfo = ds.Tables[1];
+                        dtPaymentInfo = ds.Tables[2];
                     }
 
                     ViewState["dtDeliveryInfo"] = dtDeliveryInfo;
@@ -422,15 +577,21 @@ namespace InventoryManagement
         {
             try
             {
-                if (transactionStatus == 1)
+                if (transactionStatus > 0)
                 {
                     // Execute server logic here, then show the popup
-                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "Popup", "showSuccessMessage('Saved successfully!','Success');", true);
+                    if (HFieldTransactionType.Value == "Save")
+                        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "Popup", "showSuccessMessage('Saved successfully.','Success');", true);
+                    else if (HFieldTransactionType.Value == "Update")
+                        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "Popup", "showSuccessMessage('Modified successfully.','Success');", true);
+                    else if (HFieldTransactionType.Value == "Delete")
+                        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "Popup", "showSuccessMessage('Deleted successfully.','Success');", true);
+
                     //ClientScript.RegisterStartupScript(this.GetType(), "Popup", "$('#successMessageModal').modal('show');", true);
                 }
                 else
                 {
-                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "Popup", "showSuccessMessage('Transaction failed!','Error');", true);
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "Popup", "showSuccessMessage('Transaction failed.','Error');", true);
                 }
             }
             catch (Exception)
@@ -461,6 +622,7 @@ namespace InventoryManagement
                 ViewState["dtDeliveryInfo"] = null;
                 ViewState["dtPaymentInfo"] = null;
                 BindDeliveryGridView();
+                ShowOrHideButtons();
             }
             catch (Exception)
             {
@@ -513,7 +675,7 @@ namespace InventoryManagement
                     if (footerPayModeTotal > 0)
                     {
                         Label LblFooterAmount = (Label)e.Row.Cells[2].FindControl("LblFooterAmount");
-                        LblFooterAmount.Text = LblFooterAmount.Text + Convert.ToString(footerPayModeTotal);
+                        LblFooterAmount.Text = "Total Amount: " + Convert.ToString(footerPayModeTotal);
                         //e.Row.Cells[2].Text = Convert.ToString(footerTotalQuantity);
                         e.Row.Cells[2].CssClass = "alignFooterTextRight";
                     }
@@ -650,6 +812,29 @@ namespace InventoryManagement
             return dt;
         }
 
+        private void ShowOrHideButtons()
+        {
+            if (LblDeliveryId.Text.Trim() == "")
+            {
+                BtnSave.Visible = true;
+                BtnModify.Visible = false;
+                BtnDelete.Visible = false;
+            }
+            else if (LblDeliveryId.Text.Trim() != "")
+            {
+                BtnSave.Visible = false;
+                BtnModify.Visible = true;
+                BtnDelete.Visible = true;
+            }
+        }
+
+        private void ClearFooterTotals()
+        {
+            footerTotalQuantity = 0.00M;
+            footerTotalAmount = 0.00M;
+            footerPayModeTotal = 0.00M;
+        }
+
         private DataTable Rebind_GridPaymentMode(DataTable currentDt)
         {
             DataTable dt = currentDt; // (DataTable)ViewState["dtPaymentInfo"];
@@ -693,6 +878,5 @@ namespace InventoryManagement
             ViewState["dtPaymentInfo"] = dt;
             return dt;
         }
-
     }
 }

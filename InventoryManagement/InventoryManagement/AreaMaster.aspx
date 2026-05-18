@@ -2,7 +2,11 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
-    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <!-- Load jQuery first -->
+    <script src="Scripts/jquery-3.7.0.min.js"></script>
+    <!-- Load Popper.js (required for Bootstrap dropdowns) -->
+    <script src="Scripts/popper.min.js"></script>
+    <!-- Load Bootstrap JavaScript -->
     <script src="Scripts/bootstrap.bundle.min.js"></script>
 
     <style type="text/css">

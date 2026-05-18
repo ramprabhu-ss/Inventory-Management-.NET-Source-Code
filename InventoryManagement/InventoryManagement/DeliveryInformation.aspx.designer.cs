@@ -78,6 +78,24 @@ namespace InventoryManagement
         protected global::System.Web.UI.WebControls.Button BtnView;
 
         /// <summary>
+        /// LblDelivery_Id control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LblDelivery_Id;
+
+        /// <summary>
+        /// LblDeliveryId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LblDeliveryId;
+
+        /// <summary>
         /// GrdDeliveryInfo control.
         /// </summary>
         /// <remarks>
@@ -105,6 +123,24 @@ namespace InventoryManagement
         protected global::System.Web.UI.WebControls.Button BtnSave;
 
         /// <summary>
+        /// BtnModify control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button BtnModify;
+
+        /// <summary>
+        /// BtnDelete control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button BtnDelete;
+
+        /// <summary>
         /// BtnReset control.
         /// </summary>
         /// <remarks>
@@ -112,5 +148,14 @@ namespace InventoryManagement
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button BtnReset;
+
+        /// <summary>
+        /// HFieldTransactionType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField HFieldTransactionType;
     }
 }

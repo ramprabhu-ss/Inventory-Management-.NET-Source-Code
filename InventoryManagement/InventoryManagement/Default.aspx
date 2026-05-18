@@ -1,6 +1,12 @@
 ﻿<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="InventoryManagement._Default" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <!-- Load jQuery first -->
+    <script src="Scripts/jquery-3.7.0.min.js"></script>
+    <!-- Load Popper.js (required for Bootstrap dropdowns) -->
+    <script src="Scripts/popper.min.js"></script>
+    <!-- Load Bootstrap JavaScript -->
+    <script src="Scripts/bootstrap.bundle.min.js"></script>
 
     <main>
         <%--<section class="row" aria-labelledby="aspnetTitle">
