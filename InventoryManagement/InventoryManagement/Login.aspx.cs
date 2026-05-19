@@ -13,7 +13,9 @@ namespace InventoryManagement
         {
             try
             {
-
+                Response.Cache.SetCacheability(HttpCacheability.NoCache);
+                Response.Cache.SetExpires(DateTime.UtcNow.AddHours(-1));
+                Response.Cache.SetNoStore();
             }
             catch (Exception)
             {
@@ -29,7 +31,7 @@ namespace InventoryManagement
                 string pass = txtPassword.Text.Trim();
 
                 // Simple static validation (Replace this with a Database check!)
-                if (user == "ram" && pass == "ram")
+                if (user == "admin" && pass == "admin")
                 {
                     // Create a session to keep the user logged in
                     Session["UserRole"] = "Guest";

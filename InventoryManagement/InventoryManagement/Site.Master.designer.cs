@@ -15,6 +15,24 @@ namespace InventoryManagement
     {
 
         /// <summary>
+        /// userDropdown control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor userDropdown;
+
+        /// <summary>
+        /// BtnLogout control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlButton BtnLogout;
+
+        /// <summary>
         /// MainContent control.
         /// </summary>
         /// <remarks>

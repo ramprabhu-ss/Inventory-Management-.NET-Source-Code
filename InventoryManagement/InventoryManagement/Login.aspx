@@ -9,6 +9,14 @@
     <link href="Content/bootstrap.min.css" rel="stylesheet" />
     <script src="Scripts/bootstrap.bundle.min.js"></script>
 
+    <script type="text/javascript">
+        function preventBack() {
+            window.history.forward();
+        }
+        setTimeout("preventBack()", 0);
+        window.onunload = function () { null };
+    </script>
+
     <style>
         body {
             background-color: #f8f9fa;
@@ -33,8 +41,8 @@
             <h2 class="text-center mb-4">Login</h2>
 
             <div class="mb-3">
-                <label class="form-label">User Name</label>
-                <asp:TextBox ID="txtUsername" runat="server" CssClass="form-control" placeholder="Enter user name"></asp:TextBox>
+                <label class="form-label">Username</label>
+                <asp:TextBox ID="txtUsername" runat="server" CssClass="form-control" placeholder="Enter username"></asp:TextBox>
             </div>
 
             <div class="mb-3">

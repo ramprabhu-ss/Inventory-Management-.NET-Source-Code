@@ -32,6 +32,14 @@
             console.error('Bootstrap is not loaded. Please check the script reference.');
         }
     </script>
+
+    <script type="text/javascript">
+        function preventBack() {
+            window.history.forward();
+        }
+        setTimeout("preventBack()", 0);
+        window.onunload = function () { null };
+</script>
 </head>
 <body>
     <form runat="server">
@@ -96,14 +104,14 @@
                     <!-- Dropdown for logged-in user -->
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">Hello! Ram</a>
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" runat="server" role="button" data-bs-toggle="dropdown"></a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
                                 <li>
                                     <!-- Logout must be a POST request for security -->
-                                    <button type="submit" class="dropdown-item btn btn-link">Logout</button>
+                                    <button id="BtnLogout" type="button" runat="server" onserverclick="BtnLogout_ServerClick" class="dropdown-item btn btn-link">Logout</button>
                                 </li>
                             </ul>
                         </li>

@@ -50,6 +50,25 @@ namespace InventoryManagement.IL
             return ds;
         }
 
+        public DataTable GetDeliveryInformationReport(string FromDate, string ToDate)
+        {
+            DataTable dt;
+            try
+            {
+                sqlQueryBuilder = new StringBuilder();
+                sqlQueryBuilder.Append("CALL DEL_INF_GET_DELIVERY_INFO_REPORT ('@FromDate', '@ToDate');");
+                sqlQueryBuilder.Replace("@FromDate", FromDate);
+                sqlQueryBuilder.Replace("@ToDate", ToDate);
+                dt = objUtilitiy.GetDataTable(sqlQueryBuilder.ToString());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return dt;
+        }
+
         public int InitiateTransaction(ArrayList arrListDeliveryInfo, ArrayList arrListDeliveryDetail, ArrayList arrListPaymentDetail)
         {
             int TransactionStatus = 0;
