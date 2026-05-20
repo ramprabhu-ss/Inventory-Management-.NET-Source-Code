@@ -34,9 +34,12 @@ namespace InventoryManagement
                 objAreaMaster.AREA_ID = txtAreaId.Text;
                 objAreaMaster.AREA_NAME = txtAreaName.Text;
                 objAreaMaster.ZIP_CODE = txtZipCode.Text;
-                objAreaMaster.CREATED_BY = "user";
+                objAreaMaster.CREATED_BY = "1";
                 objAreaMaster.CREATED_AT = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+                HFieldTransactionType.Value = "Save";
                 ShowResult(objAreaMaster.CreateArea(objAreaMaster));
+
                 ViewState["dtAreaMaster"] = null;
                 ClearControls();
                 BindGridView();
@@ -80,8 +83,10 @@ namespace InventoryManagement
             objAreaMaster.AREA_ID = ((TextBox)row.FindControl("grdTxtAreaId")).Text;
             objAreaMaster.AREA_NAME = ((TextBox)row.FindControl("grdTxtAreaName")).Text;
             objAreaMaster.ZIP_CODE = ((TextBox)row.FindControl("grdTxtZipCode")).Text;
-            objAreaMaster.UPDATED_BY = "user";
+            objAreaMaster.UPDATED_BY = "1";
             objAreaMaster.UPDATED_AT = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+            HFieldTransactionType.Value = "Update";
             ShowResult(objAreaMaster.UpdateArea(objAreaMaster));
 
             grdAreaMaster.EditIndex = -1; // Exit edit mode
@@ -103,6 +108,8 @@ namespace InventoryManagement
 
             // 2. Perform the actual deletion in your database
             objAreaMaster.AREA_ID = AreaId; // ((TextBox)row.FindControl("grdTxtAreaId")).Text;
+
+            HFieldTransactionType.Value = "Delete";
             ShowResult(objAreaMaster.DeleteArea(objAreaMaster));
 
             // 3. Refresh the GridView to show updated data
@@ -202,18 +209,27 @@ namespace InventoryManagement
             }
         }
 
-        public void ShowResult(int transactionStatus)
+        public void ShowResult(int rowsAffected)
         {
             try
             {
-                if (transactionStatus == 1)
+                if (rowsAffected > 0)
                 {
+                    // Execute server logic here, then show the popup
+                    if (HFieldTransactionType.Value == "Save")
+                        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "Popup", "showSuccessMessage('Saved successfully.','Success');", true);
+                    else if (HFieldTransactionType.Value == "Update")
+                        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "Popup", "showSuccessMessage('Modified successfully.','Success');", true);
+                    else if (HFieldTransactionType.Value == "Delete")
+                        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "Popup", "showSuccessMessage('Deleted successfully.','Success');", true);
 
+                    //ClientScript.RegisterStartupScript(this.GetType(), "Popup", "$('#successMessageModal').modal('show');", true);
                 }
                 else
                 {
-
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "Popup", "showSuccessMessage('Transaction failed.','Error');", true);
                 }
+                HFieldTransactionType.Value = "";
             }
             catch (Exception)
             {

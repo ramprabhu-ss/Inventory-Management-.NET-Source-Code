@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Runtime.Remoting.Messaging;
 
 namespace InventoryManagement.IL
@@ -94,15 +95,32 @@ namespace InventoryManagement.IL
             }
         }
 
+        public int ExecuteNonQueryTransaction()
+        {
+            int rowsAffected;
+
+            try
+            {
+                rowsAffected = sqlCommand.ExecuteNonQuery();
+                sqlCommand.Parameters.Clear();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return rowsAffected;
+        }
+
         public int ExecuteNonQueryTransaction(string sqlQuery)
         {
-            int TransactionStatus;
+            int rowsAffected;
 
             try
             {
                 //OpenConnection();
                 sqlCommand.CommandText = sqlQuery;
-                TransactionStatus = sqlCommand.ExecuteNonQuery();
+                rowsAffected = sqlCommand.ExecuteNonQuery();
                 //CloseConnection();
             }
             catch (Exception)
@@ -110,51 +128,40 @@ namespace InventoryManagement.IL
                 throw;
             }
 
-            return TransactionStatus;
+            return rowsAffected;
         }
 
         public int ExecuteNonQueryTransaction(MySqlCommand sqlCommandNew)
         {
-            int TransactionStatus = 0;
+            int rowsAffected = 0;
 
             try
             {
-                sqlCommand.CommandText = sqlCommandNew.CommandText;
-                /*sqlCommand.Parameters.Clear();
+                sqlCommand.Parameters.Clear();
+
+                /*
                 foreach (MySqlParameter param in sqlCommandNew.Parameters)
                 {
                     // The ICloneable interface provides a Clone() method
                     sqlCommand.Parameters.Add(((ICloneable)param).Clone());
-                }*/
-                TransactionStatus = sqlCommand.ExecuteNonQuery();
+                }
+                */
+
+                // Clone and copy the parameters to the new command
+                var clonedParameters = sqlCommandNew.Parameters.Cast<ICloneable>()
+                    .Select(p => p.Clone() as MySqlParameter)
+                    .Where(p => p != null)
+                    .ToArray();
+
+                sqlCommand.Parameters.AddRange(clonedParameters);
+                sqlCommand.CommandText = sqlCommandNew.CommandText;
+                rowsAffected = sqlCommand.ExecuteNonQuery();
             }
             catch (Exception)
             {
-                //throw;
+                throw;
             }
-            return TransactionStatus;
-        }
-
-        public int ExecuteNonQueryTransaction()
-        {
-            int TransactionStatus = 0;
-
-            try
-            {
-                //sqlCommand.CommandText = sqlCommandNew.CommandText;
-                //sqlCommand.Parameters.Clear();
-                /*foreach (MySqlParameter param in sqlCommandNew.Parameters)
-                {
-                    // The ICloneable interface provides a Clone() method
-                    sqlCommand.Parameters.Add(((ICloneable)param).Clone());
-                }*/
-                TransactionStatus = sqlCommand.ExecuteNonQuery();
-            }
-            catch (Exception)
-            {
-                //throw;
-            }
-            return TransactionStatus;
+            return rowsAffected;
         }
 
         public void BeginTransaction()
@@ -183,6 +190,19 @@ namespace InventoryManagement.IL
             {
                 sqlTransaction.Rollback();
                 CloseConnection();
+            }
+        }
+
+        public void RollbackTransaction()
+        {
+            try
+            {
+                sqlTransaction.Rollback();
+                CloseConnection();
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }

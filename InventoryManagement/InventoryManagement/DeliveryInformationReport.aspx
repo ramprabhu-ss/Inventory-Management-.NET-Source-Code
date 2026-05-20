@@ -58,7 +58,7 @@
                 <div class="col-2" style="width: 15%;">
                     <asp:Button ID="btnView" runat="server" Text="View" class="btn btn-primary btn-sm" OnClick="btnView_Click" />
                     <asp:Button ID="BtnExport" runat="server" Text="Export" class="btn btn-primary btn-sm" OnClick="BtnExport_Click" />
-                    <asp:Button ID="BtnReset" runat="server" Text="Reset" class="btn btn-primary btn-sm" OnClick="BtnReset_Click" />
+                    <asp:Button ID="BtnReset" runat="server" Text="Reset" class="btn btn-secondary btn-sm" OnClick="BtnReset_Click" />
                 </div>
             </div>
             <hr />

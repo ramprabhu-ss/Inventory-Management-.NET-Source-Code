@@ -10,58 +10,20 @@ namespace InventoryManagement.IL
     {
         readonly ClsUtility objUtilitiy = new ClsUtility();
         StringBuilder sqlQueryBuilder;
-        MySqlCommand sqlCommand = new MySqlCommand();
-        int TransactionStatus;
 
-        private string area_id;
-        private string area_name;
-        private string created_at;
-        private string updated_at;
-        private string CreatedBy;
-        private string UpdatedBy;
-        private string ZIPCODE;
+        public string AREA_ID { get; set; }
 
-        public string AREA_ID
-        {
-            get { return area_id; }
-            set { area_id = value; }
-        }
+        public string AREA_NAME { get; set; }
 
-        public string AREA_NAME
-        {
-            get { return area_name; }
-            set { area_name = value; }
-        }
+        public string CREATED_AT { get; set; }
 
-        public string CREATED_AT
-        {
-            get { return created_at; }
-            set { created_at = value; }
-        }
+        public string UPDATED_AT { get; set; }
 
-        public string UPDATED_AT
-        {
-            get { return updated_at; }
-            set { updated_at = value; }
-        }
+        public string CREATED_BY { get; set; }
 
-        public string CREATED_BY
-        {
-            get { return CreatedBy; }
-            set { CreatedBy = value; }
-        }
+        public string UPDATED_BY { get; set; }
 
-        public string UPDATED_BY
-        {
-            get { return UpdatedBy; }
-            set { UpdatedBy = value; }
-        }
-
-        public string ZIP_CODE
-        {
-            get { return ZIPCODE; }
-            set { ZIPCODE = value; }
-        }
+        public string ZIP_CODE { get; set; }
 
         public DataTable GetAreaMaster()
         {
@@ -82,76 +44,82 @@ namespace InventoryManagement.IL
 
         public int CreateArea(ClsAreaMaster objAreaMaster)
         {
+            int rowsAffected = 0;
+
             try
             {
+                objUtilitiy.BeginTransaction();
+
                 sqlQueryBuilder = new StringBuilder();
                 sqlQueryBuilder.Append("INSERT INTO area_master (area_id, area_name, created_at, ZIPCODE) VALUES ");
                 sqlQueryBuilder.Append("(@area_id, @area_name, @created_at, @ZIPCODE);");
 
-                sqlCommand = new MySqlCommand(sqlQueryBuilder.ToString());
-                sqlCommand.Parameters.AddWithValue("@area_id", objAreaMaster.AREA_ID);
-                sqlCommand.Parameters.AddWithValue("@area_name", objAreaMaster.AREA_NAME);
-                sqlCommand.Parameters.AddWithValue("@created_at", objAreaMaster.CREATED_AT);
-                sqlCommand.Parameters.AddWithValue("@ZIPCODE", objAreaMaster.ZIPCODE);
-
-                objUtilitiy.BeginTransaction();
-                TransactionStatus = objUtilitiy.ExecuteNonQueryTransaction(sqlCommand);
+                objUtilitiy.sqlCommand.CommandText = sqlQueryBuilder.ToString();
+                objUtilitiy.sqlCommand.Parameters.AddWithValue("@area_id", objAreaMaster.AREA_ID);
+                objUtilitiy.sqlCommand.Parameters.AddWithValue("@area_name", objAreaMaster.AREA_NAME);
+                objUtilitiy.sqlCommand.Parameters.AddWithValue("@created_at", objAreaMaster.CREATED_AT);
+                objUtilitiy.sqlCommand.Parameters.AddWithValue("@ZIPCODE", objAreaMaster.ZIP_CODE);
+                rowsAffected += objUtilitiy.ExecuteNonQueryTransaction();
                 objUtilitiy.CommitTransaction();
-
-                return TransactionStatus;
             }
             catch (Exception)
             {
-                throw;
+                objUtilitiy.RollbackTransaction();
             }
+
+            return rowsAffected;
         }
 
         public int UpdateArea(ClsAreaMaster objAreaMaster)
         {
+            int rowsAffected = 0;
+
             try
             {
+                objUtilitiy.BeginTransaction();
+
                 sqlQueryBuilder = new StringBuilder();
                 sqlQueryBuilder.Append("UPDATE area_master SET area_id = @area_id, area_name = @area_name, updated_at = @updated_at, ");
                 sqlQueryBuilder.Append("ZIPCODE = @ZIPCODE WHERE area_id = @area_id");
 
-                sqlCommand = new MySqlCommand(sqlQueryBuilder.ToString());
-                sqlCommand.Parameters.AddWithValue("@area_id", objAreaMaster.AREA_ID);
-                sqlCommand.Parameters.AddWithValue("@area_name", objAreaMaster.AREA_NAME);
-                sqlCommand.Parameters.AddWithValue("@updated_at", objAreaMaster.UPDATED_AT);
-                sqlCommand.Parameters.AddWithValue("@ZIPCODE", objAreaMaster.ZIPCODE);
-
-                objUtilitiy.BeginTransaction();
-                TransactionStatus = objUtilitiy.ExecuteNonQueryTransaction(sqlCommand);
+                objUtilitiy.sqlCommand.CommandText = sqlQueryBuilder.ToString();
+                objUtilitiy.sqlCommand.Parameters.AddWithValue("@area_id", objAreaMaster.AREA_ID);
+                objUtilitiy.sqlCommand.Parameters.AddWithValue("@area_name", objAreaMaster.AREA_NAME);
+                objUtilitiy.sqlCommand.Parameters.AddWithValue("@updated_at", objAreaMaster.UPDATED_AT);
+                objUtilitiy.sqlCommand.Parameters.AddWithValue("@ZIPCODE", objAreaMaster.ZIP_CODE);
+                rowsAffected += objUtilitiy.ExecuteNonQueryTransaction();
                 objUtilitiy.CommitTransaction();
-
-                return TransactionStatus;
             }
             catch (Exception)
             {
-                throw;
+                objUtilitiy.RollbackTransaction();
             }
+
+            return rowsAffected;
         }
 
         public int DeleteArea(ClsAreaMaster objAreaMaster)
         {
+            int rowsAffected = 0;
+
             try
             {
+                objUtilitiy.BeginTransaction();
+
                 sqlQueryBuilder = new StringBuilder();
                 sqlQueryBuilder.Append("DELETE FROM area_master WHERE area_id = @area_id");
 
-                sqlCommand = new MySqlCommand(sqlQueryBuilder.ToString());
-                sqlCommand.Parameters.AddWithValue("@area_id", objAreaMaster.AREA_ID);
-
-                objUtilitiy.BeginTransaction();
-                TransactionStatus = objUtilitiy.ExecuteNonQueryTransaction(sqlCommand);
+                objUtilitiy.sqlCommand.CommandText = sqlQueryBuilder.ToString();
+                objUtilitiy.sqlCommand.Parameters.AddWithValue("@area_id", objAreaMaster.AREA_ID);
+                rowsAffected += objUtilitiy.ExecuteNonQueryTransaction();
                 objUtilitiy.CommitTransaction();
-
-                return TransactionStatus;
             }
             catch (Exception)
             {
-                throw;
+                objUtilitiy.RollbackTransaction();
             }
+
+            return rowsAffected;
         }
 
     }

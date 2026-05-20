@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -36,7 +37,7 @@ namespace InventoryManagement
                     // Create a session to keep the user logged in
                     Session["UserRole"] = "Guest";
                     Session["UserId"] = user;
-                    Session["SessionStartTime"] = DateTime.Now;
+                    Session["LoginTime"] = DateTime.Now.ToString("dd-MM-yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
                     Response.Redirect("Default.aspx");
                 }
                 else

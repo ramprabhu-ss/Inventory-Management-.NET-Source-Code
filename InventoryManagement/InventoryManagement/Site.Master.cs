@@ -12,7 +12,8 @@ namespace InventoryManagement
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            userDropdown.InnerText = "Hello! " + Convert.ToString(Session["UserId"]);
+            userDropdown.InnerText = Convert.ToString(Session["UserId"]);
+            //LblLoginTime.InnerText = Convert.ToString(Session["LoginTime"]);
         }
 
         protected void BtnLogout_ServerClick(object sender, EventArgs e)

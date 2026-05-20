@@ -110,7 +110,6 @@ namespace InventoryManagement
                             GrdTxtTotalAmount.Text = Convert.ToString(totalAmount);
                             footerTotalAmount = footerTotalAmount + totalAmount;
 
-                            //objDeliveryDetails.DeliveryId = "";
                             objDeliveryDetails.DeliveryDate = TxtDeliveryDate.Text.Trim();
                             objDeliveryDetails.EmployeeID = DdlEmployeeId.SelectedValue.Trim();
                             objDeliveryDetails.ProductId = GrdDdlProduct.SelectedValue.Trim();
@@ -129,7 +128,7 @@ namespace InventoryManagement
                 if (TxtDeliveryDate.Text.Trim() != "" && DdlEmployeeId.SelectedValue.Trim() != "")
                 {
                     DeliveryMaster objDeliveryMaster = new DeliveryMaster();
-                    //objDeliveryMaster.DeliveryId = "";
+
                     objDeliveryMaster.DeliveryDate = TxtDeliveryDate.Text.Trim();
                     objDeliveryMaster.EmployeeID = DdlEmployeeId.SelectedValue.Trim();
                     objDeliveryMaster.TotalQuantity = Convert.ToString(footerTotalQuantity);
@@ -150,7 +149,6 @@ namespace InventoryManagement
 
                         if (GrdDdlPaymentMode.SelectedValue != "" && GrdTxtAmount.Text != "")
                         {
-                            //objPaymentDetails.DeliveryId = "";
                             objPaymentDetails.DeliveryDate = TxtDeliveryDate.Text.Trim();
                             objPaymentDetails.EmployeeID = DdlEmployeeId.SelectedValue.Trim();
                             objPaymentDetails.PaymentMode = GrdDdlPaymentMode.SelectedValue.Trim();
@@ -164,7 +162,6 @@ namespace InventoryManagement
 
                 HFieldTransactionType.Value = "Save";
                 ShowResult(objDeliveryInformation.InsertTransaction(arrListDeliveryMaster, arrListDeliveryDetail, arrListPaymentDetail));
-                HFieldTransactionType.Value = "";
             }
             catch (Exception)
             {
@@ -284,8 +281,6 @@ namespace InventoryManagement
 
                 HFieldTransactionType.Value = "Update";
                 ShowResult(objDeliveryInformation.UpdateTransaction(arrListDeliveryMaster, arrListDeliveryDetail, arrListPaymentDetail));
-                HFieldTransactionType.Value = "";
-                //ShowResult(objDeliveryInformation.InitiateTransaction(arrListDeliveryMaster, arrListDeliveryDetail, arrListPaymentDetail));
             }
             catch (Exception)
             {
@@ -314,7 +309,6 @@ namespace InventoryManagement
 
                 HFieldTransactionType.Value = "Delete";
                 ShowResult(objDeliveryInformation.DeleteTransaction(LblDeliveryId.Text.Trim()));
-                HFieldTransactionType.Value = "";
             }
             catch (Exception)
             {
@@ -573,11 +567,11 @@ namespace InventoryManagement
             }
         }
 
-        public void ShowResult(int transactionStatus)
+        public void ShowResult(int rowsAffected)
         {
             try
             {
-                if (transactionStatus > 0)
+                if (rowsAffected > 0)
                 {
                     // Execute server logic here, then show the popup
                     if (HFieldTransactionType.Value == "Save")
@@ -593,6 +587,7 @@ namespace InventoryManagement
                 {
                     ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "Popup", "showSuccessMessage('Transaction failed.','Error');", true);
                 }
+                HFieldTransactionType.Value = "";
             }
             catch (Exception)
             {

@@ -118,7 +118,7 @@
                             <asp:Label ID="LblEmployee" runat="server" Text="Employee ID:" class="form-label" Style="vertical-align: middle; margin-bottom: 0;"></asp:Label>
                         </div>
                         <div class="col-8" style="padding-left: 5px;">
-                            <asp:DropDownList ID="DdlEmployeeId" runat="server" AutoPostBack="false" EnableViewState="true" CssClass="form-control form-select-sm" TabIndex="2">
+                            <asp:DropDownList ID="DdlEmployeeId" runat="server" AutoPostBack="false" EnableViewState="true" CssClass="form-select form-select-sm" TabIndex="2">
                             </asp:DropDownList>
                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorDdlEmployeeId" runat="server" ControlToValidate="DdlEmployeeId" InitialValue="" ErrorMessage="Employee ID is required." CssClass="text-danger" Display="Dynamic" />
                         </div>
@@ -147,7 +147,7 @@
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Product Name" HeaderStyle-CssClass="bg-primary text-white">
                         <ItemTemplate>
-                            <asp:DropDownList ID="GrdDdlProduct" runat="server" AutoPostBack="false" EnableViewState="true" class="form-select" TabIndex="1">
+                            <asp:DropDownList ID="GrdDdlProduct" runat="server" AutoPostBack="false" EnableViewState="true" class="form-select form-select-sm" TabIndex="1">
                             </asp:DropDownList>
                         </ItemTemplate>
                         <FooterTemplate>
@@ -157,7 +157,7 @@
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Quantity" HeaderStyle-CssClass="bg-primary text-white" FooterStyle-HorizontalAlign="Right">
                         <ItemTemplate>
-                            <asp:TextBox ID="GrdTxtQuantity" runat="server" TextMode="Number" EnableViewState="true" class="form-control alignRight" TabIndex="2"></asp:TextBox>
+                            <asp:TextBox ID="GrdTxtQuantity" runat="server" TextMode="Number" EnableViewState="true" class="form-control form-control-sm alignRight" TabIndex="2"></asp:TextBox>
                         </ItemTemplate>
                         <FooterTemplate>
                             <asp:Label ID="LblFooterTotalQuantity" runat="server" class="form-label alignFooterTextRight"></asp:Label>
@@ -165,13 +165,13 @@
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Price" HeaderStyle-CssClass="bg-primary text-white">
                         <ItemTemplate>
-                            <asp:TextBox ID="GrdTxtPrice" runat="server" TextMode="Number" EnableViewState="true" class="form-control alignRight" TabIndex="3"></asp:TextBox>
+                            <asp:TextBox ID="GrdTxtPrice" runat="server" TextMode="Number" EnableViewState="true" class="form-control form-control-sm alignRight" TabIndex="3"></asp:TextBox>
                         </ItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Total Amount" HeaderStyle-CssClass="bg-primary text-white" FooterStyle-HorizontalAlign="Right">
                         <ItemTemplate>
                             <%--<asp:Label ID="GrdLblTotalAmount" runat="server" Text="0.00" EnableViewState="true" class="form-label" TabIndex="4"></asp:Label>--%>
-                            <asp:TextBox ID="GrdTxtTotalAmount" runat="server" TextMode="Number" EnableViewState="true" ReadOnly="true" class="form-control alignRight" TabIndex="4"></asp:TextBox>
+                            <asp:TextBox ID="GrdTxtTotalAmount" runat="server" TextMode="Number" EnableViewState="true" ReadOnly="true" class="form-control form-control-sm alignRight" TabIndex="4"></asp:TextBox>
                         </ItemTemplate>
                         <FooterTemplate>
                             <asp:Label ID="LblFooterTotalAmount" runat="server" class="form-label alignFooterTextRight"></asp:Label>
@@ -179,7 +179,7 @@
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Remarks" HeaderStyle-CssClass="bg-primary text-white">
                         <ItemTemplate>
-                            <asp:TextBox ID="GrdTxtRemarks" runat="server" EnableViewState="true" class="form-control" TabIndex="5"></asp:TextBox>
+                            <asp:TextBox ID="GrdTxtRemarks" runat="server" EnableViewState="true" class="form-control form-control-sm" TabIndex="5"></asp:TextBox>
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>
@@ -201,7 +201,7 @@
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Payment Mode" HeaderStyle-CssClass="bg-primary text-white">
                         <ItemTemplate>
-                            <asp:DropDownList ID="GrdDdlPaymentMode" runat="server" AutoPostBack="false" EnableViewState="true" class="form-select" TabIndex="1">
+                            <asp:DropDownList ID="GrdDdlPaymentMode" runat="server" AutoPostBack="false" EnableViewState="true" class="form-select form-select-sm" TabIndex="1">
                             </asp:DropDownList>
                         </ItemTemplate>
                         <FooterTemplate>
@@ -211,7 +211,7 @@
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Amount" HeaderStyle-CssClass="bg-primary text-white" FooterStyle-HorizontalAlign="Right">
                         <ItemTemplate>
-                            <asp:TextBox ID="GrdTxtAmount" runat="server" TextMode="Number" EnableViewState="true" class="form-control alignRight" TabIndex="2"></asp:TextBox>
+                            <asp:TextBox ID="GrdTxtAmount" runat="server" TextMode="Number" EnableViewState="true" class="form-control form-control-sm alignRight" TabIndex="2"></asp:TextBox>
                         </ItemTemplate>
                         <FooterTemplate>
                             <asp:Label ID="LblFooterAmount" runat="server" class="form-label alignFooterTextRight"></asp:Label>
