@@ -1,5 +1,7 @@
-﻿using System;
+﻿using InventoryManagement.IL;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Web;
@@ -10,6 +12,8 @@ namespace InventoryManagement
 {
     public partial class Login : System.Web.UI.Page
     {
+        ClsLogin objLogin = new ClsLogin();
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -28,22 +32,44 @@ namespace InventoryManagement
         {
             try
             {
-                string user = txtUsername.Text.Trim();
-                string pass = txtPassword.Text.Trim();
+                string userName = txtUsername.Text.Trim();
+                string password = txtPassword.Text.Trim();
 
                 // Simple static validation (Replace this with a Database check!)
-                if (user == "admin" && pass == "admin")
+                DataTable dtUser = objLogin.GetUserDetails(userName);
+
+                if(dtUser != null && dtUser.Rows.Count > 0)
+                {
+                    if (userName == Convert.ToString(dtUser.Rows[0]["username"]) && password == "admin")
+                    {
+                        // Create a session to keep the user logged in
+                        Session["UserRoleId"] = Convert.ToString(dtUser.Rows[0]["role_id"]);
+                        Session["UserName"] = Convert.ToString(dtUser.Rows[0]["username"]);
+                        Session["LoginTime"] = DateTime.Now.ToString("dd-MM-yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
+                        Response.Redirect("Default.aspx");
+                    }
+                    else
+                    {
+                        lblMessage.Text = "Invalid credentials.";
+                    }
+                }
+                else
+                {
+                    lblMessage.Text = "Invalid credentials.";
+                }
+
+                /*if (user == "admin" && pass == "admin")
                 {
                     // Create a session to keep the user logged in
-                    Session["UserRole"] = "Guest";
-                    Session["UserId"] = user;
+                    Session["UserRoleId"] = "Guest";
+                    Session["UserName"] = user;
                     Session["LoginTime"] = DateTime.Now.ToString("dd-MM-yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
                     Response.Redirect("Default.aspx");
                 }
                 else
                 {
-                    lblMessage.Text = "Invalid Username or Password.";
-                }
+                    lblMessage.Text = "Invalid credentials.";
+                }*/
             }
             catch (Exception)
             {

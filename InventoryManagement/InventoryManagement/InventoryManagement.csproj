@@ -102,7 +102,8 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Default.aspx" />
-    <Content Include="DeliveryInformationReport.aspx" />
+    <Content Include="DeliveryInfoProductsReport.aspx" />
+    <Content Include="DeliveryInfoPaymentsReport.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="DeliveryInformation.aspx" />
@@ -187,12 +188,19 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="DeliveryInformationReport.aspx.cs">
-      <DependentUpon>DeliveryInformationReport.aspx</DependentUpon>
+    <Compile Include="DeliveryInfoProductsReport.aspx.cs">
+      <DependentUpon>DeliveryInfoProductsReport.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="DeliveryInformationReport.aspx.designer.cs">
-      <DependentUpon>DeliveryInformationReport.aspx</DependentUpon>
+    <Compile Include="DeliveryInfoProductsReport.aspx.designer.cs">
+      <DependentUpon>DeliveryInfoProductsReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryInfoPaymentsReport.aspx.cs">
+      <DependentUpon>DeliveryInfoPaymentsReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DeliveryInfoPaymentsReport.aspx.designer.cs">
+      <DependentUpon>DeliveryInfoPaymentsReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

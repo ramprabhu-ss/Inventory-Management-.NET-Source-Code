@@ -3366,7 +3366,7 @@ function Identity( v ) {
 	return v;
 }
 function Thrower( ex ) {
-	throw ex;
+	throw;
 }
 
 function adoptValue( value, resolve, reject, noValue ) {

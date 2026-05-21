@@ -10,6 +10,7 @@ namespace InventoryManagement.IL
     {
         readonly ClsUtility objUtilitiy = new ClsUtility();
         StringBuilder sqlQueryBuilder;
+        MySqlCommand objMySqlCommand;
 
         public string AREA_ID { get; set; }
 
@@ -32,7 +33,9 @@ namespace InventoryManagement.IL
             {
                 sqlQueryBuilder = new StringBuilder();
                 sqlQueryBuilder.Append("SELECT area_id, area_name, ZIPCODE FROM area_master ORDER BY area_name");
-                dt = objUtilitiy.GetDataTable(sqlQueryBuilder.ToString());
+
+                objMySqlCommand = new MySqlCommand(sqlQueryBuilder.ToString());
+                dt = objUtilitiy.GetDataTable(objMySqlCommand);
             }
             catch (Exception)
             {

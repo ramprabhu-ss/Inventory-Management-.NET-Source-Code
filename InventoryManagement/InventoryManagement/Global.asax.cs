@@ -21,8 +21,8 @@ namespace InventoryManagement
             // This triggers EVERY TIME a new user starts a unique session
 
             // Set your default session variables here
-            //Session["UserRole"] = "Guest";
-            //Session["UserId"] = "Ram";
+            //Session["UserRoleId"] = "Guest";
+            //Session["UserName"] = "Ram";
             //Session["SessionStartTime"] = DateTime.Now;
             Response.Redirect("~/Login.aspx");
         }

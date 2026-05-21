@@ -1,22 +1,17 @@
 ﻿using InventoryManagement.IL;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Security.Policy;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
 
 namespace InventoryManagement
 {
-    public partial class DeliveryInformationReport : System.Web.UI.Page
+    public partial class DeliveryInfoProductsReport : System.Web.UI.Page
     {
         public ClsDeliveryInformation objDeliveryInformation = new ClsDeliveryInformation();
-        decimal footerTotalQuantity, footerTotalAmount, BankTransfer, Card, Cash, Cheque, Credit, Paytm, UPI = 0.00M;
+        decimal footerTotalQuantity, footerTotalAmount = 0.00M;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -52,7 +47,7 @@ namespace InventoryManagement
                 }
 
                 DataTable dt = new DataTable();
-                dt = objDeliveryInformation.GetDeliveryInformationReport(Convert.ToDateTime(TxtFromDate.Text).ToString("yyyy-MM-dd HH:mm:ss"), Convert.ToDateTime(TxtToDate.Text).ToString("yyyy-MM-dd HH:mm:ss"));
+                dt = objDeliveryInformation.GetDeliveryInfoProductsReport(Convert.ToDateTime(TxtFromDate.Text).ToString("yyyy-MM-dd HH:mm:ss"), Convert.ToDateTime(TxtToDate.Text).ToString("yyyy-MM-dd HH:mm:ss"));
 
                 GrdViewDeliveryInfo.DataSource = dt;
                 GrdViewDeliveryInfo.DataBind();
@@ -86,32 +81,13 @@ namespace InventoryManagement
                 {
                     e.Row.Cells[0].CssClass = "alignDataRowTextRight"; // Delivery Id
 
-                    footerTotalQuantity = footerTotalQuantity + Convert.ToDecimal(DataBinder.Eval(e.Row.DataItem, "Total Quantity"));
-                    e.Row.Cells[3].CssClass = "alignDataRowTextRight"; // Total Quantity
+                    footerTotalQuantity = footerTotalQuantity + Convert.ToDecimal(DataBinder.Eval(e.Row.DataItem, "Quantity"));
+                    e.Row.Cells[4].CssClass = "alignDataRowTextRight"; // Quantity
 
-                    footerTotalAmount = footerTotalAmount + Convert.ToDecimal(DataBinder.Eval(e.Row.DataItem, "Total Amount"));
-                    e.Row.Cells[4].CssClass = "alignDataRowTextRight"; // Total Amount
+                    e.Row.Cells[5].CssClass = "alignDataRowTextRight"; // Price
 
-                    e.Row.Cells[5].CssClass = "alignDataRowTextRight"; // Bank Transfer
-                    BankTransfer = BankTransfer + Convert.ToDecimal(DataBinder.Eval(e.Row.DataItem, "Bank Transfer"));
-
-                    e.Row.Cells[6].CssClass = "alignDataRowTextRight"; // Card
-                    Card = Card + Convert.ToDecimal(DataBinder.Eval(e.Row.DataItem, "Card"));
-
-                    e.Row.Cells[7].CssClass = "alignDataRowTextRight"; // Cash
-                    Cash = Cash + Convert.ToDecimal(DataBinder.Eval(e.Row.DataItem, "Cash"));
-
-                    e.Row.Cells[8].CssClass = "alignDataRowTextRight"; // Cheque
-                    Cheque = Cheque + Convert.ToDecimal(DataBinder.Eval(e.Row.DataItem, "Cheque"));
-
-                    e.Row.Cells[9].CssClass = "alignDataRowTextRight"; // Credit
-                    Credit = Credit + Convert.ToDecimal(DataBinder.Eval(e.Row.DataItem, "Credit"));
-
-                    e.Row.Cells[10].CssClass = "alignDataRowTextRight"; // Paytm
-                    Paytm = Paytm + Convert.ToDecimal(DataBinder.Eval(e.Row.DataItem, "Paytm"));
-
-                    e.Row.Cells[11].CssClass = "alignDataRowTextRight"; // UPI
-                    UPI = UPI + Convert.ToDecimal(DataBinder.Eval(e.Row.DataItem, "UPI"));
+                    footerTotalAmount = footerTotalAmount + Convert.ToDecimal(DataBinder.Eval(e.Row.DataItem, "Amount"));
+                    e.Row.Cells[6].CssClass = "alignDataRowTextRight"; // Total Amount
                 }
 
                 // Check if the current row being bound is the footer
@@ -119,32 +95,11 @@ namespace InventoryManagement
                 {
                     // Access cells by index and set text
                     // You can use a calculated variable here
-                    e.Row.Cells[3].Text = Convert.ToString(footerTotalQuantity);
-                    e.Row.Cells[3].CssClass = "alignFooterTextRight"; // Total Quantity
+                    e.Row.Cells[4].Text = Convert.ToString(footerTotalQuantity);
+                    e.Row.Cells[4].CssClass = "alignFooterTextRight"; // Quantity
 
-                    e.Row.Cells[4].Text = Convert.ToString(footerTotalAmount);
-                    e.Row.Cells[4].CssClass = "alignFooterTextRight"; // Total Amount
-
-                    e.Row.Cells[5].Text = Convert.ToString(BankTransfer);
-                    e.Row.Cells[5].CssClass = "alignFooterTextRight"; // Bank Transfer
-
-                    e.Row.Cells[6].Text = Convert.ToString(Card);
-                    e.Row.Cells[6].CssClass = "alignFooterTextRight"; // Card
-
-                    e.Row.Cells[7].Text = Convert.ToString(Cash);
-                    e.Row.Cells[7].CssClass = "alignFooterTextRight"; // Cash
-
-                    e.Row.Cells[8].Text = Convert.ToString(Cheque);
-                    e.Row.Cells[8].CssClass = "alignFooterTextRight"; // Cheque
-
-                    e.Row.Cells[9].Text = Convert.ToString(Credit);
-                    e.Row.Cells[9].CssClass = "alignFooterTextRight"; // Credit
-
-                    e.Row.Cells[10].Text = Convert.ToString(Paytm);
-                    e.Row.Cells[10].CssClass = "alignFooterTextRight"; // Paytm
-
-                    e.Row.Cells[11].Text = Convert.ToString(UPI);
-                    e.Row.Cells[11].CssClass = "alignFooterTextRight"; // UPI
+                    e.Row.Cells[6].Text = Convert.ToString(footerTotalAmount);
+                    e.Row.Cells[6].CssClass = "alignFooterTextRight"; // Amount
                 }
             }
             catch (Exception)
@@ -176,7 +131,7 @@ namespace InventoryManagement
                 }
 
                 // 1. Clear response and set headers for Excel download
-                string filename = "Delivery_Information_Report_" + DateTime.Now.ToString("dd-MM-yyyy hh:mm:ss tt", CultureInfo.InvariantCulture).Replace(":", "-") + ".xls";
+                string filename = "Delivery_Info_Products_Report_" + DateTime.Now.ToString("dd-MM-yyyy hh:mm:ss tt", CultureInfo.InvariantCulture).Replace(":", "-") + ".xls";
                 Response.Clear();
                 Response.Buffer = true;
                 Response.AddHeader("content-disposition", "attachment;filename=" + filename);

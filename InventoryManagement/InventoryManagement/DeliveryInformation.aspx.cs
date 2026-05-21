@@ -76,7 +76,7 @@ namespace InventoryManagement
                 ArrayList arrListDeliveryDetail = new ArrayList();
                 ArrayList arrListPaymentDetail = new ArrayList();
                 StringBuilder sqlQueryBuilder = new StringBuilder();
-                string CreatedBy = "1"; // Convert.ToString(Session["UserId"]);
+                string CreatedBy = "1"; // Convert.ToString(Session["UserName"]);
                 string CreatedOn = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
                 footerTotalQuantity = 0.00M;
@@ -192,7 +192,7 @@ namespace InventoryManagement
                 ArrayList arrListDeliveryDetail = new ArrayList();
                 ArrayList arrListPaymentDetail = new ArrayList();
                 StringBuilder sqlQueryBuilder = new StringBuilder();
-                string CreatedBy = "1"; // Convert.ToString(Session["UserId"]);
+                string CreatedBy = "1"; // Convert.ToString(Session["UserName"]);
                 string CreatedOn = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
                 footerTotalQuantity = 0.00M;

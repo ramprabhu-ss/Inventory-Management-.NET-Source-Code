@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Delivery Information Report" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="DeliveryInformationReport.aspx.cs" Inherits="InventoryManagement.DeliveryInformationReport" %>
+﻿<%@ Page Title="Delivery Information - Products" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="DeliveryInfoProductsReport.aspx.cs" Inherits="InventoryManagement.DeliveryInfoProductsReport" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <!-- Load jQuery first -->

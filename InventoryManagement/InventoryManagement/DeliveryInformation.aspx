@@ -35,6 +35,7 @@
                 // Attach keypress event to Quantity textboxes
                 $("[id*=GrdDeliveryInfo] [id*=GrdTxtQuantity]").on("keyup", function () {
                     var totalQuantity = 0;
+                    var totalAmount = 0;
 
                     // Iterate through all Quantity textboxes to calculate the total
                     $("[id*=GrdDeliveryInfo] [id*=GrdTxtQuantity]").each(function () {
@@ -43,6 +44,14 @@
 
                     // Update the footer label with the total quantity
                     $("[id*=LblFooterTotalQuantity]").text("Total Quantity: " + totalQuantity.toFixed(2));
+
+                    // Iterate through all TotalAmount textboxes to calculate the total
+                    $("[id*=GrdDeliveryInfo] [id*=GrdTxtTotalAmount]").each(function () {
+                        totalAmount += parseFloat($(this).val()) || 0;
+                    });
+
+                    // Update the footer label with the total quantity
+                    $("[id*=LblFooterTotalAmount]").text("Total Amount: " + totalAmount.toFixed(2));
                 });
 
                 // Attach keypress event to Price textboxes

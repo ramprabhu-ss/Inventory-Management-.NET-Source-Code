@@ -12,21 +12,21 @@ namespace InventoryManagement.IL
     public class ClsUtility
     {
         public static string connectionString = ConfigurationManager.ConnectionStrings["dbConnectionName"].ToString();
-        static MySqlConnection sqlConnection;
+        static MySqlConnection mySqlConnection;
+        static MySqlTransaction mySqlTransaction;
         public MySqlCommand sqlCommand = new MySqlCommand();
-        static MySqlTransaction sqlTransaction;
 
         public void OpenConnection()
         {
             try
             {
-                sqlConnection = new MySqlConnection(connectionString);
-                sqlCommand.Connection = sqlConnection;
+                mySqlConnection = new MySqlConnection(connectionString);
+                sqlCommand.Connection = mySqlConnection;
 
-                if (sqlConnection.State == ConnectionState.Open)
-                    sqlConnection.Close();
+                if (mySqlConnection.State == ConnectionState.Open)
+                    mySqlConnection.Close();
 
-                sqlConnection.Open();
+                mySqlConnection.Open();
             }
             catch (Exception)
             {
@@ -38,7 +38,7 @@ namespace InventoryManagement.IL
         {
             try
             {
-                sqlConnection.Close();
+                mySqlConnection.Close();
             }
             catch (Exception)
             {
@@ -46,13 +46,16 @@ namespace InventoryManagement.IL
             }
         }
 
-        public DataTable GetDataTable(string sqlQuery)
+        public DataTable GetDataTable(MySqlCommand objMySqlCommand)
         {
             DataTable dataTable = new DataTable();
 
             try
             {
-                MySqlDataAdapter sqlDataAdapter = new MySqlDataAdapter(sqlQuery, connectionString);
+                mySqlConnection = new MySqlConnection(connectionString);
+                objMySqlCommand.Connection = mySqlConnection;
+
+                MySqlDataAdapter sqlDataAdapter = new MySqlDataAdapter(objMySqlCommand);
                 sqlDataAdapter.Fill(dataTable);
             }
             catch (Exception)
@@ -63,13 +66,16 @@ namespace InventoryManagement.IL
             return dataTable;
         }
 
-        public DataSet GetDataSet(string sqlQuery)
+        public DataSet GetDataSet(MySqlCommand objMySqlCommand)
         {
             DataSet dataSet = new DataSet();
 
             try
             {
-                MySqlDataAdapter sqlDataAdapter = new MySqlDataAdapter(sqlQuery, connectionString);
+                mySqlConnection = new MySqlConnection(connectionString);
+                objMySqlCommand.Connection = mySqlConnection;
+
+                MySqlDataAdapter sqlDataAdapter = new MySqlDataAdapter(objMySqlCommand);
                 sqlDataAdapter.Fill(dataSet);
             }
             catch (Exception)
@@ -169,13 +175,13 @@ namespace InventoryManagement.IL
             try
             {
                 OpenConnection();
-                sqlTransaction = sqlConnection.BeginTransaction();
-                sqlCommand.Connection = sqlConnection;
-                sqlCommand.Transaction = sqlTransaction;
+                mySqlTransaction = mySqlConnection.BeginTransaction();
+                sqlCommand.Connection = mySqlConnection;
+                sqlCommand.Transaction = mySqlTransaction;
             }
             catch (Exception)
             {
-                sqlTransaction.Rollback();
+                mySqlTransaction.Rollback();
             }
         }
 
@@ -183,12 +189,12 @@ namespace InventoryManagement.IL
         {
             try
             {
-                sqlTransaction.Commit();
+                mySqlTransaction.Commit();
                 CloseConnection();
             }
             catch (Exception)
             {
-                sqlTransaction.Rollback();
+                mySqlTransaction.Rollback();
                 CloseConnection();
             }
         }
@@ -197,7 +203,7 @@ namespace InventoryManagement.IL
         {
             try
             {
-                sqlTransaction.Rollback();
+                mySqlTransaction.Rollback();
                 CloseConnection();
             }
             catch (Exception)

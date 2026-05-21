@@ -1,9 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -13,6 +11,7 @@ namespace InventoryManagement.IL
     {
         public ClsUtility objUtilitiy = new ClsUtility();
         StringBuilder sqlQueryBuilder;
+        MySqlCommand objMySqlCommand;
 
         public DataSet GetMasters()
         {
@@ -21,7 +20,10 @@ namespace InventoryManagement.IL
             {
                 sqlQueryBuilder = new StringBuilder();
                 sqlQueryBuilder.Append("CALL DEL_INF_GET_MASTERS;");
-                ds = objUtilitiy.GetDataSet(sqlQueryBuilder.ToString());
+
+                objMySqlCommand = new MySqlCommand(sqlQueryBuilder.ToString());
+
+                ds = objUtilitiy.GetDataSet(objMySqlCommand);
             }
             catch (Exception)
             {
@@ -37,10 +39,13 @@ namespace InventoryManagement.IL
             try
             {
                 sqlQueryBuilder = new StringBuilder();
-                sqlQueryBuilder.Append("CALL DEL_INF_GET_DELIVERY_INFORMATION ('@DeliveryDate', @EmployeeId);");
-                sqlQueryBuilder.Replace("@DeliveryDate", DeliveryDate);
-                sqlQueryBuilder.Replace("@EmployeeId", EmployeeId);
-                ds = objUtilitiy.GetDataSet(sqlQueryBuilder.ToString());
+                sqlQueryBuilder.Append("CALL DEL_INF_GET_DELIVERY_INFORMATION (@DeliveryDate, @EmployeeId);");
+
+                objMySqlCommand = new MySqlCommand(sqlQueryBuilder.ToString());
+                objMySqlCommand.Parameters.AddWithValue("@DeliveryDate", DeliveryDate);
+                objMySqlCommand.Parameters.AddWithValue("@EmployeeId", EmployeeId);
+                
+                ds = objUtilitiy.GetDataSet(objMySqlCommand);
             }
             catch (Exception)
             {
@@ -50,16 +55,41 @@ namespace InventoryManagement.IL
             return ds;
         }
 
-        public DataTable GetDeliveryInformationReport(string FromDate, string ToDate)
+        public DataTable GetDeliveryInfoPaymentsReport(string FromDate, string ToDate)
         {
             DataTable dt;
             try
             {
                 sqlQueryBuilder = new StringBuilder();
-                sqlQueryBuilder.Append("CALL DEL_INF_GET_DELIVERY_INFO_REPORT ('@FromDate', '@ToDate');");
-                sqlQueryBuilder.Replace("@FromDate", FromDate);
-                sqlQueryBuilder.Replace("@ToDate", ToDate);
-                dt = objUtilitiy.GetDataTable(sqlQueryBuilder.ToString());
+                sqlQueryBuilder.Append("CALL DEL_INF_DELIVERY_INFO_PAYMENTS_REPORT (@FromDate, @ToDate);");
+
+                objMySqlCommand = new MySqlCommand(sqlQueryBuilder.ToString());
+                objMySqlCommand.Parameters.AddWithValue("@FromDate", FromDate);
+                objMySqlCommand.Parameters.AddWithValue("@ToDate", ToDate);
+
+                dt = objUtilitiy.GetDataTable(objMySqlCommand);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return dt;
+        }
+
+        public DataTable GetDeliveryInfoProductsReport(string FromDate, string ToDate)
+        {
+            DataTable dt;
+            try
+            {
+                sqlQueryBuilder = new StringBuilder();
+                sqlQueryBuilder.Append("CALL DEL_INF_DELIVERY_INFO_PRODUCTS_REPORT (@FromDate, @ToDate);");
+
+                objMySqlCommand = new MySqlCommand(sqlQueryBuilder.ToString());
+                objMySqlCommand.Parameters.AddWithValue("@FromDate", FromDate);
+                objMySqlCommand.Parameters.AddWithValue("@ToDate", ToDate);
+
+                dt = objUtilitiy.GetDataTable(objMySqlCommand);
             }
             catch (Exception)
             {
@@ -79,8 +109,9 @@ namespace InventoryManagement.IL
 
                 sqlQueryBuilder = new StringBuilder();
                 sqlQueryBuilder.Append("SELECT (MAX(IFNULL(DELIVERY_ID,0)) + 1) AS DELIVERY_ID FROM DELIVERY_INF;");
+                objMySqlCommand = new MySqlCommand(sqlQueryBuilder.ToString());
 
-                DataTable dt = objUtilitiy.GetDataTable(sqlQueryBuilder.ToString());
+                DataTable dt = objUtilitiy.GetDataTable(objMySqlCommand);
                 if (dt != null && dt.Rows.Count > 0)
                     Delivery_ID = Convert.ToInt32(dt.Rows[0]["DELIVERY_ID"]);
                 else
