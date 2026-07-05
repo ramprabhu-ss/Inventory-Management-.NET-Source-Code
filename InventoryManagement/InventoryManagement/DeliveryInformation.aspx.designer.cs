@@ -114,6 +114,60 @@ namespace InventoryManagement
         protected global::System.Web.UI.WebControls.GridView GrdPaymentMode;
 
         /// <summary>
+        /// LblRemarks control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LblRemarks;
+
+        /// <summary>
+        /// TxtRemarks control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TxtRemarks;
+
+        /// <summary>
+        /// LblFooterTotalAmount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LblFooterTotalAmount;
+
+        /// <summary>
+        /// LblFooterOnlineAmount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LblFooterOnlineAmount;
+
+        /// <summary>
+        /// LblFooterFinalAmount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LblFooterFinalAmount;
+
+        /// <summary>
+        /// LblFooterShortageAmount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LblFooterShortageAmount;
+
+        /// <summary>
         /// BtnSave control.
         /// </summary>
         /// <remarks>

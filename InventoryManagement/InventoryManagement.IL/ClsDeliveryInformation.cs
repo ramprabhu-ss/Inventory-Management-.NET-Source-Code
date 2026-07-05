@@ -44,7 +44,7 @@ namespace InventoryManagement.IL
                 objMySqlCommand = new MySqlCommand(sqlQueryBuilder.ToString());
                 objMySqlCommand.Parameters.AddWithValue("@DeliveryDate", DeliveryDate);
                 objMySqlCommand.Parameters.AddWithValue("@EmployeeId", EmployeeId);
-                
+
                 ds = objUtilitiy.GetDataSet(objMySqlCommand);
             }
             catch (Exception)
@@ -143,8 +143,8 @@ namespace InventoryManagement.IL
                 // Detail Table Query
                 sqlQueryBuilder = new StringBuilder();
                 sqlQueryBuilder.Append("INSERT INTO delivery_item_details (Delivery_ID, DeliveryDate, EmployeeID, ");
-                sqlQueryBuilder.Append("ProductID, ActualDelivered, Price, Remarks, created_at) VALUES (@Delivery_ID, ");
-                sqlQueryBuilder.Append("@DeliveryDate, @EmployeeID, @ProductID, @ActualDelivered, @Price, @Remarks, @created_at);");
+                sqlQueryBuilder.Append("ProductID, ActualDelivered, OnlineQuantity, Price, Remarks, created_at) VALUES (@Delivery_ID, ");
+                sqlQueryBuilder.Append("@DeliveryDate, @EmployeeID, @ProductID, @ActualDelivered, @OnlineQuantity, @Price, @Remarks, @created_at);");
 
                 for (int i = 0; i < arrListDeliveryDetail.Count; i++)
                 {
@@ -156,6 +156,7 @@ namespace InventoryManagement.IL
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@EmployeeID", objDeliveryDetails.EmployeeID);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@ProductID", objDeliveryDetails.ProductId);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@ActualDelivered", objDeliveryDetails.Quantity);
+                    objUtilitiy.sqlCommand.Parameters.AddWithValue("@OnlineQuantity", objDeliveryDetails.OnlineQuantity);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@Price", objDeliveryDetails.Price);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@Remarks", objDeliveryDetails.Remarks);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@created_at", objDeliveryDetails.created_at);
@@ -321,8 +322,8 @@ namespace InventoryManagement.IL
                 // Detail Table Query
                 sqlQueryBuilder = new StringBuilder();
                 sqlQueryBuilder.Append("INSERT INTO delivery_item_details (Delivery_ID, DeliveryDate, EmployeeID, ");
-                sqlQueryBuilder.Append("ProductID, ActualDelivered, Price, Remarks, created_at) VALUES (@Delivery_ID, ");
-                sqlQueryBuilder.Append("@DeliveryDate, @EmployeeID, @ProductID, @ActualDelivered, @Price, @Remarks, @created_at);");
+                sqlQueryBuilder.Append("ProductID, ActualDelivered, OnlineQuantity, Price, Remarks, created_at) VALUES (@Delivery_ID, ");
+                sqlQueryBuilder.Append("@DeliveryDate, @EmployeeID, @ProductID, @ActualDelivered, @OnlineQuantity, @Price, @Remarks, @created_at);");
 
                 for (int i = 0; i < arrListDeliveryDetail.Count; i++)
                 {
@@ -334,6 +335,7 @@ namespace InventoryManagement.IL
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@EmployeeID", objDeliveryDetails.EmployeeID);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@ProductID", objDeliveryDetails.ProductId);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@ActualDelivered", objDeliveryDetails.Quantity);
+                    objUtilitiy.sqlCommand.Parameters.AddWithValue("@OnlineQuantity", objDeliveryDetails.OnlineQuantity);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@Price", objDeliveryDetails.Price);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@Remarks", objDeliveryDetails.Remarks);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@created_at", objDeliveryDetails.created_at);
@@ -371,6 +373,7 @@ namespace InventoryManagement.IL
             catch (Exception)
             {
                 objUtilitiy.RollbackTransaction();
+                rowsAffected = 0;
             }
 
             return rowsAffected;
@@ -406,6 +409,7 @@ namespace InventoryManagement.IL
             catch (Exception)
             {
                 objUtilitiy.RollbackTransaction();
+                rowsAffected = 0;
             }
 
             return rowsAffected;
@@ -442,6 +446,7 @@ namespace InventoryManagement.IL
         public string EmployeeID { get; set; }
         public string ProductId { get; set; }
         public string Quantity { get; set; }
+        public string OnlineQuantity { get; set; }
         public string Price { get; set; }
         public string TotalAmount { get; set; }
         public string Remarks { get; set; }
