@@ -15,7 +15,49 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- New column 'Remarks' added for delivery_item_details table
+-- New column 'full_name' added for user_master table -- Start 
+SET @column_exists = (
+    SELECT COUNT(*) 
+    FROM INFORMATION_SCHEMA.COLUMNS 
+    WHERE TABLE_SCHEMA = DATABASE() 
+    AND TABLE_NAME = 'user_master' 
+    AND COLUMN_NAME = 'full_name'
+);
+
+-- If the count is 0, prepare the ALTER statement; otherwise, run a dummy query
+SET @sql = IF(@column_exists = 0, 
+    'ALTER TABLE user_master ADD COLUMN full_name varchar(100)', 
+    'SELECT "Column already exists"'
+);
+
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+-- New column 'full_name' added for user_master table -- End 
+
+
+-- New column 'Remarks' added for role_master table -- Start 
+SET @column_exists = (
+    SELECT COUNT(*) 
+    FROM INFORMATION_SCHEMA.COLUMNS 
+    WHERE TABLE_SCHEMA = DATABASE() 
+    AND TABLE_NAME = 'role_master' 
+    AND COLUMN_NAME = 'is_active'
+);
+
+-- If the count is 0, prepare the ALTER statement; otherwise, run a dummy query
+SET @sql = IF(@column_exists = 0, 
+    'ALTER TABLE role_master ADD COLUMN is_active TINYINT(1)', 
+    'SELECT "Column already exists"'
+);
+
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+-- New column 'is_active' added for role_master table -- End 
+
+
+-- New column 'Remarks' added for delivery_item_details table -- Start 
 SET @column_exists = (
     SELECT COUNT(*) 
     FROM INFORMATION_SCHEMA.COLUMNS 
@@ -33,8 +75,10 @@ SET @sql = IF(@column_exists = 0,
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
+-- New column 'Remarks' added for delivery_item_details table -- End 
 
--- New column 'OnlineQuantity' added for delivery_item_details table
+
+-- New column 'OnlineQuantity' added for delivery_item_details table -- Start
 SET @column_exists = (
     SELECT COUNT(*) 
     FROM INFORMATION_SCHEMA.COLUMNS 
@@ -52,6 +96,29 @@ SET @sql = IF(@column_exists = 0,
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
+-- New column 'OnlineQuantity' added for delivery_item_details table -- End
+
+
+-- New column 'Remarks' added for delivery_inf table -- Start
+SET @column_exists = (
+    SELECT COUNT(*) 
+    FROM INFORMATION_SCHEMA.COLUMNS 
+    WHERE TABLE_SCHEMA = DATABASE() 
+    AND TABLE_NAME = 'delivery_inf' 
+    AND COLUMN_NAME = 'Remarks'
+);
+
+-- If the count is 0, prepare the ALTER statement; otherwise, run a dummy query
+SET @sql = IF(@column_exists = 0, 
+    'ALTER TABLE delivery_inf ADD COLUMN Remarks VARCHAR(1000)', 
+    'SELECT "Column already exists"'
+);
+
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+-- New column 'Remarks' added for delivery_inf table -- End
+
 
 --
 -- Table structure for table `paymode_master`
@@ -210,7 +277,8 @@ BEGIN
         DeliveryDate, 
         EmployeeID, 
         Total_Amount, 
-        Total_Quantity 
+        Total_Quantity, 
+        Remarks 
 	FROM 
 		`delivery_inf` 
 	WHERE 
