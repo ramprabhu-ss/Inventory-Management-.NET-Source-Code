@@ -161,6 +161,16 @@ namespace InventoryManagement.IL
                 rowsAffected += objUtility.ExecuteNonQueryTransaction();
                 objUtility.CommitTransaction();
             }
+            catch (MySqlException ex)
+            {
+                objUtility.RollbackTransaction();
+                // Check for foreign key constraint violation (error code 1451)
+                if (ex.Number == 1451 || ex.Message.Contains("foreign key constraint"))
+                {
+                    throw new Exception("Cannot delete this product. This product is referenced in other records (e.g., orders, deliveries, inventory). Please remove those references first.");
+                }
+                throw;
+            }
             catch (Exception)
             {
                 objUtility.RollbackTransaction();

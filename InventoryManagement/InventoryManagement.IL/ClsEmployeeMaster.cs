@@ -100,8 +100,7 @@ namespace InventoryManagement.IL
                 sqlQueryBuilder.Append("UPDATE employee_master SET emp_name = @emp_name, designation = @designation, ");
                 sqlQueryBuilder.Append("department = @department, mobile_no = @mobile_no, email_id = @email_id, ");
                 sqlQueryBuilder.Append("address = @address, city = @city, state = @state, pincode = @pincode, ");
-                sqlQueryBuilder.Append("join_date = @join_date, salary = @salary, status = @status, ");
-                sqlQueryBuilder.Append("updated_by = @updated_by, updated_at = @updated_at WHERE emp_code = @emp_code");
+                sqlQueryBuilder.Append("join_date = @join_date, salary = @salary, status = @status WHERE emp_code = @emp_code");
 
                 objUtility.sqlCommand.CommandText = sqlQueryBuilder.ToString();
                 objUtility.sqlCommand.Parameters.AddWithValue("@emp_code", objEmployeeMaster.EMP_CODE);
@@ -117,8 +116,6 @@ namespace InventoryManagement.IL
                 objUtility.sqlCommand.Parameters.AddWithValue("@join_date", objEmployeeMaster.JOIN_DATE.HasValue ? (object)objEmployeeMaster.JOIN_DATE : DBNull.Value);
                 objUtility.sqlCommand.Parameters.AddWithValue("@salary", objEmployeeMaster.SALARY.HasValue ? (object)objEmployeeMaster.SALARY : DBNull.Value);
                 objUtility.sqlCommand.Parameters.AddWithValue("@status", objEmployeeMaster.STATUS ?? "ACTIVE");
-                objUtility.sqlCommand.Parameters.AddWithValue("@updated_by", string.IsNullOrWhiteSpace(objEmployeeMaster.UPDATED_BY) ? DBNull.Value : (object)objEmployeeMaster.UPDATED_BY);
-                objUtility.sqlCommand.Parameters.AddWithValue("@updated_at", objEmployeeMaster.UPDATED_AT.HasValue ? (object)objEmployeeMaster.UPDATED_AT : DBNull.Value);
 
                 rowsAffected += objUtility.ExecuteNonQueryTransaction();
                 objUtility.CommitTransaction();
@@ -145,6 +142,16 @@ namespace InventoryManagement.IL
                 objUtility.sqlCommand.Parameters.AddWithValue("@emp_code", objEmployeeMaster.EMP_CODE);
                 rowsAffected += objUtility.ExecuteNonQueryTransaction();
                 objUtility.CommitTransaction();
+            }
+            catch (MySqlException ex)
+            {
+                objUtility.RollbackTransaction();
+                // Check for foreign key constraint violation (error code 1451)
+                if (ex.Number == 1451 || ex.Message.Contains("foreign key constraint"))
+                {
+                    throw new Exception("Cannot delete this employee. This employee is referenced in other records (e.g., deliveries, orders). Please remove those references first.");
+                }
+                throw;
             }
             catch (Exception)
             {
