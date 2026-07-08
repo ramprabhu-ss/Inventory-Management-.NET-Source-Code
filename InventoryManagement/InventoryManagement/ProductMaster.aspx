@@ -127,11 +127,45 @@
                             OnRowDeleting="grdProductMaster_RowDeleting" OnRowDataBound="grdProductMaster_RowDataBound">
                             <Columns>
                                 <asp:BoundField DataField="ProductID" HeaderText="Product ID" ReadOnly="true" ItemStyle-Width="80px" />
-                                <asp:BoundField DataField="ProductName" HeaderText="Product Name" />
+
+                                <asp:TemplateField HeaderText="Product Name">
+                                    <ItemTemplate>
+                                        <%# Eval("ProductName") %>
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <asp:TextBox ID="txtProductNameEdit" runat="server" Text='<%# Bind("ProductName") %>' CssClass="form-control" />
+                                    </EditItemTemplate>
+                                </asp:TemplateField>
+
                                 <asp:BoundField DataField="category_name" HeaderText="Category" ReadOnly="true" />
-                                <asp:BoundField DataField="UnitPrice" HeaderText="Unit Price" DataFormatString="{0:N2}" />
-                                <asp:BoundField DataField="StockQuantity" HeaderText="Stock Qty" />
-                                <asp:BoundField DataField="IsActive" HeaderText="Active" DataFormatString="{0:Yes;No}" ItemStyle-Width="60px" />
+
+                                <asp:TemplateField HeaderText="Unit Price">
+                                    <ItemTemplate>
+                                        <%# Eval("UnitPrice", "{0:N2}") %>
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <asp:TextBox ID="txtUnitPriceEdit" runat="server" Text='<%# Bind("UnitPrice") %>' CssClass="form-control" />
+                                    </EditItemTemplate>
+                                </asp:TemplateField>
+
+                                <asp:TemplateField HeaderText="Stock Qty">
+                                    <ItemTemplate>
+                                        <%# Eval("StockQuantity") %>
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <asp:TextBox ID="txtStockQuantityEdit" runat="server" Text='<%# Bind("StockQuantity") %>' CssClass="form-control" />
+                                    </EditItemTemplate>
+                                </asp:TemplateField>
+
+                                <asp:TemplateField HeaderText="Active" ItemStyle-Width="60px">
+                                    <ItemTemplate>
+                                        <%# Convert.ToBoolean(Eval("IsActive")) ? "Yes" : "No" %>
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <asp:CheckBox ID="chkIsActiveEdit" runat="server" Checked='<%# Bind("IsActive") %>' />
+                                    </EditItemTemplate>
+                                </asp:TemplateField>
+
                                 <asp:CommandField ShowEditButton="true" ShowDeleteButton="true" ItemStyle-Width="120px" />
                             </Columns>
                             <EditRowStyle BackColor="#FFE699" />

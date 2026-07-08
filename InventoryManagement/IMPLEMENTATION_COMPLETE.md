@@ -227,7 +227,7 @@ All write operations use:
 | Category | product_category | category_id | category_name |
 | Employee | employee_master | emp_code | emp_name, designation, department, mobile_no |
 | GST | gst_master | gst_id | gst_percentage, effective_from, effective_to |
-| Pricing | pricing_master | pricing_id | ProductID, base_price, gst_id |
+| Pricing | pricing_master | pricing_id | ProductID, base_price, gst_id, effective_from, effective_to, effectiveStatus |
 | Role | role_master | role_id | role_name, is_active |
 | User | user_master | user_id | username, password, role_id |
 | Mapping | Product_GST_Mapping | ProductID | gst_id |
