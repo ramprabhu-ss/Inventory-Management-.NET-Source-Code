@@ -12,7 +12,7 @@ namespace InventoryManagement.IL
         MySqlCommand objMySqlCommand;
 
         public int PRODUCT_ID { get; set; }
-        public int GST_ID { get; set; }
+        public string GST_ID { get; set; }
         public DateTime? CREATED_AT { get; set; }
         public DateTime? UPDATED_AT { get; set; }
         public string CREATED_BY { get; set; }
@@ -94,35 +94,32 @@ namespace InventoryManagement.IL
                 objUtility.sqlCommand.CommandText = sqlQueryBuilder.ToString();
                 objUtility.sqlCommand.Parameters.AddWithValue("@product_id", objMapping.PRODUCT_ID);
 
-                int existingCount = (int)objUtility.sqlCommand.ExecuteScalar();
+                object scalarResult = objUtility.sqlCommand.ExecuteScalar();
+                int existingCount = scalarResult != null ? Convert.ToInt32(scalarResult) : 0;
 
                 if (existingCount > 0)
                 {
                     // Update existing mapping
                     sqlQueryBuilder = new StringBuilder();
-                    sqlQueryBuilder.Append("UPDATE Product_GST_Mapping SET gst_id = @gst_id, updated_by = @updated_by, updated_at = @updated_at ");
+                    sqlQueryBuilder.Append("UPDATE Product_GST_Mapping SET gst_id = @gst_id ");
                     sqlQueryBuilder.Append("WHERE ProductID = @product_id");
 
                     objUtility.sqlCommand.CommandText = sqlQueryBuilder.ToString();
                     objUtility.sqlCommand.Parameters.Clear();
                     objUtility.sqlCommand.Parameters.AddWithValue("@product_id", objMapping.PRODUCT_ID);
                     objUtility.sqlCommand.Parameters.AddWithValue("@gst_id", objMapping.GST_ID);
-                    objUtility.sqlCommand.Parameters.AddWithValue("@updated_by", string.IsNullOrWhiteSpace(objMapping.UPDATED_BY) ? DBNull.Value : (object)objMapping.UPDATED_BY);
-                    objUtility.sqlCommand.Parameters.AddWithValue("@updated_at", objMapping.UPDATED_AT.HasValue ? (object)objMapping.UPDATED_AT : DBNull.Value);
                 }
                 else
                 {
                     // Insert new mapping
                     sqlQueryBuilder = new StringBuilder();
-                    sqlQueryBuilder.Append("INSERT INTO Product_GST_Mapping (ProductID, gst_id, created_by, created_at) ");
-                    sqlQueryBuilder.Append("VALUES (@product_id, @gst_id, @created_by, @created_at)");
+                    sqlQueryBuilder.Append("INSERT INTO Product_GST_Mapping (ProductID, gst_id) ");
+                    sqlQueryBuilder.Append("VALUES (@product_id, @gst_id)");
 
                     objUtility.sqlCommand.CommandText = sqlQueryBuilder.ToString();
                     objUtility.sqlCommand.Parameters.Clear();
                     objUtility.sqlCommand.Parameters.AddWithValue("@product_id", objMapping.PRODUCT_ID);
                     objUtility.sqlCommand.Parameters.AddWithValue("@gst_id", objMapping.GST_ID);
-                    objUtility.sqlCommand.Parameters.AddWithValue("@created_by", string.IsNullOrWhiteSpace(objMapping.CREATED_BY) ? DBNull.Value : (object)objMapping.CREATED_BY);
-                    objUtility.sqlCommand.Parameters.AddWithValue("@created_at", objMapping.CREATED_AT.HasValue ? (object)objMapping.CREATED_AT : DBNull.Value);
                 }
 
                 rowsAffected += objUtility.ExecuteNonQueryTransaction();
@@ -169,14 +166,14 @@ namespace InventoryManagement.IL
                 foreach (DataRow row in dtMappings.Rows)
                 {
                     int productId = Convert.ToInt32(row["ProductID"]);
-                    int? gstId = row["GST_ID"] != DBNull.Value ? Convert.ToInt32(row["GST_ID"]) : (int?)null;
+                    string gstId = row["GST_ID"] != DBNull.Value ? row["GST_ID"].ToString() : null;
 
-                    if (gstId.HasValue)
+                    if (!string.IsNullOrEmpty(gstId))
                     {
                         var mapping = new ClsProductGSTMapping
                         {
                             PRODUCT_ID = productId,
-                            GST_ID = gstId.Value,
+                            GST_ID = gstId,
                             UPDATED_BY = row["UpdatedBy"]?.ToString(),
                             UPDATED_AT = DateTime.Now
                         };

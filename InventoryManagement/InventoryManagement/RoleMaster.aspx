@@ -66,7 +66,6 @@
                             <Columns>
                                 <asp:BoundField DataField="role_id" HeaderText="Role ID" ReadOnly="true" ItemStyle-Width="100px" />
                                 <asp:BoundField DataField="role_name" HeaderText="Role Name" />
-                                <asp:BoundField DataField="is_active" HeaderText="Active" DataFormatString="{0:Yes;No}" ItemStyle-Width="60px" />
                                 <asp:CommandField ShowEditButton="true" ShowDeleteButton="true" ItemStyle-Width="100px" />
                             </Columns>
                             <EditRowStyle BackColor="#FFE699" />

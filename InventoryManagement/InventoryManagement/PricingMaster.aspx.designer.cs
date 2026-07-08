@@ -42,6 +42,15 @@ namespace InventoryManagement
         protected global::System.Web.UI.WebControls.DropDownList ddlGST;
 
         /// <summary>
+        /// txtToDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtToDate;
+
+        /// <summary>
         /// btnSave control.
         /// </summary>
         /// <remarks>

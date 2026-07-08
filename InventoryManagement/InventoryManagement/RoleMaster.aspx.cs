@@ -43,22 +43,46 @@ namespace InventoryManagement
                     return;
                 }
 
-                var objRole = new ClsRoleMaster
+                // If editing existing role, update; otherwise create new
+                if (ViewState["EditRoleID"] != null && !string.IsNullOrEmpty(ViewState["EditRoleID"].ToString()))
                 {
-                    ROLE_ID = txtRoleId.Text.Trim(),
-                    ROLE_NAME = txtRoleName.Text.Trim(),
-                    DESCRIPTION = txtDescription.Text.Trim(),
-                    IS_ACTIVE = chkIsActive.Checked,
-                    CREATED_BY = Session["UserID"]?.ToString() ?? "SYSTEM",
-                    CREATED_AT = DateTime.Now
-                };
+                    var objRole = new ClsRoleMaster
+                    {
+                        ROLE_ID = ViewState["EditRoleID"].ToString(),
+                        ROLE_NAME = txtRoleName.Text.Trim(),
+                        DESCRIPTION = txtDescription.Text.Trim(),
+                        IS_ACTIVE = chkIsActive.Checked,
+                        UPDATED_BY = Session["UserID"]?.ToString() ?? "SYSTEM",
+                        UPDATED_AT = DateTime.Now
+                    };
 
-                int result = objRoleMaster.CreateRole(objRole);
-                ShowResult(result);
-                if (result > 0)
+                    int result = objRoleMaster.UpdateRole(objRole);
+                    ShowResult(result);
+                    if (result > 0)
+                    {
+                        ClearControls();
+                        BindGridView();
+                    }
+                }
+                else
                 {
-                    ClearControls();
-                    BindGridView();
+                    var objRole = new ClsRoleMaster
+                    {
+                        ROLE_ID = txtRoleId.Text.Trim(),
+                        ROLE_NAME = txtRoleName.Text.Trim(),
+                        DESCRIPTION = txtDescription.Text.Trim(),
+                        IS_ACTIVE = chkIsActive.Checked,
+                        CREATED_BY = Session["UserID"]?.ToString() ?? "SYSTEM",
+                        CREATED_AT = DateTime.Now
+                    };
+
+                    int result = objRoleMaster.CreateRole(objRole);
+                    ShowResult(result);
+                    if (result > 0)
+                    {
+                        ClearControls();
+                        BindGridView();
+                    }
                 }
             }
             catch (Exception ex)
@@ -71,8 +95,29 @@ namespace InventoryManagement
 
         protected void grdRoleMaster_RowEditing(object sender, GridViewEditEventArgs e)
         {
-            grdRoleMaster.EditIndex = e.NewEditIndex;
-            BindGridView();
+            try
+            {
+                // Prevent inline GridView edit; populate main form for editing
+                e.Cancel = true;
+                string roleId = grdRoleMaster.DataKeys[e.NewEditIndex].Value.ToString();
+                DataTable dt = objRoleMaster.GetRoleMaster();
+                DataRow[] rows = dt.Select("role_id = '" + roleId.Replace("'", "''") + "'");
+                if (rows.Length > 0)
+                {
+                    var r = rows[0];
+                    txtRoleId.Text = r["role_id"] != DBNull.Value ? r["role_id"].ToString() : "";
+                    txtRoleName.Text = r["role_name"] != DBNull.Value ? r["role_name"].ToString() : "";
+                    txtRoleId.ReadOnly = true; // Role ID should not be editable during update
+
+                    ViewState["EditRoleID"] = roleId;
+                    btnSave.Text = "Update";
+                    lblMessage.Style["display"] = "none";
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowMessage("Error preparing role for edit: " + ex.Message, "danger");
+            }
         }
 
         protected void grdRoleMaster_RowUpdating(object sender, GridViewUpdateEventArgs e)
@@ -125,6 +170,9 @@ namespace InventoryManagement
         {
             txtRoleId.Text = txtRoleName.Text = txtDescription.Text = "";
             chkIsActive.Checked = true;
+            txtRoleId.ReadOnly = false;
+            ViewState["EditRoleID"] = null;
+            btnSave.Text = "Save";
             lblMessage.Style["display"] = "none";
         }
 

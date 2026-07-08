@@ -71,23 +71,67 @@ namespace InventoryManagement
                     return;
                 }
 
-                var objPricing = new ClsPricingMaster
+                if (string.IsNullOrEmpty(txtBasePrice.Text))
                 {
-                    PRODUCT_ID = int.Parse(ddlProduct.SelectedValue),
-                    BASE_PRICE = decimal.Parse(txtBasePrice.Text),
-                    GST_ID = int.Parse(ddlGST.SelectedValue),
-                    EFFECTIVE_FROM = DateTime.Now,
-                    EFFECTIVE_STATUS = "ACTIVE",
-                    CREATED_BY = Session["UserID"]?.ToString() ?? "SYSTEM",
-                    CREATED_AT = DateTime.Now
-                };
+                    ShowMessage("Please enter Base Price.", "warning");
+                    return;
+                }
 
-                int result = objPricingMaster.CreatePricing(objPricing);
-                ShowResult(result);
-                if (result > 0)
+                // If editing existing pricing, update; otherwise create new
+                if (ViewState["EditPricingID"] != null && int.TryParse(ViewState["EditPricingID"].ToString(), out var editId) && editId > 0)
                 {
-                    txtBasePrice.Text = "";
-                    BindGridView();
+                    DateTime? effectiveTo = null;
+                    if (!string.IsNullOrEmpty(txtToDate.Text))
+                    {
+                        effectiveTo = DateTime.Parse(txtToDate.Text);
+                    }
+
+                    // Use the original effective_from date (preserved from when Edit was clicked)
+                    DateTime effectiveFrom = ViewState["OriginalEffectiveFrom"] != null 
+                        ? (DateTime)ViewState["OriginalEffectiveFrom"] 
+                        : DateTime.Now;
+
+                    var objPricing = new ClsPricingMaster
+                    {
+                        PRICING_ID = editId,
+                        PRODUCT_ID = int.Parse(ddlProduct.SelectedValue),
+                        BASE_PRICE = decimal.Parse(txtBasePrice.Text),
+                        GST_ID = ddlGST.SelectedValue,
+                        EFFECTIVE_FROM = effectiveFrom,
+                        EFFECTIVE_TO = effectiveTo,
+                        EFFECTIVE_STATUS = "ACTIVE",
+                        UPDATED_BY = Session["UserID"]?.ToString() ?? "SYSTEM",
+                        UPDATED_AT = DateTime.Now
+                    };
+
+                    int result = objPricingMaster.UpdatePricing(objPricing);
+                    ShowResult(result);
+                    if (result > 0)
+                    {
+                        ClearControls();
+                        BindGridView();
+                    }
+                }
+                else
+                {
+                    var objPricing = new ClsPricingMaster
+                    {
+                        PRODUCT_ID = int.Parse(ddlProduct.SelectedValue),
+                        BASE_PRICE = decimal.Parse(txtBasePrice.Text),
+                        GST_ID = ddlGST.SelectedValue,
+                        EFFECTIVE_FROM = DateTime.Now,
+                        EFFECTIVE_STATUS = "ACTIVE",
+                        CREATED_BY = Session["UserID"]?.ToString() ?? "SYSTEM",
+                        CREATED_AT = DateTime.Now
+                    };
+
+                    int result = objPricingMaster.CreatePricing(objPricing);
+                    ShowResult(result);
+                    if (result > 0)
+                    {
+                        ClearControls();
+                        BindGridView();
+                    }
                 }
             }
             catch (Exception ex)
@@ -98,8 +142,46 @@ namespace InventoryManagement
 
         protected void grdPricingMaster_RowEditing(object sender, GridViewEditEventArgs e)
         {
-            grdPricingMaster.EditIndex = e.NewEditIndex;
-            BindGridView();
+            try
+            {
+                // Prevent inline GridView edit; populate main form for editing
+                e.Cancel = true;
+                int pricingId = (int)grdPricingMaster.DataKeys[e.NewEditIndex].Value;
+                DataTable dt = objPricingMaster.GetPricing();
+                DataRow[] rows = dt.Select("pricing_id = " + pricingId);
+                if (rows.Length > 0)
+                {
+                    var r = rows[0];
+                    ddlProduct.SelectedValue = r["ProductID"] != DBNull.Value ? r["ProductID"].ToString() : "";
+                    txtBasePrice.Text = r["base_price"] != DBNull.Value ? Convert.ToDecimal(r["base_price"]).ToString("0.00") : "";
+                    ddlGST.SelectedValue = r["gst_id"] != DBNull.Value ? r["gst_id"].ToString() : "";
+
+                    // Populate To Date if it exists
+                    if (r["effective_to"] != DBNull.Value)
+                    {
+                        DateTime toDate = Convert.ToDateTime(r["effective_to"]);
+                        txtToDate.Text = toDate.ToString("yyyy-MM-dd");
+                    }
+                    else
+                    {
+                        txtToDate.Text = "";
+                    }
+
+                    // Store the original effective_from date to preserve it during update
+                    if (r["effective_from"] != DBNull.Value)
+                    {
+                        ViewState["OriginalEffectiveFrom"] = Convert.ToDateTime(r["effective_from"]);
+                    }
+
+                    ViewState["EditPricingID"] = pricingId;
+                    btnSave.Text = "Update";
+                    lblMessage.Style["display"] = "none";
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowMessage("Error preparing pricing for edit: " + ex.Message, "danger");
+            }
         }
 
         protected void grdPricingMaster_RowUpdating(object sender, GridViewUpdateEventArgs e)
@@ -107,9 +189,37 @@ namespace InventoryManagement
             try
             {
                 int pricingId = (int)grdPricingMaster.DataKeys[e.RowIndex].Value;
+                GridViewRow row = grdPricingMaster.Rows[e.RowIndex];
+
+                // Extract values from the editing row
+                string productName = ((TextBox)row.Cells[1].Controls[0]).Text.Trim();
+                decimal basePrice = decimal.Parse(((TextBox)row.Cells[2].Controls[0]).Text);
+                decimal gstPercentage = decimal.Parse(((TextBox)row.Cells[3].Controls[0]).Text);
+                DateTime effectiveFrom = DateTime.Parse(((TextBox)row.Cells[4].Controls[0]).Text);
+                string effectiveToText = ((TextBox)row.Cells[5].Controls[0]).Text;
+                DateTime? effectiveTo = string.IsNullOrEmpty(effectiveToText) ? (DateTime?)null : DateTime.Parse(effectiveToText);
+
+                // Get the product ID and GST ID from the current data
+                DataTable dt = objPricingMaster.GetPricing();
+                DataRow[] rows = dt.Select("pricing_id = " + pricingId);
+                if (rows.Length == 0)
+                {
+                    ShowMessage("Pricing record not found.", "danger");
+                    return;
+                }
+
+                int productId = Convert.ToInt32(rows[0]["ProductID"]);
+                string gstId = rows[0]["gst_id"]?.ToString() ?? "";
+
                 var objPricing = new ClsPricingMaster
                 {
                     PRICING_ID = pricingId,
+                    PRODUCT_ID = productId,
+                    BASE_PRICE = basePrice,
+                    GST_ID = gstId,
+                    EFFECTIVE_FROM = effectiveFrom,
+                    EFFECTIVE_TO = effectiveTo,
+                    EFFECTIVE_STATUS = "ACTIVE",
                     UPDATED_BY = Session["UserID"]?.ToString() ?? "SYSTEM",
                     UPDATED_AT = DateTime.Now
                 };
@@ -150,6 +260,18 @@ namespace InventoryManagement
         private void ShowResult(int rowsAffected)
         {
             ShowMessage(rowsAffected > 0 ? "Operation completed successfully." : "No records affected.", rowsAffected > 0 ? "success" : "warning");
+        }
+
+        private void ClearControls()
+        {
+            ddlProduct.SelectedValue = "";
+            txtBasePrice.Text = "";
+            ddlGST.SelectedValue = "";
+            txtToDate.Text = "";
+            ViewState["EditPricingID"] = null;
+            ViewState["OriginalEffectiveFrom"] = null;
+            btnSave.Text = "Save";
+            lblMessage.Style["display"] = "none";
         }
 
         private void ShowMessage(string message, string alertType = "info")
