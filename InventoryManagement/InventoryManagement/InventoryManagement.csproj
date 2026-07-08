@@ -131,6 +131,7 @@
     <Content Include="GSTMaster.aspx" />
     <Content Include="PricingMaster.aspx" />
     <Content Include="RoleMaster.aspx" />
+    <Content Include="ToDoTasks.aspx" />
     <Content Include="UserMaster.aspx" />
     <Content Include="ProductGSTMapping.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
@@ -249,6 +250,13 @@
     </Compile>
     <Compile Include="Site.Mobile.Master.designer.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
+    </Compile>
+    <Compile Include="ToDoTasks.aspx.cs">
+      <DependentUpon>ToDoTasks.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ToDoTasks.aspx.designer.cs">
+      <DependentUpon>ToDoTasks.aspx</DependentUpon>
     </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
