@@ -15,25 +15,25 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- New column 'full_name' added for user_master table -- Start 
+-- New column 'employee_id' added for user_master table -- Start 
 SET @column_exists = (
     SELECT COUNT(*) 
     FROM INFORMATION_SCHEMA.COLUMNS 
     WHERE TABLE_SCHEMA = DATABASE() 
     AND TABLE_NAME = 'user_master' 
-    AND COLUMN_NAME = 'full_name'
+    AND COLUMN_NAME = 'employee_id'
 );
 
 -- If the count is 0, prepare the ALTER statement; otherwise, run a dummy query
 SET @sql = IF(@column_exists = 0, 
-    'ALTER TABLE user_master ADD COLUMN full_name varchar(100)', 
+    'ALTER TABLE user_master ADD COLUMN employee_id INT', 
     'SELECT "Column already exists"'
 );
 
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
--- New column 'full_name' added for user_master table -- End 
+-- New column 'employee_id' added for user_master table -- End 
 
 
 -- New column 'Remarks' added for role_master table -- Start 
