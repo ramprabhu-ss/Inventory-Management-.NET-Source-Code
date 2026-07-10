@@ -21,11 +21,10 @@
 
         <div class="table-responsive">
             <asp:GridView ID="grdAreaMaster" runat="server" AutoGenerateColumns="false" EnableViewState="true"
-                AllowSorting="true" AllowPaging="true" PageSize="5" DataKeyNames="area_id,area_name"
+                AllowSorting="true" AllowPaging="true" DataKeyNames="area_id,area_name"
                 OnRowEditing="grdAreaMaster_RowEditing" OnRowUpdating="grdAreaMaster_RowUpdating"
                 OnRowCancelingEdit="grdAreaMaster_RowCancelingEdit" OnRowDeleting="grdAreaMaster_RowDeleting"
-                OnRowDataBound="grdAreaMaster_RowDataBound" OnPageIndexChanging="grdAreaMaster_PageIndexChanging"
-                CssClass="table table-striped table-bordered table-hover">
+                OnRowDataBound="grdAreaMaster_RowDataBound" CssClass="table table-striped table-bordered table-hover">
                 <Columns>
                     <asp:TemplateField HeaderText="Area Id" HeaderStyle-CssClass="bg-primary text-white">
                         <ItemTemplate>
@@ -53,9 +52,8 @@
                     </asp:TemplateField>
                     <asp:CommandField ShowEditButton="True" ShowDeleteButton="true" HeaderStyle-CssClass="bg-primary text-white" />
                 </Columns>
-                <PagerSettings Visible="true" Mode="NumericFirstLast" Position="Bottom" />
-                <PagerStyle CssClass="table-secondary text-white" HorizontalAlign="Right" />
             </asp:GridView>
+            <hr />
         </div>
 
         <div class="container">
@@ -66,19 +64,18 @@
                 <div class="col-4">
                     <asp:TextBox ID="txtAreaId" runat="server" class="form-control form-control-sm"></asp:TextBox>
                 </div>
-                <div class="col-6">
-                </div>
-            </div>
-            <div class="row p-2">
                 <div class="col-2">
                     <asp:Label ID="lblAreaName" runat="server" Text="Area Name" class="form-label"></asp:Label>
                 </div>
                 <div class="col-4">
                     <asp:TextBox ID="txtAreaName" runat="server" class="form-control form-control-sm"></asp:TextBox>
                 </div>
+            </div>
+            <%--<div class="row p-2">
+
                 <div class="col-6">
                 </div>
-            </div>
+            </div>--%>
             <div class="row p-2">
                 <div class="col-2">
                     <asp:Label ID="lblZipCode" runat="server" Text="Zip Code" class="form-label"></asp:Label>
@@ -90,13 +87,13 @@
                 </div>
             </div>
             <div class="row p-2">
-                <div class="col-2">
-                </div>
                 <div class="col-4">
+                </div>
+                <div class="col-4" style="text-align: center;">
                     <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" class="btn btn-primary btn-sm" />
                     <asp:Button ID="btnReset" runat="server" Text="Reset" OnClick="btnReset_Click" class="btn btn-secondary btn-sm" />
                 </div>
-                <div class="col-6">
+                <div class="col-4">
                 </div>
             </div>
         </div>
@@ -159,7 +156,7 @@
                 var modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
                 modal.show();
             }
-            
+
         </script>
     </main>
 </asp:Content>

@@ -157,44 +157,6 @@ namespace InventoryManagement
             grdAreaMaster.DataBind();
         }
 
-        protected void grdAreaMaster_PageIndexChanging(object sender, GridViewPageEventArgs e)
-        {
-            try
-            {
-                // Set the GridView to the new page index
-                grdAreaMaster.PageIndex = e.NewPageIndex;
-
-                // Re-bind the data source to refresh the grid view
-                BindGridView();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        protected void grdAreaMaster_Sorting(object sender, GridViewSortEventArgs e)
-        {
-            string SortDir = string.Empty;
-            /*if (dir == SortDirection.Ascending)
-            {
-                dir = SortDirection.Descending;
-                SortDir = "Desc";
-            }
-            else
-            {
-                dir = SortDirection.Ascending;
-                SortDir = "Asc";
-            }
-
-            Da
-            ViewState["dtAreaMaster"]
-            DataView sortedView = new DataView(dt);
-            sortedView.Sort = e.SortExpression + " " + SortDir;
-            Datagrid1.DataSource = sortedView;
-            Datagrid1.DataBind();*/
-        }
-
         private void ClearControls()
         {
             try
