@@ -34,16 +34,22 @@
                                     <asp:DropDownList ID="ddlProduct" runat="server" CssClass="form-control"></asp:DropDownList>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Base Price *</label>
                                     <asp:TextBox ID="txtBasePrice" runat="server" CssClass="form-control" TextMode="Number" Step="0.01"></asp:TextBox>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label>GST *</label>
                                     <asp:DropDownList ID="ddlGST" runat="server" CssClass="form-control"></asp:DropDownList>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>To Date</label>
+                                    <asp:TextBox ID="txtToDate" runat="server" CssClass="form-control" TextMode="Date"></asp:TextBox>
                                 </div>
                             </div>
                             <div class="col-md-3">

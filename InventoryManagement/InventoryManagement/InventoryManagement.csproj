@@ -130,6 +130,9 @@
     <Content Include="GSTMaster.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="PricingMaster.aspx" />
+    <Content Include="RoleMaster.aspx" />
+    <Content Include="ToDoTasks.aspx" />
+    <Content Include="UserMaster.aspx" />
     <Content Include="ProductGSTMapping.aspx" />
     <Content Include="ProductMaster.aspx" />
     <Content Include="RoleMaster.aspx" />
@@ -264,6 +267,15 @@
     <Compile Include="PricingMaster.aspx.designer.cs">
       <DependentUpon>PricingMaster.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ToDoTasks.aspx.cs">
+      <DependentUpon>ToDoTasks.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ToDoTasks.aspx.designer.cs">
+      <DependentUpon>ToDoTasks.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ViewSwitcher.ascx.cs">
+      <DependentUpon>ViewSwitcher.ascx</DependentUpon>
     <Compile Include="ProductGSTMapping.aspx.cs">
       <DependentUpon>ProductGSTMapping.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

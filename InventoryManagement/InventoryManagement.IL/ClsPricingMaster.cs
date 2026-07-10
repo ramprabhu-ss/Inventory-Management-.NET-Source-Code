@@ -14,7 +14,7 @@ namespace InventoryManagement.IL
         public int PRICING_ID { get; set; }
         public int PRODUCT_ID { get; set; }
         public decimal BASE_PRICE { get; set; }
-        public int GST_ID { get; set; }
+        public string GST_ID { get; set; }
         public DateTime? EFFECTIVE_FROM { get; set; }
         public DateTime? EFFECTIVE_TO { get; set; }
         public string EFFECTIVE_STATUS { get; set; }
@@ -78,8 +78,8 @@ namespace InventoryManagement.IL
                 objUtility.BeginTransaction();
 
                 sqlQueryBuilder = new StringBuilder();
-                sqlQueryBuilder.Append("INSERT INTO pricing_master (ProductID, base_price, gst_id, effective_from, effective_to, effectiveStatus, created_by, created_at) ");
-                sqlQueryBuilder.Append("VALUES (@product_id, @base_price, @gst_id, @effective_from, @effective_to, @effective_status, @created_by, @created_at)");
+                sqlQueryBuilder.Append("INSERT INTO pricing_master (ProductID, base_price, gst_id, effective_from, effective_to, effectiveStatus) ");
+                sqlQueryBuilder.Append("VALUES (@product_id, @base_price, @gst_id, @effective_from, @effective_to, @effective_status)");
 
                 objUtility.sqlCommand.CommandText = sqlQueryBuilder.ToString();
                 objUtility.sqlCommand.Parameters.AddWithValue("@product_id", objPricingMaster.PRODUCT_ID);
@@ -88,8 +88,6 @@ namespace InventoryManagement.IL
                 objUtility.sqlCommand.Parameters.AddWithValue("@effective_from", objPricingMaster.EFFECTIVE_FROM.HasValue ? (object)objPricingMaster.EFFECTIVE_FROM : DBNull.Value);
                 objUtility.sqlCommand.Parameters.AddWithValue("@effective_to", objPricingMaster.EFFECTIVE_TO.HasValue ? (object)objPricingMaster.EFFECTIVE_TO : DBNull.Value);
                 objUtility.sqlCommand.Parameters.AddWithValue("@effective_status", objPricingMaster.EFFECTIVE_STATUS ?? "ACTIVE");
-                objUtility.sqlCommand.Parameters.AddWithValue("@created_by", string.IsNullOrWhiteSpace(objPricingMaster.CREATED_BY) ? DBNull.Value : (object)objPricingMaster.CREATED_BY);
-                objUtility.sqlCommand.Parameters.AddWithValue("@created_at", objPricingMaster.CREATED_AT.HasValue ? (object)objPricingMaster.CREATED_AT : DBNull.Value);
 
                 rowsAffected += objUtility.ExecuteNonQueryTransaction();
                 objUtility.CommitTransaction();
@@ -112,7 +110,7 @@ namespace InventoryManagement.IL
                 sqlQueryBuilder = new StringBuilder();
                 sqlQueryBuilder.Append("UPDATE pricing_master SET ProductID = @product_id, base_price = @base_price, ");
                 sqlQueryBuilder.Append("gst_id = @gst_id, effective_from = @effective_from, effective_to = @effective_to, ");
-                sqlQueryBuilder.Append("effectiveStatus = @effective_status, updated_by = @updated_by, updated_at = @updated_at WHERE pricing_id = @pricing_id");
+                sqlQueryBuilder.Append("effectiveStatus = @effective_status WHERE pricing_id = @pricing_id");
 
                 objUtility.sqlCommand.CommandText = sqlQueryBuilder.ToString();
                 objUtility.sqlCommand.Parameters.AddWithValue("@pricing_id", objPricingMaster.PRICING_ID);
@@ -122,8 +120,6 @@ namespace InventoryManagement.IL
                 objUtility.sqlCommand.Parameters.AddWithValue("@effective_from", objPricingMaster.EFFECTIVE_FROM.HasValue ? (object)objPricingMaster.EFFECTIVE_FROM : DBNull.Value);
                 objUtility.sqlCommand.Parameters.AddWithValue("@effective_to", objPricingMaster.EFFECTIVE_TO.HasValue ? (object)objPricingMaster.EFFECTIVE_TO : DBNull.Value);
                 objUtility.sqlCommand.Parameters.AddWithValue("@effective_status", objPricingMaster.EFFECTIVE_STATUS ?? "ACTIVE");
-                objUtility.sqlCommand.Parameters.AddWithValue("@updated_by", string.IsNullOrWhiteSpace(objPricingMaster.UPDATED_BY) ? DBNull.Value : (object)objPricingMaster.UPDATED_BY);
-                objUtility.sqlCommand.Parameters.AddWithValue("@updated_at", objPricingMaster.UPDATED_AT.HasValue ? (object)objPricingMaster.UPDATED_AT : DBNull.Value);
 
                 rowsAffected += objUtility.ExecuteNonQueryTransaction();
                 objUtility.CommitTransaction();
@@ -150,6 +146,16 @@ namespace InventoryManagement.IL
                 objUtility.sqlCommand.Parameters.AddWithValue("@pricing_id", objPricingMaster.PRICING_ID);
                 rowsAffected += objUtility.ExecuteNonQueryTransaction();
                 objUtility.CommitTransaction();
+            }
+            catch (MySqlException ex)
+            {
+                objUtility.RollbackTransaction();
+                // Check for foreign key constraint violation (error code 1451)
+                if (ex.Number == 1451 || ex.Message.Contains("foreign key constraint"))
+                {
+                    throw new Exception("Cannot delete this pricing. This pricing is referenced in other records (e.g., orders, deliveries). Please remove those references first.");
+                }
+                throw;
             }
             catch (Exception)
             {

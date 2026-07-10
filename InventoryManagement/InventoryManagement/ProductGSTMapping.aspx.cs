@@ -70,7 +70,7 @@ namespace InventoryManagement
                 var objMap = new ClsProductGSTMapping
                 {
                     PRODUCT_ID = int.Parse(ddlProduct.SelectedValue),
-                    GST_ID = int.Parse(ddlGST.SelectedValue),
+                    GST_ID = ddlGST.SelectedValue,
                     CREATED_BY = Session["UserID"]?.ToString() ?? "SYSTEM",
                     CREATED_AT = DateTime.Now
                 };
