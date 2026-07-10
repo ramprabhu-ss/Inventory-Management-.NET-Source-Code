@@ -65,6 +65,7 @@
     <Compile Include="ClsProductGSTMapping.cs" />
     <Compile Include="ClsProductMaster.cs" />
     <Compile Include="ClsRoleMaster.cs" />
+    <Compile Include="ClsToDoTask.cs" />
     <Compile Include="ClsUserMaster.cs" />
     <Compile Include="ClsUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

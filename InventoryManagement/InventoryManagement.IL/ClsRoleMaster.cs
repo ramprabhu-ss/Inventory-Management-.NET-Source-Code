@@ -26,7 +26,7 @@ namespace InventoryManagement.IL
             try
             {
                 sqlQueryBuilder = new StringBuilder();
-                sqlQueryBuilder.Append("SELECT role_id, role_name, description, is_active FROM role_master ORDER BY role_name");
+                sqlQueryBuilder.Append("SELECT role_id, role_name FROM role_master ORDER BY role_name");
 
                 objMySqlCommand = new MySqlCommand(sqlQueryBuilder.ToString());
                 dt = objUtility.GetDataTable(objMySqlCommand);
@@ -46,16 +46,12 @@ namespace InventoryManagement.IL
                 objUtility.BeginTransaction();
 
                 sqlQueryBuilder = new StringBuilder();
-                sqlQueryBuilder.Append("INSERT INTO role_master (role_id, role_name, description, is_active, created_by, created_at) ");
-                sqlQueryBuilder.Append("VALUES (@role_id, @role_name, @description, @is_active, @created_by, @created_at)");
+                sqlQueryBuilder.Append("INSERT INTO role_master (role_id, role_name) ");
+                sqlQueryBuilder.Append("VALUES (@role_id, @role_name)");
 
                 objUtility.sqlCommand.CommandText = sqlQueryBuilder.ToString();
                 objUtility.sqlCommand.Parameters.AddWithValue("@role_id", objRoleMaster.ROLE_ID ?? string.Empty);
                 objUtility.sqlCommand.Parameters.AddWithValue("@role_name", objRoleMaster.ROLE_NAME ?? string.Empty);
-                objUtility.sqlCommand.Parameters.AddWithValue("@description", string.IsNullOrWhiteSpace(objRoleMaster.DESCRIPTION) ? DBNull.Value : (object)objRoleMaster.DESCRIPTION);
-                objUtility.sqlCommand.Parameters.AddWithValue("@is_active", objRoleMaster.IS_ACTIVE);
-                objUtility.sqlCommand.Parameters.AddWithValue("@created_by", string.IsNullOrWhiteSpace(objRoleMaster.CREATED_BY) ? DBNull.Value : (object)objRoleMaster.CREATED_BY);
-                objUtility.sqlCommand.Parameters.AddWithValue("@created_at", objRoleMaster.CREATED_AT.HasValue ? (object)objRoleMaster.CREATED_AT : DBNull.Value);
 
                 rowsAffected += objUtility.ExecuteNonQueryTransaction();
                 objUtility.CommitTransaction();
@@ -76,16 +72,11 @@ namespace InventoryManagement.IL
                 objUtility.BeginTransaction();
 
                 sqlQueryBuilder = new StringBuilder();
-                sqlQueryBuilder.Append("UPDATE role_master SET role_name = @role_name, description = @description, ");
-                sqlQueryBuilder.Append("is_active = @is_active, updated_by = @updated_by, updated_at = @updated_at WHERE role_id = @role_id");
+                sqlQueryBuilder.Append("UPDATE role_master SET role_name = @role_name WHERE role_id = @role_id");
 
                 objUtility.sqlCommand.CommandText = sqlQueryBuilder.ToString();
                 objUtility.sqlCommand.Parameters.AddWithValue("@role_id", objRoleMaster.ROLE_ID);
                 objUtility.sqlCommand.Parameters.AddWithValue("@role_name", objRoleMaster.ROLE_NAME ?? string.Empty);
-                objUtility.sqlCommand.Parameters.AddWithValue("@description", string.IsNullOrWhiteSpace(objRoleMaster.DESCRIPTION) ? DBNull.Value : (object)objRoleMaster.DESCRIPTION);
-                objUtility.sqlCommand.Parameters.AddWithValue("@is_active", objRoleMaster.IS_ACTIVE);
-                objUtility.sqlCommand.Parameters.AddWithValue("@updated_by", string.IsNullOrWhiteSpace(objRoleMaster.UPDATED_BY) ? DBNull.Value : (object)objRoleMaster.UPDATED_BY);
-                objUtility.sqlCommand.Parameters.AddWithValue("@updated_at", objRoleMaster.UPDATED_AT.HasValue ? (object)objRoleMaster.UPDATED_AT : DBNull.Value);
 
                 rowsAffected += objUtility.ExecuteNonQueryTransaction();
                 objUtility.CommitTransaction();

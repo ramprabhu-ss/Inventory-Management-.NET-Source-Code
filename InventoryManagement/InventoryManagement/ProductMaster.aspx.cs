@@ -60,29 +60,61 @@ namespace InventoryManagement
                 if (!ValidateInput())
                     return;
 
-                var objProd = new ClsProductMaster
+                // Determine if this is an update or create based on ViewState
+                if (ViewState["EditProductID"] != null && int.TryParse(ViewState["EditProductID"].ToString(), out var editId) && editId > 0)
                 {
-                    PRODUCT_NAME = txtProductName.Text.Trim(),
-                    CATEGORY_ID = int.Parse(ddlCategory.SelectedValue),
-                    DESCRIPTION = txtDescription.Text.Trim(),
-                    UNIT_PRICE = decimal.Parse(txtUnitPrice.Text),
-                    STOCK_QUANTITY = int.Parse(txtStockQuantity.Text),
-                    REORDER_LEVEL = string.IsNullOrEmpty(txtReorderLevel.Text) ? 0 : int.Parse(txtReorderLevel.Text),
-                    WEIGHT = string.IsNullOrEmpty(txtWeight.Text) ? (decimal?)null : decimal.Parse(txtWeight.Text),
-                    GAS_TYPE = txtGasType.Text.Trim(),
-                    IS_ACTIVE = chkIsActive.Checked,
-                    AVAILABLE_OUT_DELIVERY = chkAvailableOutDelivery.Checked ? "YES" : "NO",
-                    FLEXI_PRICE = chkFlexiPrice.Checked ? "YES" : "NO",
-                    CREATED_BY = Session["UserID"] != null ? Session["UserID"].ToString() : "SYSTEM",
-                    CREATED_AT = DateTime.Now
-                };
+                    var objProd = new ClsProductMaster
+                    {
+                        PRODUCT_ID = editId,
+                        PRODUCT_NAME = txtProductName.Text.Trim(),
+                        CATEGORY_ID = int.TryParse(ddlCategory.SelectedValue, out var cid) ? cid : 0,
+                        DESCRIPTION = txtDescription.Text.Trim(),
+                        UNIT_PRICE = decimal.TryParse(txtUnitPrice.Text, out var up) ? up : 0m,
+                        STOCK_QUANTITY = int.TryParse(txtStockQuantity.Text, out var sq) ? sq : 0,
+                        REORDER_LEVEL = string.IsNullOrEmpty(txtReorderLevel.Text) ? 0 : int.Parse(txtReorderLevel.Text),
+                        WEIGHT = string.IsNullOrEmpty(txtWeight.Text) ? (decimal?)null : decimal.Parse(txtWeight.Text),
+                        GAS_TYPE = txtGasType.Text.Trim(),
+                        IS_ACTIVE = chkIsActive.Checked,
+                        AVAILABLE_OUT_DELIVERY = chkAvailableOutDelivery.Checked ? "YES" : "NO",
+                        FLEXI_PRICE = chkFlexiPrice.Checked ? "YES" : "NO",
+                        UPDATED_BY = Session["UserID"] != null ? Session["UserID"].ToString() : "SYSTEM",
+                        UPDATED_AT = DateTime.Now
+                    };
 
-                int rowsAffected = objProductMaster.CreateProduct(objProd);
-                ShowResult(rowsAffected);
-                if (rowsAffected > 0)
+                    int rowsAffected = objProductMaster.UpdateProduct(objProd);
+                    ShowResult(rowsAffected);
+                    if (rowsAffected > 0)
+                    {
+                        ClearControls();
+                        BindGridView();
+                    }
+                }
+                else
                 {
-                    ClearControls();
-                    BindGridView();
+                    var objProd = new ClsProductMaster
+                    {
+                        PRODUCT_NAME = txtProductName.Text.Trim(),
+                        CATEGORY_ID = int.Parse(ddlCategory.SelectedValue),
+                        DESCRIPTION = txtDescription.Text.Trim(),
+                        UNIT_PRICE = decimal.Parse(txtUnitPrice.Text),
+                        STOCK_QUANTITY = int.Parse(txtStockQuantity.Text),
+                        REORDER_LEVEL = string.IsNullOrEmpty(txtReorderLevel.Text) ? 0 : int.Parse(txtReorderLevel.Text),
+                        WEIGHT = string.IsNullOrEmpty(txtWeight.Text) ? (decimal?)null : decimal.Parse(txtWeight.Text),
+                        GAS_TYPE = txtGasType.Text.Trim(),
+                        IS_ACTIVE = chkIsActive.Checked,
+                        AVAILABLE_OUT_DELIVERY = chkAvailableOutDelivery.Checked ? "YES" : "NO",
+                        FLEXI_PRICE = chkFlexiPrice.Checked ? "YES" : "NO",
+                        CREATED_BY = Session["UserID"] != null ? Session["UserID"].ToString() : "SYSTEM",
+                        CREATED_AT = DateTime.Now
+                    };
+
+                    int rowsAffected = objProductMaster.CreateProduct(objProd);
+                    ShowResult(rowsAffected);
+                    if (rowsAffected > 0)
+                    {
+                        ClearControls();
+                        BindGridView();
+                    }
                 }
             }
             catch (Exception ex)
@@ -98,8 +130,37 @@ namespace InventoryManagement
 
         protected void grdProductMaster_RowEditing(object sender, GridViewEditEventArgs e)
         {
-            grdProductMaster.EditIndex = e.NewEditIndex;
-            BindGridView();
+            try
+            {
+                // Prevent GridView from entering edit mode; populate main form for editing instead
+                e.Cancel = true;
+                int productId = (int)grdProductMaster.DataKeys[e.NewEditIndex].Value;
+                DataTable dt = objProductMaster.GetProductMaster();
+                DataRow[] rows = dt.Select("ProductID = " + productId);
+                if (rows.Length > 0)
+                {
+                    var r = rows[0];
+                    txtProductName.Text = r["ProductName"] != DBNull.Value ? r["ProductName"].ToString() : string.Empty;
+                    ddlCategory.SelectedValue = r["category_id"] != DBNull.Value ? r["category_id"].ToString() : "";
+                    txtDescription.Text = r["Description"] != DBNull.Value ? r["Description"].ToString() : string.Empty;
+                    txtUnitPrice.Text = r["UnitPrice"] != DBNull.Value ? Convert.ToDecimal(r["UnitPrice"]).ToString("0.00") : "0.00";
+                    txtStockQuantity.Text = r["StockQuantity"] != DBNull.Value ? r["StockQuantity"].ToString() : "0";
+                    txtReorderLevel.Text = r["ReorderLevel"] != DBNull.Value ? r["ReorderLevel"].ToString() : "0";
+                    txtWeight.Text = r["Weight"] != DBNull.Value ? r["Weight"].ToString() : string.Empty;
+                    txtGasType.Text = r["GasType"] != DBNull.Value ? r["GasType"].ToString() : string.Empty;
+                    chkIsActive.Checked = r["IsActive"] != DBNull.Value && Convert.ToBoolean(r["IsActive"]);
+                    chkAvailableOutDelivery.Checked = r["available_out_delivery"] != DBNull.Value && r["available_out_delivery"].ToString().ToUpper() == "YES";
+                    chkFlexiPrice.Checked = r["FlexiPrice"] != DBNull.Value && r["FlexiPrice"].ToString().ToUpper() == "YES";
+
+                    ViewState["EditProductID"] = productId;
+                    btnSave.Text = "Update";
+                    lblMessage.Style["display"] = "none";
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowMessage("Error preparing product for edit: " + ex.Message, "danger");
+            }
         }
 
         protected void grdProductMaster_RowUpdating(object sender, GridViewUpdateEventArgs e)
@@ -109,12 +170,19 @@ namespace InventoryManagement
                 int productId = (int)grdProductMaster.DataKeys[e.RowIndex].Value;
                 GridViewRow row = grdProductMaster.Rows[e.RowIndex];
 
+                // Find controls from the edit row using their IDs defined in the TemplateFields
+                var txtName = row.FindControl("txtProductNameEdit") as TextBox;
+                var txtUnitPrice = row.FindControl("txtUnitPriceEdit") as TextBox;
+                var txtStockQty = row.FindControl("txtStockQuantityEdit") as TextBox;
+                var chkActive = row.FindControl("chkIsActiveEdit") as CheckBox;
+
                 var objProd = new ClsProductMaster
                 {
                     PRODUCT_ID = productId,
-                    PRODUCT_NAME = ((TextBox)row.Cells[1].Controls[0]).Text.Trim(),
-                    UNIT_PRICE = decimal.Parse(((TextBox)row.Cells[4].Controls[0]).Text),
-                    STOCK_QUANTITY = int.Parse(((TextBox)row.Cells[5].Controls[0]).Text),
+                    PRODUCT_NAME = txtName != null ? txtName.Text.Trim() : string.Empty,
+                    UNIT_PRICE = txtUnitPrice != null && decimal.TryParse(txtUnitPrice.Text, out var up) ? up : 0m,
+                    STOCK_QUANTITY = txtStockQty != null && int.TryParse(txtStockQty.Text, out var sq) ? sq : 0,
+                    IS_ACTIVE = chkActive != null && chkActive.Checked,
                     UPDATED_BY = Session["UserID"] != null ? Session["UserID"].ToString() : "SYSTEM",
                     UPDATED_AT = DateTime.Now
                 };
@@ -205,6 +273,8 @@ namespace InventoryManagement
             chkAvailableOutDelivery.Checked = false;
             chkFlexiPrice.Checked = false;
             lblMessage.Style["display"] = "none";
+            ViewState["EditProductID"] = null;
+            btnSave.Text = "Save";
         }
 
         private void ShowResult(int rowsAffected)

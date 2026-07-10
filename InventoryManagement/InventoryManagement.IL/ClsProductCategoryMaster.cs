@@ -42,15 +42,12 @@ namespace InventoryManagement.IL
             try
             {
                 objUtility.BeginTransaction();
-
                 sqlQueryBuilder = new StringBuilder();
-                sqlQueryBuilder.Append("INSERT INTO product_category (category_name, created_by, created_at) ");
-                sqlQueryBuilder.Append("VALUES (@category_name, @created_by, @created_at)");
+                sqlQueryBuilder.Append("INSERT INTO product_category (category_name) ");
+                sqlQueryBuilder.Append("VALUES (@category_name)");
 
                 objUtility.sqlCommand.CommandText = sqlQueryBuilder.ToString();
                 objUtility.sqlCommand.Parameters.AddWithValue("@category_name", objCategoryMaster.CATEGORY_NAME ?? string.Empty);
-                objUtility.sqlCommand.Parameters.AddWithValue("@created_by", string.IsNullOrWhiteSpace(objCategoryMaster.CREATED_BY) ? DBNull.Value : (object)objCategoryMaster.CREATED_BY);
-                objUtility.sqlCommand.Parameters.AddWithValue("@created_at", objCategoryMaster.CREATED_AT.HasValue ? (object)objCategoryMaster.CREATED_AT : DBNull.Value);
 
                 rowsAffected += objUtility.ExecuteNonQueryTransaction();
                 objUtility.CommitTransaction();
@@ -71,14 +68,11 @@ namespace InventoryManagement.IL
                 objUtility.BeginTransaction();
 
                 sqlQueryBuilder = new StringBuilder();
-                sqlQueryBuilder.Append("UPDATE product_category SET category_name = @category_name, ");
-                sqlQueryBuilder.Append("updated_by = @updated_by, updated_at = @updated_at WHERE category_id = @category_id");
+                sqlQueryBuilder.Append("UPDATE product_category SET category_name = @category_name WHERE category_id = @category_id");
 
                 objUtility.sqlCommand.CommandText = sqlQueryBuilder.ToString();
                 objUtility.sqlCommand.Parameters.AddWithValue("@category_id", objCategoryMaster.CATEGORY_ID);
                 objUtility.sqlCommand.Parameters.AddWithValue("@category_name", objCategoryMaster.CATEGORY_NAME ?? string.Empty);
-                objUtility.sqlCommand.Parameters.AddWithValue("@updated_by", string.IsNullOrWhiteSpace(objCategoryMaster.UPDATED_BY) ? DBNull.Value : (object)objCategoryMaster.UPDATED_BY);
-                objUtility.sqlCommand.Parameters.AddWithValue("@updated_at", objCategoryMaster.UPDATED_AT.HasValue ? (object)objCategoryMaster.UPDATED_AT : DBNull.Value);
 
                 rowsAffected += objUtility.ExecuteNonQueryTransaction();
                 objUtility.CommitTransaction();
@@ -105,6 +99,16 @@ namespace InventoryManagement.IL
                 objUtility.sqlCommand.Parameters.AddWithValue("@category_id", objCategoryMaster.CATEGORY_ID);
                 rowsAffected += objUtility.ExecuteNonQueryTransaction();
                 objUtility.CommitTransaction();
+            }
+            catch (MySqlException ex)
+            {
+                objUtility.RollbackTransaction();
+                // Check for foreign key constraint violation (error code 1451)
+                if (ex.Number == 1451 || ex.Message.Contains("foreign key constraint"))
+                {
+                    throw new Exception("Cannot delete this category. This category is referenced by existing products. Please remove or reassign those products first.");
+                }
+                throw;
             }
             catch (Exception)
             {
