@@ -4,16 +4,13 @@ using System.Collections;
 using System.Data;
 using System.Linq;
 using System.Text;
-using System.Web.Services.Description;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using WebGrease.Css.Ast.Selectors;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace InventoryManagement
 {
-    public partial class DeliveryInformation : System.Web.UI.Page
+    public partial class DeliveryInformationUser : System.Web.UI.Page
     {
         public ClsDeliveryInformation objDeliveryInformation = new ClsDeliveryInformation();
         int footerTotalQuantity = 0;
@@ -31,7 +28,12 @@ namespace InventoryManagement
                 if (!IsPostBack)
                 {
                     TxtDeliveryDate.Text = DateTime.Now.Date.ToString("yyyy-MM-dd");
+                    TxtDeliveryDate.Attributes["min"] = DateTime.Now.ToString("yyyy-MM-dd");
                     TxtDeliveryDate.Attributes["max"] = DateTime.Now.ToString("yyyy-MM-dd");
+                    TxtDeliveryDate.Enabled = false;
+                    BtnView.Visible = false;
+                    LblDelivery_Id.Visible = false;
+                    LblDeliveryId.Visible = false;
 
                     // Load product details for product dropdown in gridview
                     DataSet ds = objDeliveryInformation.GetMasters(); ;
@@ -45,6 +47,7 @@ namespace InventoryManagement
                         DdlEmployeeId.DataValueField = "emp_code";
                         DdlEmployeeId.DataBind();
                         DdlEmployeeId.Items.Insert(0, new ListItem("-- Select --", "0"));
+                        DdlEmployeeId.Enabled = false;
 
                         ViewState["dtPriceMaster"] = ds.Tables[3];
                     }
@@ -153,6 +156,7 @@ namespace InventoryManagement
                     objDeliveryMaster.EmployeeID = DdlEmployeeId.SelectedValue.Trim();
                     objDeliveryMaster.TotalQuantity = Convert.ToString(footerTotalQuantity);
                     objDeliveryMaster.TotalAmount = Convert.ToString(footerTotalAmount);
+                    objDeliveryMaster.Remarks = TxtRemarks.Text.Trim();
                     objDeliveryMaster.CreatedBy = CreatedBy;
                     objDeliveryMaster.created_at = CreatedOn;
                     arrListDeliveryMaster.Add((DeliveryMaster)objDeliveryMaster);
@@ -285,6 +289,7 @@ namespace InventoryManagement
                     objDeliveryMaster.EmployeeID = DdlEmployeeId.SelectedValue.Trim();
                     objDeliveryMaster.TotalQuantity = Convert.ToString(footerTotalQuantity);
                     objDeliveryMaster.TotalAmount = Convert.ToString(footerTotalAmount);
+                    objDeliveryMaster.Remarks = TxtRemarks.Text.Trim();
                     objDeliveryMaster.CreatedBy = CreatedBy;
                     objDeliveryMaster.created_at = CreatedOn;
                     arrListDeliveryMaster.Add((DeliveryMaster)objDeliveryMaster);
@@ -360,7 +365,7 @@ namespace InventoryManagement
                 ViewState["dtProducts"] = null;
                 ViewState["dtPriceMaster"] = null;
                 HFieldTransactionType.Value = "";
-                Response.Redirect("~/DeliveryInformation.aspx", true);
+                Response.Redirect("~/DeliveryInformationUser.aspx", true);
             }
             catch (Exception)
             {
@@ -642,9 +647,15 @@ namespace InventoryManagement
                     if (ds != null && ds.Tables.Count > 0)
                     {
                         if (ds.Tables[0].Rows.Count > 0)
+                        {
                             LblDeliveryId.Text = ds.Tables[0].Rows[0]["Delivery_ID"].ToString();
+                            TxtRemarks.Text = ds.Tables[0].Rows[0]["Remarks"].ToString();
+                        }
                         else
+                        {
                             LblDeliveryId.Text = "";
+                            TxtRemarks.Text = "";
+                        }
 
                         dtDeliveryInfo = ds.Tables[1];
                         dtPaymentInfo = ds.Tables[2];

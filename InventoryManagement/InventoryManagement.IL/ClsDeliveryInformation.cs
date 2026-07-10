@@ -44,7 +44,7 @@ namespace InventoryManagement.IL
                 objMySqlCommand = new MySqlCommand(sqlQueryBuilder.ToString());
                 objMySqlCommand.Parameters.AddWithValue("@DeliveryDate", DeliveryDate);
                 objMySqlCommand.Parameters.AddWithValue("@EmployeeId", EmployeeId);
-                
+
                 ds = objUtilitiy.GetDataSet(objMySqlCommand);
             }
             catch (Exception)
@@ -126,8 +126,8 @@ namespace InventoryManagement.IL
                     // Master Table Query
                     sqlQueryBuilder = new StringBuilder();
                     sqlQueryBuilder.Append("INSERT INTO delivery_inf (Delivery_ID, DeliveryDate, EmployeeID, Total_Amount, ");
-                    sqlQueryBuilder.Append("Total_Quantity, CreatedBy, created_at) VALUES (@Delivery_ID, @DeliveryDate, ");
-                    sqlQueryBuilder.Append("@EmployeeID, @Total_Amount, @Total_Quantity, @CreatedBy, @created_at);");
+                    sqlQueryBuilder.Append("Total_Quantity, Remarks, CreatedBy, created_at) VALUES (@Delivery_ID, @DeliveryDate, ");
+                    sqlQueryBuilder.Append("@EmployeeID, @Total_Amount, @Total_Quantity, @Remarks, @CreatedBy, @created_at);");
 
                     objUtilitiy.sqlCommand.CommandText = sqlQueryBuilder.ToString();
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@Delivery_ID", Delivery_ID);
@@ -135,6 +135,7 @@ namespace InventoryManagement.IL
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@EmployeeID", objDeliveryMaster.EmployeeID);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@Total_Amount", objDeliveryMaster.TotalAmount);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@Total_Quantity", objDeliveryMaster.TotalQuantity);
+                    objUtilitiy.sqlCommand.Parameters.AddWithValue("@Remarks", objDeliveryMaster.Remarks);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@CreatedBy", objDeliveryMaster.CreatedBy);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@created_at", objDeliveryMaster.created_at);
                     rowsAffected += objUtilitiy.ExecuteNonQueryTransaction();
@@ -143,8 +144,8 @@ namespace InventoryManagement.IL
                 // Detail Table Query
                 sqlQueryBuilder = new StringBuilder();
                 sqlQueryBuilder.Append("INSERT INTO delivery_item_details (Delivery_ID, DeliveryDate, EmployeeID, ");
-                sqlQueryBuilder.Append("ProductID, ActualDelivered, Price, Remarks, created_at) VALUES (@Delivery_ID, ");
-                sqlQueryBuilder.Append("@DeliveryDate, @EmployeeID, @ProductID, @ActualDelivered, @Price, @Remarks, @created_at);");
+                sqlQueryBuilder.Append("ProductID, ActualDelivered, OnlineQuantity, Price, Remarks, created_at) VALUES (@Delivery_ID, ");
+                sqlQueryBuilder.Append("@DeliveryDate, @EmployeeID, @ProductID, @ActualDelivered, @OnlineQuantity, @Price, @Remarks, @created_at);");
 
                 for (int i = 0; i < arrListDeliveryDetail.Count; i++)
                 {
@@ -156,6 +157,7 @@ namespace InventoryManagement.IL
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@EmployeeID", objDeliveryDetails.EmployeeID);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@ProductID", objDeliveryDetails.ProductId);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@ActualDelivered", objDeliveryDetails.Quantity);
+                    objUtilitiy.sqlCommand.Parameters.AddWithValue("@OnlineQuantity", objDeliveryDetails.OnlineQuantity);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@Price", objDeliveryDetails.Price);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@Remarks", objDeliveryDetails.Remarks);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@created_at", objDeliveryDetails.created_at);
@@ -193,93 +195,6 @@ namespace InventoryManagement.IL
             return rowsAffected;
         }
 
-        /*public int InsertTransaction(ArrayList arrListDeliveryInfo, ArrayList arrListDeliveryDetail, ArrayList arrListPaymentDetail)
-        {
-            int rowsAffected = 0;
-
-            try
-            {
-                int Delivery_ID = 0;
-                sqlQueryBuilder = new StringBuilder();
-                sqlQueryBuilder.Append("SELECT (MAX(IFNULL(DELIVERY_ID,0)) + 1) AS DELIVERY_ID FROM DELIVERY_INF");
-
-                DataTable dt = objUtilitiy.GetDataTable(sqlQueryBuilder.ToString());
-                if (dt != null && dt.Rows.Count > 0)
-                    Delivery_ID = Convert.ToInt32(dt.Rows[0]["DELIVERY_ID"]);
-                else
-                    Delivery_ID = 1; // Start from 1 if there are no records
-
-                sqlQueryBuilder = new StringBuilder();
-
-                for (int i = 0; i < arrListDeliveryInfo.Count; i++)
-                {
-                    DeliveryMaster objDeliveryMaster = (DeliveryMaster)arrListDeliveryInfo[i];
-
-                    sqlQueryBuilder.Append("INSERT INTO delivery_inf (Delivery_ID, DeliveryDate, EmployeeID, Total_Amount, ");
-                    sqlQueryBuilder.Append("Total_Quantity, CreatedBy, created_at) VALUES (@Delivery_ID, '@DeliveryDate', ");
-                    sqlQueryBuilder.Append("@EmployeeID, @Total_Amount, @Total_Quantity,'@CreatedBy', '@created_at');\n");
-
-                    sqlQueryBuilder.Replace("@Delivery_ID", Convert.ToString(Delivery_ID));
-                    sqlQueryBuilder.Replace("@DeliveryDate", objDeliveryMaster.DeliveryDate);
-                    sqlQueryBuilder.Replace("@EmployeeID", objDeliveryMaster.EmployeeID);
-                    sqlQueryBuilder.Replace("@Total_Amount", objDeliveryMaster.TotalAmount);
-                    sqlQueryBuilder.Replace("@Total_Quantity", objDeliveryMaster.TotalQuantity);
-                    sqlQueryBuilder.Replace("@CreatedBy", objDeliveryMaster.CreatedBy);
-                    sqlQueryBuilder.Replace("@created_at", objDeliveryMaster.created_at);
-                }
-
-                for (int i = 0; i < arrListDeliveryDetail.Count; i++)
-                {
-                    DeliveryDetails objDeliveryDetails = (DeliveryDetails)arrListDeliveryDetail[i];
-
-                    sqlQueryBuilder.Append("INSERT INTO delivery_item_details (Delivery_ID, DeliveryDate, EmployeeID, ");
-                    sqlQueryBuilder.Append("ProductID, ActualDelivered, Price, created_at) VALUES (@Delivery_ID, ");
-                    sqlQueryBuilder.Append("'@DeliveryDate', @EmployeeID, @ProductID, @ActualDelivered, @Price, '@created_at');\n");
-
-                    sqlQueryBuilder.Replace("@Delivery_ID", Convert.ToString(Delivery_ID));
-                    sqlQueryBuilder.Replace("@DeliveryDate", objDeliveryDetails.DeliveryDate);
-                    sqlQueryBuilder.Replace("@EmployeeID", objDeliveryDetails.EmployeeID);
-                    sqlQueryBuilder.Replace("@ProductID", objDeliveryDetails.ProductId);
-                    sqlQueryBuilder.Replace("@ActualDelivered", objDeliveryDetails.Quantity);
-                    sqlQueryBuilder.Replace("@Price", objDeliveryDetails.Price);
-                    sqlQueryBuilder.Replace("@created_at", objDeliveryDetails.created_at);
-                }
-
-                for (int i = 0; i < arrListPaymentDetail.Count; i++)
-                {
-                    PaymentDetails objPaymentDetails = (PaymentDetails)arrListPaymentDetail[i];
-
-                    sqlQueryBuilder.Append("INSERT INTO delivery_item_payment (Delivery_ID, DeliveryDate, EmployeeID, ");
-                    sqlQueryBuilder.Append("PaymentMode, Amount, created_at) VALUES (@Delivery_ID, ");
-                    sqlQueryBuilder.Append("'@DeliveryDate', @EmployeeID, '@PaymentMode', @Amount, '@created_at');\n");
-
-                    sqlQueryBuilder.Replace("@Delivery_ID", Convert.ToString(Delivery_ID));
-                    sqlQueryBuilder.Replace("@DeliveryDate", objPaymentDetails.DeliveryDate);
-                    sqlQueryBuilder.Replace("@EmployeeID", objPaymentDetails.EmployeeID);
-                    sqlQueryBuilder.Replace("@PaymentMode", objPaymentDetails.PaymentMode);
-                    sqlQueryBuilder.Replace("@Amount", objPaymentDetails.Amount);
-                    sqlQueryBuilder.Replace("@created_at", objPaymentDetails.created_at);
-                }
-
-                if (sqlQueryBuilder.Length > 0)
-                {
-                    objUtilitiy.BeginTransaction();
-                    rowsAffected = objUtilitiy.ExecuteNonQueryTransaction(sqlQueryBuilder.ToString());
-                    objUtilitiy.CommitTransaction();
-                }
-                else
-                {
-                    rowsAffected = 0; // No data to insert
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-            return rowsAffected;
-        }*/
-
         public int UpdateTransaction(ArrayList arrListDeliveryInfo, ArrayList arrListDeliveryDetail, ArrayList arrListPaymentDetail)
         {
             int rowsAffected = 0;
@@ -297,9 +212,9 @@ namespace InventoryManagement.IL
 
                     // Master Table Query
                     sqlQueryBuilder = new StringBuilder();
-                    sqlQueryBuilder.Append("UPDATE delivery_inf SET DeliveryDate = @DeliveryDate, EmployeeID = @EmployeeID, ");
-                    sqlQueryBuilder.Append("Total_Amount = @Total_Amount, Total_Quantity = @Total_Quantity, CreatedBy = @CreatedBy, ");
-                    sqlQueryBuilder.Append("created_at = @created_at WHERE Delivery_ID = @Delivery_ID;");
+                    sqlQueryBuilder.Append("UPDATE delivery_inf SET DeliveryDate = @DeliveryDate, EmployeeID = @EmployeeID, Total_Amount = @Total_Amount, ");
+                    sqlQueryBuilder.Append("Total_Quantity = @Total_Quantity, Remarks = @Remarks, CreatedBy = @CreatedBy, created_at = @created_at ");
+                    sqlQueryBuilder.Append("WHERE Delivery_ID = @Delivery_ID;");
 
                     objUtilitiy.sqlCommand.CommandText = sqlQueryBuilder.ToString();
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@Delivery_ID", Delivery_ID);
@@ -307,6 +222,7 @@ namespace InventoryManagement.IL
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@EmployeeID", objDeliveryMaster.EmployeeID);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@Total_Amount", objDeliveryMaster.TotalAmount);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@Total_Quantity", objDeliveryMaster.TotalQuantity);
+                    objUtilitiy.sqlCommand.Parameters.AddWithValue("@Remarks", objDeliveryMaster.Remarks);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@CreatedBy", objDeliveryMaster.CreatedBy);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@created_at", objDeliveryMaster.created_at);
                     rowsAffected += objUtilitiy.ExecuteNonQueryTransaction();
@@ -321,8 +237,8 @@ namespace InventoryManagement.IL
                 // Detail Table Query
                 sqlQueryBuilder = new StringBuilder();
                 sqlQueryBuilder.Append("INSERT INTO delivery_item_details (Delivery_ID, DeliveryDate, EmployeeID, ");
-                sqlQueryBuilder.Append("ProductID, ActualDelivered, Price, Remarks, created_at) VALUES (@Delivery_ID, ");
-                sqlQueryBuilder.Append("@DeliveryDate, @EmployeeID, @ProductID, @ActualDelivered, @Price, @Remarks, @created_at);");
+                sqlQueryBuilder.Append("ProductID, ActualDelivered, OnlineQuantity, Price, Remarks, created_at) VALUES (@Delivery_ID, ");
+                sqlQueryBuilder.Append("@DeliveryDate, @EmployeeID, @ProductID, @ActualDelivered, @OnlineQuantity, @Price, @Remarks, @created_at);");
 
                 for (int i = 0; i < arrListDeliveryDetail.Count; i++)
                 {
@@ -334,6 +250,7 @@ namespace InventoryManagement.IL
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@EmployeeID", objDeliveryDetails.EmployeeID);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@ProductID", objDeliveryDetails.ProductId);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@ActualDelivered", objDeliveryDetails.Quantity);
+                    objUtilitiy.sqlCommand.Parameters.AddWithValue("@OnlineQuantity", objDeliveryDetails.OnlineQuantity);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@Price", objDeliveryDetails.Price);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@Remarks", objDeliveryDetails.Remarks);
                     objUtilitiy.sqlCommand.Parameters.AddWithValue("@created_at", objDeliveryDetails.created_at);
@@ -371,6 +288,7 @@ namespace InventoryManagement.IL
             catch (Exception)
             {
                 objUtilitiy.RollbackTransaction();
+                rowsAffected = 0;
             }
 
             return rowsAffected;
@@ -406,18 +324,10 @@ namespace InventoryManagement.IL
             catch (Exception)
             {
                 objUtilitiy.RollbackTransaction();
+                rowsAffected = 0;
             }
 
             return rowsAffected;
-        }
-
-        public string SanitizeInput(string userInput)
-        {
-            if (string.IsNullOrEmpty(userInput)) return string.Empty;
-
-            // This regex replaces any character that is NOT a letter, number, or space
-            // It removes quotes, semicolons, dashes, and other injection vectors
-            return Regex.Replace(userInput, @"[^a-zA-Z0-9\s]", "");
         }
     }
 
@@ -427,6 +337,7 @@ namespace InventoryManagement.IL
         public string DeliveryDate { get; set; }
         public string EmployeeID { get; set; }
         public string TotalQuantity { get; set; }
+        public string Remarks { get; set; }
         public string TotalAmount { get; set; }
         public string created_at { get; set; }
         public string updated_at { get; set; }
@@ -442,6 +353,7 @@ namespace InventoryManagement.IL
         public string EmployeeID { get; set; }
         public string ProductId { get; set; }
         public string Quantity { get; set; }
+        public string OnlineQuantity { get; set; }
         public string Price { get; set; }
         public string TotalAmount { get; set; }
         public string Remarks { get; set; }

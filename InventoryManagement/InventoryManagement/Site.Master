@@ -40,10 +40,24 @@
         setTimeout("preventBack()", 0);
         window.onunload = function () { null };
     </script>
+
+    <style>
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
 </head>
 <body>
     <form runat="server">
-        <asp:ScriptManager runat="server">
+        <asp:ScriptManager ID="MasterScriptManager" runat="server">
             <Scripts>
                 <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
                 <%--Framework Scripts--%>
@@ -81,23 +95,25 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Masters</a>
                             <div class="dropdown-menu">
+                                <%--<div class="dropdown-divider"></div>--%>
                                 <a class="dropdown-item" href="AreaMaster.aspx">Area Master</a>
-                                <a class="dropdown-item" href="CustomerMaster.aspx">Customer Master</a>
-                                <a class="dropdown-item" href="ProductMaster.aspx">Product Master</a>
                                 <a class="dropdown-item" href="CategoryMaster.aspx">Product Category</a>
+                                <a class="dropdown-item" href="CustomerMaster.aspx">Customer Master</a>
                                 <a class="dropdown-item" href="EmployeeMaster.aspx">Employee Master</a>
                                 <a class="dropdown-item" href="GSTMaster.aspx">GST Master</a>
                                 <a class="dropdown-item" href="PricingMaster.aspx">Pricing Master</a>
+                                <a class="dropdown-item" href="ProductMaster.aspx">Product Master</a>
+                                <a class="dropdown-item" href="ProductGSTMapping.aspx">Product-GST Mapping</a>
                                 <a class="dropdown-item" href="RoleMaster.aspx">Role Master</a>
                                 <a class="dropdown-item" href="UserMaster.aspx">User Master</a>
-                                <a class="dropdown-item" href="ProductGSTMapping.aspx">Product-GST Mapping</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Transactions</a>
                             <div class="dropdown-menu">
                                 <%--<div class="dropdown-divider"></div>--%>
-                                <a class="dropdown-item" href="DeliveryInformation.aspx">Delivery Information</a>
+                                <a class="dropdown-item" href="DeliveryInformationAdmin.aspx">Delivery Information - Admin</a>
+                                <a class="dropdown-item" href="DeliveryInformationUser.aspx">Delivery Information - User</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">

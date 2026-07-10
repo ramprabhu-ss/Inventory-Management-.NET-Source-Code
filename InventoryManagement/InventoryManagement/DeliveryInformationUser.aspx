@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Delivery Information" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="DeliveryInformation.aspx.cs" Inherits="InventoryManagement.DeliveryInformation" MaintainScrollPositionOnPostback="true" %>
+﻿<%@ Page Title="Delivery Information" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="DeliveryInformationUser.aspx.cs" Inherits="InventoryManagement.DeliveryInformationUser" MaintainScrollPositionOnPostback="true" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -203,10 +203,10 @@
                     firstRow.find("[id*=GrdTxtAmount]").trigger("keyup");
 
                     // Update the footer label with the total amount
-                    if (onlineAmount > 0) {
+                    /*if (onlineAmount > 0) {
                         var totalAmount = $("[id*=LblFooterTotalAmount]").text();
                         $("[id*=LblFooterShortageAmount]").text((totalAmount - onlineAmount).toFixed(2));
-                    }
+                    }*/
                 });
             });
         }
@@ -386,7 +386,9 @@
                 </div>
                 <div class="col-4">
                     <asp:Label ID="LblRemarks" runat="server" Text="Remarks:" class="form-label"></asp:Label>
-                    <asp:TextBox ID="TxtRemarks" runat="server" TextMode="MultiLine" EnableViewState="true" class="form-control form-control-sm" TabIndex="10"></asp:TextBox>
+                    <br />
+                    <asp:TextBox ID="TxtRemarks" runat="server" TextMode="MultiLine" EnableViewState="true" class="form-control form-control-sm"
+                        Style="margin: 2% 0% 0% 0%; width: 100%; height: 45%;" TabIndex="10"></asp:TextBox>
                 </div>
                 <div class="col-3">
                     <ul class="list-group">

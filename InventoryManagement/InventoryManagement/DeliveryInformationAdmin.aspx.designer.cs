@@ -11,7 +11,7 @@ namespace InventoryManagement
 {
 
 
-    public partial class DeliveryInformation
+    public partial class DeliveryInformationAdmin
     {
 
         /// <summary>

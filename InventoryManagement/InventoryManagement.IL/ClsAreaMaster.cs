@@ -68,6 +68,7 @@ namespace InventoryManagement.IL
             catch (Exception)
             {
                 objUtilitiy.RollbackTransaction();
+                rowsAffected = 0;
             }
 
             return rowsAffected;
@@ -96,6 +97,7 @@ namespace InventoryManagement.IL
             catch (Exception)
             {
                 objUtilitiy.RollbackTransaction();
+                rowsAffected = 0;
             }
 
             return rowsAffected;
@@ -120,6 +122,7 @@ namespace InventoryManagement.IL
             catch (Exception)
             {
                 objUtilitiy.RollbackTransaction();
+                rowsAffected = 0;
             }
 
             return rowsAffected;

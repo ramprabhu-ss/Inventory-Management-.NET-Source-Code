@@ -4,16 +4,13 @@ using System.Collections;
 using System.Data;
 using System.Linq;
 using System.Text;
-using System.Web.Services.Description;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using WebGrease.Css.Ast.Selectors;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace InventoryManagement
 {
-    public partial class DeliveryInformation : System.Web.UI.Page
+    public partial class DeliveryInformationAdmin : System.Web.UI.Page
     {
         public ClsDeliveryInformation objDeliveryInformation = new ClsDeliveryInformation();
         int footerTotalQuantity = 0;
@@ -153,6 +150,7 @@ namespace InventoryManagement
                     objDeliveryMaster.EmployeeID = DdlEmployeeId.SelectedValue.Trim();
                     objDeliveryMaster.TotalQuantity = Convert.ToString(footerTotalQuantity);
                     objDeliveryMaster.TotalAmount = Convert.ToString(footerTotalAmount);
+                    objDeliveryMaster.Remarks = TxtRemarks.Text.Trim();
                     objDeliveryMaster.CreatedBy = CreatedBy;
                     objDeliveryMaster.created_at = CreatedOn;
                     arrListDeliveryMaster.Add((DeliveryMaster)objDeliveryMaster);
@@ -285,6 +283,7 @@ namespace InventoryManagement
                     objDeliveryMaster.EmployeeID = DdlEmployeeId.SelectedValue.Trim();
                     objDeliveryMaster.TotalQuantity = Convert.ToString(footerTotalQuantity);
                     objDeliveryMaster.TotalAmount = Convert.ToString(footerTotalAmount);
+                    objDeliveryMaster.Remarks = TxtRemarks.Text.Trim();
                     objDeliveryMaster.CreatedBy = CreatedBy;
                     objDeliveryMaster.created_at = CreatedOn;
                     arrListDeliveryMaster.Add((DeliveryMaster)objDeliveryMaster);
@@ -360,7 +359,7 @@ namespace InventoryManagement
                 ViewState["dtProducts"] = null;
                 ViewState["dtPriceMaster"] = null;
                 HFieldTransactionType.Value = "";
-                Response.Redirect("~/DeliveryInformation.aspx", true);
+                Response.Redirect("~/DeliveryInformationAdmin.aspx", true);
             }
             catch (Exception)
             {
@@ -642,9 +641,15 @@ namespace InventoryManagement
                     if (ds != null && ds.Tables.Count > 0)
                     {
                         if (ds.Tables[0].Rows.Count > 0)
+                        {
                             LblDeliveryId.Text = ds.Tables[0].Rows[0]["Delivery_ID"].ToString();
+                            TxtRemarks.Text = ds.Tables[0].Rows[0]["Remarks"].ToString();
+                        }
                         else
+                        {
                             LblDeliveryId.Text = "";
+                            TxtRemarks.Text = "";
+                        }
 
                         dtDeliveryInfo = ds.Tables[1];
                         dtPaymentInfo = ds.Tables[2];

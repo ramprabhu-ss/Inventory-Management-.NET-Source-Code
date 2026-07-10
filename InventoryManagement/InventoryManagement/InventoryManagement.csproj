@@ -84,7 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AreaMaster.aspx" />
-    <Content Include="CustomerMaster.aspx" />
+    <Content Include="CategoryMaster.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
@@ -102,12 +102,15 @@
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="CustomerMaster.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="DeliveryInfoProductsReport.aspx" />
     <Content Include="DeliveryInfoPaymentsReport.aspx" />
+    <Content Include="DeliveryInformationUser.aspx" />
+    <Content Include="EmployeeMaster.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="DeliveryInformation.aspx" />
+    <Content Include="DeliveryInformationAdmin.aspx" />
     <Content Include="Content\bootstrap.rtl.min.css.map" />
     <Content Include="Content\bootstrap.rtl.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
@@ -124,16 +127,15 @@
     <Content Include="Content\bootstrap-grid.rtl.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
-    <Content Include="Login.aspx" />
-    <Content Include="ProductMaster.aspx" />
-    <Content Include="EmployeeMaster.aspx" />
-    <Content Include="CategoryMaster.aspx" />
     <Content Include="GSTMaster.aspx" />
+    <Content Include="Login.aspx" />
     <Content Include="PricingMaster.aspx" />
     <Content Include="RoleMaster.aspx" />
     <Content Include="ToDoTasks.aspx" />
     <Content Include="UserMaster.aspx" />
     <Content Include="ProductGSTMapping.aspx" />
+    <Content Include="ProductMaster.aspx" />
+    <Content Include="RoleMaster.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -176,6 +178,7 @@
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
     <Content Include="Site.Master" />
+    <Content Include="UserMaster.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="web.config" />
     <Content Include="Bundle.config" />
@@ -190,6 +193,13 @@
     </Compile>
     <Compile Include="AreaMaster.aspx.designer.cs">
       <DependentUpon>AreaMaster.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CategoryMaster.aspx.cs">
+      <DependentUpon>CategoryMaster.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CategoryMaster.aspx.designer.cs">
+      <DependentUpon>CategoryMaster.aspx</DependentUpon>
     </Compile>
     <Compile Include="CustomerMaster.aspx.cs">
       <DependentUpon>CustomerMaster.aspx</DependentUpon>
@@ -219,8 +229,29 @@
     <Compile Include="DeliveryInfoPaymentsReport.aspx.designer.cs">
       <DependentUpon>DeliveryInfoPaymentsReport.aspx</DependentUpon>
     </Compile>
+    <Compile Include="DeliveryInformationUser.aspx.cs">
+      <DependentUpon>DeliveryInformationUser.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DeliveryInformationUser.aspx.designer.cs">
+      <DependentUpon>DeliveryInformationUser.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeMaster.aspx.cs">
+      <DependentUpon>EmployeeMaster.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EmployeeMaster.aspx.designer.cs">
+      <DependentUpon>EmployeeMaster.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="GSTMaster.aspx.cs">
+      <DependentUpon>GSTMaster.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GSTMaster.aspx.designer.cs">
+      <DependentUpon>GSTMaster.aspx</DependentUpon>
     </Compile>
     <Compile Include="Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
@@ -229,13 +260,50 @@
     <Compile Include="Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DeliveryInformation.aspx.cs">
-      <DependentUpon>DeliveryInformation.aspx</DependentUpon>
+    <Compile Include="PricingMaster.aspx.cs">
+      <DependentUpon>PricingMaster.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="DeliveryInformation.aspx.designer.cs">
-      <DependentUpon>DeliveryInformation.aspx</DependentUpon>
+    <Compile Include="PricingMaster.aspx.designer.cs">
+      <DependentUpon>PricingMaster.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ToDoTasks.aspx.cs">
+      <DependentUpon>ToDoTasks.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ToDoTasks.aspx.designer.cs">
+      <DependentUpon>ToDoTasks.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ViewSwitcher.ascx.cs">
+      <DependentUpon>ViewSwitcher.ascx</DependentUpon>
+    <Compile Include="ProductGSTMapping.aspx.cs">
+      <DependentUpon>ProductGSTMapping.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProductGSTMapping.aspx.designer.cs">
+      <DependentUpon>ProductGSTMapping.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ProductMaster.aspx.cs">
+      <DependentUpon>ProductMaster.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProductMaster.aspx.designer.cs">
+      <DependentUpon>ProductMaster.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DeliveryInformationAdmin.aspx.cs">
+      <DependentUpon>DeliveryInformationAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DeliveryInformationAdmin.aspx.designer.cs">
+      <DependentUpon>DeliveryInformationAdmin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RoleMaster.aspx.cs">
+      <DependentUpon>RoleMaster.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RoleMaster.aspx.designer.cs">
+      <DependentUpon>RoleMaster.aspx</DependentUpon>
     </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
@@ -251,62 +319,6 @@
     <Compile Include="Site.Mobile.Master.designer.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
     </Compile>
-    <Compile Include="ToDoTasks.aspx.cs">
-      <DependentUpon>ToDoTasks.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ToDoTasks.aspx.designer.cs">
-      <DependentUpon>ToDoTasks.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="ViewSwitcher.ascx.cs">
-      <DependentUpon>ViewSwitcher.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ViewSwitcher.ascx.designer.cs">
-      <DependentUpon>ViewSwitcher.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="ProductMaster.aspx.cs">
-      <DependentUpon>ProductMaster.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ProductMaster.aspx.designer.cs">
-      <DependentUpon>ProductMaster.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="EmployeeMaster.aspx.cs">
-      <DependentUpon>EmployeeMaster.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="EmployeeMaster.aspx.designer.cs">
-      <DependentUpon>EmployeeMaster.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="CategoryMaster.aspx.cs">
-      <DependentUpon>CategoryMaster.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="CategoryMaster.aspx.designer.cs">
-      <DependentUpon>CategoryMaster.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GSTMaster.aspx.cs">
-      <DependentUpon>GSTMaster.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GSTMaster.aspx.designer.cs">
-      <DependentUpon>GSTMaster.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="PricingMaster.aspx.cs">
-      <DependentUpon>PricingMaster.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="PricingMaster.aspx.designer.cs">
-      <DependentUpon>PricingMaster.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="RoleMaster.aspx.cs">
-      <DependentUpon>RoleMaster.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="RoleMaster.aspx.designer.cs">
-      <DependentUpon>RoleMaster.aspx</DependentUpon>
-    </Compile>
     <Compile Include="UserMaster.aspx.cs">
       <DependentUpon>UserMaster.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -314,12 +326,12 @@
     <Compile Include="UserMaster.aspx.designer.cs">
       <DependentUpon>UserMaster.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ProductGSTMapping.aspx.cs">
-      <DependentUpon>ProductGSTMapping.aspx</DependentUpon>
+    <Compile Include="ViewSwitcher.ascx.cs">
+      <DependentUpon>ViewSwitcher.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ProductGSTMapping.aspx.designer.cs">
-      <DependentUpon>ProductGSTMapping.aspx</DependentUpon>
+    <Compile Include="ViewSwitcher.ascx.designer.cs">
+      <DependentUpon>ViewSwitcher.ascx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup />
