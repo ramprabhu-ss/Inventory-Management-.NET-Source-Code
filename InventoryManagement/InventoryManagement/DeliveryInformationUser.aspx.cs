@@ -543,24 +543,32 @@ namespace InventoryManagement
                     {
                         LblFooterOnlineAmount.Text = Convert.ToString(footerOnlineAmount);
 
-                        //TextBox GrdTxtAmount = (TextBox)GrdPaymentMode.Rows[0].Cells[2].FindControl("GrdTxtAmount");
-                        //GrdTxtAmount.Text = Convert.ToString(footerOnlineAmount);
-
-                        /*for (int i = 0; i < GrdPaymentMode.Rows.Count; i++)
+                        foreach (GridViewRow row in GrdPaymentMode.Rows)
                         {
-                            if (GrdPaymentMode.Rows[i].RowType == DataControlRowType.DataRow)
+                            if (row.RowType == DataControlRowType.DataRow)
                             {
-                                TextBox GrdTxt_Amount = (TextBox)GrdPaymentMode.Rows[i].FindControl("GrdTxtAmount");
-                                footerPayModeTotal += Convert.ToDecimal(GrdTxt_Amount.Text);
+                                DropDownList GrdDdlPaymentMode = (DropDownList)row.FindControl("GrdDdlPaymentMode"); // For TemplateFields
+                                TextBox GrdTxtAmount = (TextBox)row.FindControl("GrdTxtAmount");
+
+                                if (GrdDdlPaymentMode.SelectedValue != "")
+                                {
+                                    if (GrdDdlPaymentMode.SelectedValue == "BANK_TRANSFER")
+                                    {
+                                        footerPayModeTotal = 0.00M;
+                                        GrdTxtAmount.Text = Convert.ToDecimal(footerOnlineAmount).ToString();
+                                        footerPayModeTotal = footerOnlineAmount;
+                                    }
+                                    else
+                                    {
+                                        footerPayModeTotal += Convert.ToDecimal(GrdTxtAmount.Text);
+                                    }
+                                }
                             }
 
-                            if (GrdPaymentMode.Rows[i].RowType == DataControlRowType.Footer)
-                            {
-                                Label LblFooterPaymentTotal = (Label)GrdPaymentMode.FindControl("LblFooterPaymentTotal");
-                                LblFooterPaymentTotal.Text = "Total Amount: " + Convert.ToString(footerPayModeTotal);
-                                LblFooterShortageAmount.Text = (Convert.ToDecimal(LblFooterTotalAmount.Text) - footerPayModeTotal).ToString();
-                            }
-                        }*/
+                            Label LblFooterPaymentTotal = (Label)GrdPaymentMode.FooterRow.FindControl("LblFooterPaymentTotal");
+                            LblFooterPaymentTotal.Text = "Total Amount: " + Convert.ToString(footerPayModeTotal);
+                            LblFooterShortageAmount.Text = (Convert.ToDecimal(LblFooterTotalAmount.Text) - footerPayModeTotal).ToString();
+                        }
                     }
                     else
                     {
@@ -789,7 +797,8 @@ namespace InventoryManagement
                     if (e.Row.RowIndex == 0 && !Convert.IsDBNull(DataBinder.Eval(e.Row.DataItem, "Amount")))
                     {
                         GrdTxtAmount.Text = LblFooterOnlineAmount.Text; // Convert.ToString(footerOnlineAmount);
-                        footerPayModeTotal += Convert.ToDecimal(LblFooterOnlineAmount.Text); // footerOnlineAmount;
+                        if (GrdDdlPaymentMode.SelectedValue == "BANK_TRANSFER")
+                            footerPayModeTotal = Convert.ToDecimal(LblFooterOnlineAmount.Text); // footerOnlineAmount;
                     }
                     else
                     {
