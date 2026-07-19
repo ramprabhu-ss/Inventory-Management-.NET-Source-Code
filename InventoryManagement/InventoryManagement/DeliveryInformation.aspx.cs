@@ -2,7 +2,6 @@
 using System;
 using System.Collections;
 using System.Data;
-using System.Linq;
 using System.Text;
 using System.Web.Services.Description;
 using System.Web.UI;
@@ -16,12 +15,8 @@ namespace InventoryManagement
     public partial class DeliveryInformation : System.Web.UI.Page
     {
         public ClsDeliveryInformation objDeliveryInformation = new ClsDeliveryInformation();
-        int footerTotalQuantity = 0;
-        int footerOnlineQuantity = 0;
+        decimal footerTotalQuantity = 0.00M;
         decimal footerTotalAmount = 0.00M;
-        decimal footerOnlineAmount = 0.00M;
-        decimal footerFinalAmount = 0.00M;
-        decimal footerShortageAmount = 0.00M;
         decimal footerPayModeTotal = 0.00M;
 
         protected void Page_Load(object sender, EventArgs e)
@@ -39,14 +34,13 @@ namespace InventoryManagement
                     {
                         ViewState["dtProducts"] = ds.Tables[0];
                         ViewState["dtPaymentMode"] = ds.Tables[1];
+                        //ViewState["dtEmployeeId"] = ds.Tables[2];
 
                         DdlEmployeeId.DataSource = ds.Tables[2];
                         DdlEmployeeId.DataTextField = "emp_name";
                         DdlEmployeeId.DataValueField = "emp_code";
                         DdlEmployeeId.DataBind();
                         DdlEmployeeId.Items.Insert(0, new ListItem("-- Select --", "0"));
-
-                        ViewState["dtPriceMaster"] = ds.Tables[3];
                     }
 
                     BindDeliveryGridView();
@@ -85,8 +79,7 @@ namespace InventoryManagement
                 string CreatedBy = "1"; // Convert.ToString(Session["UserName"]);
                 string CreatedOn = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
-                footerTotalQuantity = 0;
-                footerOnlineQuantity = 0;
+                footerTotalQuantity = 0.00M;
                 footerTotalAmount = 0.00M;
 
                 // Delivery Details - Iterate through each row of the gridview and capture the values
@@ -100,7 +93,6 @@ namespace InventoryManagement
                         //string customerId = row.Cells[0].Text; // For BoundFields
                         DropDownList GrdDdlProduct = (DropDownList)row.FindControl("GrdDdlProduct"); // For TemplateFields
                         TextBox GrdTxtQuantity = (TextBox)row.FindControl("GrdTxtQuantity");
-                        TextBox GrdTxtOnlineQty = (TextBox)row.FindControl("GrdTxtOnlineQty");
                         TextBox GrdTxtPrice = (TextBox)row.FindControl("GrdTxtPrice");
                         TextBox GrdTxtTotalAmount = (TextBox)row.FindControl("GrdTxtTotalAmount");
                         TextBox GrdTxtRemarks = (TextBox)row.FindControl("GrdTxtRemarks");
@@ -109,31 +101,19 @@ namespace InventoryManagement
 
                         if (GrdDdlProduct.SelectedValue != "" && GrdTxtQuantity.Text != "" && GrdTxtPrice.Text != "")
                         {
-                            GrdTxtOnlineQty.Text = (GrdTxtOnlineQty.Text == "") ? "0" : GrdTxtOnlineQty.Text;
+                            footerTotalQuantity = Math.Round(footerTotalQuantity + Convert.ToDecimal(GrdTxtQuantity.Text), 2);
 
-                            footerTotalQuantity += Convert.ToInt32(GrdTxtQuantity.Text);
-                            footerOnlineQuantity += Convert.ToInt32(GrdTxtOnlineQty.Text);
-
-                            int quantity, onlineQuantity = 0;
-                            decimal price, onlineAmount, totalAmount = 0.00M;
-
-                            quantity = Convert.ToInt32(GrdTxtQuantity.Text);
+                            decimal quantity, price, totalAmount = 0.00M;
+                            quantity = Convert.ToDecimal(GrdTxtQuantity.Text);
                             price = Convert.ToDecimal(GrdTxtPrice.Text);
                             totalAmount = Math.Round((quantity * price), 2);
                             GrdTxtTotalAmount.Text = Convert.ToString(totalAmount);
-                            footerTotalAmount += totalAmount;
-
-                            onlineQuantity = Convert.ToInt32(GrdTxtOnlineQty.Text);
-                            onlineAmount = Math.Round((onlineQuantity * price), 2);
-                            footerOnlineAmount += onlineAmount;
-
-                            footerFinalAmount = footerTotalAmount - footerOnlineAmount;
+                            footerTotalAmount = footerTotalAmount + totalAmount;
 
                             objDeliveryDetails.DeliveryDate = TxtDeliveryDate.Text.Trim();
                             objDeliveryDetails.EmployeeID = DdlEmployeeId.SelectedValue.Trim();
                             objDeliveryDetails.ProductId = GrdDdlProduct.SelectedValue.Trim();
                             objDeliveryDetails.Quantity = GrdTxtQuantity.Text.Trim();
-                            objDeliveryDetails.OnlineQuantity = GrdTxtOnlineQty.Text.Trim();
                             objDeliveryDetails.Price = GrdTxtPrice.Text.Trim();
                             objDeliveryDetails.TotalAmount = GrdTxtTotalAmount.Text.Trim();
                             objDeliveryDetails.Remarks = GrdTxtRemarks.Text.Trim();
@@ -215,8 +195,7 @@ namespace InventoryManagement
                 string CreatedBy = "1"; // Convert.ToString(Session["UserName"]);
                 string CreatedOn = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
-                footerTotalQuantity = 0;
-                footerOnlineQuantity = 0;
+                footerTotalQuantity = 0.00M;
                 footerTotalAmount = 0.00M;
 
                 // Delivery Details - Iterate through each row of the gridview and capture the values
@@ -230,7 +209,6 @@ namespace InventoryManagement
                         //string customerId = row.Cells[0].Text; // For BoundFields
                         DropDownList GrdDdlProduct = (DropDownList)row.FindControl("GrdDdlProduct"); // For TemplateFields
                         TextBox GrdTxtQuantity = (TextBox)row.FindControl("GrdTxtQuantity");
-                        TextBox GrdTxtOnlineQty = (TextBox)row.FindControl("GrdTxtOnlineQty");
                         TextBox GrdTxtPrice = (TextBox)row.FindControl("GrdTxtPrice");
                         TextBox GrdTxtTotalAmount = (TextBox)row.FindControl("GrdTxtTotalAmount");
                         TextBox GrdTxtRemarks = (TextBox)row.FindControl("GrdTxtRemarks");
@@ -239,32 +217,20 @@ namespace InventoryManagement
 
                         if (GrdDdlProduct.SelectedValue != "" && GrdTxtQuantity.Text != "" && GrdTxtPrice.Text != "")
                         {
-                            GrdTxtOnlineQty.Text = (GrdTxtOnlineQty.Text == "") ? "0" : GrdTxtOnlineQty.Text;
+                            footerTotalQuantity = Math.Round(footerTotalQuantity + Convert.ToDecimal(GrdTxtQuantity.Text), 2);
 
-                            footerTotalQuantity += Convert.ToInt32(GrdTxtQuantity.Text);
-                            footerOnlineQuantity += Convert.ToInt32(GrdTxtOnlineQty.Text);
-
-                            int quantity, onlineQuantity = 0;
-                            decimal price, onlineAmount, totalAmount = 0.00M;
-
-                            quantity = Convert.ToInt32(GrdTxtQuantity.Text);
+                            decimal quantity, price, totalAmount = 0.00M;
+                            quantity = Convert.ToDecimal(GrdTxtQuantity.Text);
                             price = Convert.ToDecimal(GrdTxtPrice.Text);
                             totalAmount = Math.Round((quantity * price), 2);
                             GrdTxtTotalAmount.Text = Convert.ToString(totalAmount);
-                            footerTotalAmount += totalAmount;
-
-                            onlineQuantity = Convert.ToInt32(GrdTxtOnlineQty.Text);
-                            onlineAmount = Math.Round((onlineQuantity * price), 2);
-                            footerOnlineAmount += onlineAmount;
-
-                            footerFinalAmount = footerTotalAmount - footerOnlineAmount;
+                            footerTotalAmount = footerTotalAmount + totalAmount;
 
                             objDeliveryDetails.DeliveryId = LblDeliveryId.Text.Trim();
                             objDeliveryDetails.DeliveryDate = TxtDeliveryDate.Text.Trim();
                             objDeliveryDetails.EmployeeID = DdlEmployeeId.SelectedValue.Trim();
                             objDeliveryDetails.ProductId = GrdDdlProduct.SelectedValue.Trim();
                             objDeliveryDetails.Quantity = GrdTxtQuantity.Text.Trim();
-                            objDeliveryDetails.OnlineQuantity = GrdTxtOnlineQty.Text.Trim();
                             objDeliveryDetails.Price = GrdTxtPrice.Text.Trim();
                             objDeliveryDetails.TotalAmount = GrdTxtTotalAmount.Text.Trim();
                             objDeliveryDetails.Remarks = GrdTxtRemarks.Text.Trim();
@@ -301,7 +267,7 @@ namespace InventoryManagement
 
                         if (GrdDdlPaymentMode.SelectedValue != "" && GrdTxtAmount.Text != "")
                         {
-                            objPaymentDetails.DeliveryId = LblDeliveryId.Text.Trim();
+                            objPaymentDetails.DeliveryId = LblDeliveryId.Text.Trim(); ;
                             objPaymentDetails.DeliveryDate = TxtDeliveryDate.Text.Trim();
                             objPaymentDetails.EmployeeID = DdlEmployeeId.SelectedValue.Trim();
                             objPaymentDetails.PaymentMode = GrdDdlPaymentMode.SelectedValue.Trim();
@@ -315,7 +281,6 @@ namespace InventoryManagement
 
                 HFieldTransactionType.Value = "Update";
                 ShowResult(objDeliveryInformation.UpdateTransaction(arrListDeliveryMaster, arrListDeliveryDetail, arrListPaymentDetail));
-                //BtnReset_Click(BtnReset, EventArgs.Empty);
             }
             catch (Exception)
             {
@@ -357,8 +322,6 @@ namespace InventoryManagement
             {
                 ViewState["dtDeliveryInfo"] = null;
                 ViewState["dtPaymentInfo"] = null;
-                ViewState["dtProducts"] = null;
-                ViewState["dtPriceMaster"] = null;
                 HFieldTransactionType.Value = "";
                 Response.Redirect("~/DeliveryInformation.aspx", true);
             }
@@ -398,8 +361,6 @@ namespace InventoryManagement
         {
             try
             {
-                //footerPayModeTotal = 0.00M;
-
                 // Capturing values before deleting an existing row
                 DataTable dt = Rebind_GridDeliveryInformation((DataTable)ViewState["dtDeliveryInfo"]);
                 bool isRowSelected = false;
@@ -427,26 +388,6 @@ namespace InventoryManagement
                     ViewState["dtDeliveryInfo"] = dt;
                     GrdDeliveryInfo.DataSource = dt;
                     GrdDeliveryInfo.DataBind();
-
-                    TextBox GrdTxtAmount = (TextBox)GrdPaymentMode.Rows[0].Cells[2].FindControl("GrdTxtAmount");
-                    GrdTxtAmount.Text = Convert.ToString(footerOnlineAmount);
-                    footerPayModeTotal = 0.00M;
-                    //for (int i = 0; i < GrdPaymentMode.Rows.Count; i++)
-                    foreach (GridViewRow row in GrdPaymentMode.Rows)
-                    {
-                        if (row.RowType == DataControlRowType.DataRow)
-                        {
-                            TextBox GrdTxt_Amount = (TextBox)row.FindControl("GrdTxtAmount");
-                            footerPayModeTotal += Convert.ToDecimal(GrdTxt_Amount.Text);
-                        }
-                    }
-
-                    if (GrdPaymentMode.FooterRow != null)
-                    {
-                        Label LblFooterPaymentTotal = (Label)GrdPaymentMode.FooterRow.FindControl("LblFooterPaymentTotal");
-                        LblFooterPaymentTotal.Text = "Total Amount: " + Convert.ToString(footerPayModeTotal);
-                        LblFooterShortageAmount.Text = (Convert.ToDecimal(LblFooterTotalAmount.Text) - footerPayModeTotal).ToString();
-                    }
                 }
             }
             catch (Exception)
@@ -464,102 +405,51 @@ namespace InventoryManagement
                 {
                     // Find the DropDownList using its ID
                     DropDownList GrdDdlProduct = (DropDownList)e.Row.FindControl("GrdDdlProduct");
-                    GrdDdlProduct.DataSource = (DataTable)ViewState["dtProducts"]; // Method to fetch your data
-                    GrdDdlProduct.DataTextField = "ProductName";
-                    GrdDdlProduct.DataValueField = "ProductID";
-                    GrdDdlProduct.DataBind();
-                    GrdDdlProduct.Items.Insert(0, new ListItem("-- Select --", ""));
-
-                    if (!Convert.IsDBNull(DataBinder.Eval(e.Row.DataItem, "ProductID")))
+                    if (GrdDdlProduct != null)
                     {
+                        // Populate the DropDownList from your data source
+                        GrdDdlProduct.DataSource = (DataTable)ViewState["dtProducts"]; // Method to fetch your data
+                        GrdDdlProduct.DataTextField = "ProductName";
+                        GrdDdlProduct.DataValueField = "ProductID";
+                        GrdDdlProduct.DataBind();
+
+                        // Optional: Add a default "Select" item
+                        GrdDdlProduct.Items.Insert(0, new ListItem("-- Select --", ""));
+
                         // Set the selected value based on the current row data
                         GrdDdlProduct.SelectedValue = DataBinder.Eval(e.Row.DataItem, "ProductID").ToString();
                     }
 
                     TextBox GrdTxtQuantity = (TextBox)e.Row.FindControl("GrdTxtQuantity");
-                    if (!Convert.IsDBNull(DataBinder.Eval(e.Row.DataItem, "Quantity")))
+                    if (GrdTxtQuantity != null)
                     {
-                        GrdTxtQuantity.Text = Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "Quantity")).ToString();
-                        footerTotalQuantity += Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "Quantity"));
-                    }
-
-                    TextBox GrdTxtOnlineQty = (TextBox)e.Row.FindControl("GrdTxtOnlineQty");
-                    if (!Convert.IsDBNull(DataBinder.Eval(e.Row.DataItem, "OnlineQuantity")))
-                    {
-                        GrdTxtOnlineQty.Text = Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "OnlineQuantity")).ToString();
-                        footerOnlineQuantity += Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "OnlineQuantity"));
+                        GrdTxtQuantity.Text = DataBinder.Eval(e.Row.DataItem, "Quantity").ToString();
+                        if (GrdTxtQuantity.Text != "")
+                            footerTotalQuantity = Math.Round(footerTotalQuantity + Convert.ToDecimal(GrdTxtQuantity.Text), 2);
                     }
 
                     TextBox GrdTxtPrice = (TextBox)e.Row.FindControl("GrdTxtPrice");
-                    if (!Convert.IsDBNull(DataBinder.Eval(e.Row.DataItem, "Price")))
+                    if (GrdTxtPrice != null)
                         GrdTxtPrice.Text = DataBinder.Eval(e.Row.DataItem, "Price").ToString();
 
                     TextBox GrdTxtTotalAmount = (TextBox)e.Row.FindControl("GrdTxtTotalAmount");
-                    if (!Convert.IsDBNull(DataBinder.Eval(e.Row.DataItem, "TotalAmount")))
+                    if (GrdTxtTotalAmount != null)
                     {
                         GrdTxtTotalAmount.Text = DataBinder.Eval(e.Row.DataItem, "TotalAmount").ToString();
-                        int quantity, onlineQuantity = 0;
-                        decimal price, onlineAmount, totalAmount = 0.00M;
-
+                        decimal quantity, price, totalAmount = 0.00M;
                         if (GrdTxtQuantity.Text != "" && GrdTxtPrice.Text != "")
                         {
-                            quantity = Convert.ToInt32(GrdTxtQuantity.Text);
+                            quantity = Convert.ToDecimal(GrdTxtQuantity.Text);
                             price = Convert.ToDecimal(GrdTxtPrice.Text);
                             totalAmount = Math.Round((quantity * price), 2);
-                            footerTotalAmount += totalAmount;
-                        }
-
-                        if (GrdTxtOnlineQty.Text != "" && GrdTxtPrice.Text != "")
-                        {
-                            onlineQuantity = Convert.ToInt32(GrdTxtOnlineQty.Text);
-                            price = Convert.ToDecimal(GrdTxtPrice.Text);
-                            onlineAmount = Math.Round((onlineQuantity * price), 2);
-                            footerOnlineAmount += onlineAmount;
+                            footerTotalAmount = footerTotalAmount + totalAmount;
+                            //GrdTxtTotalAmount.Text = Convert.ToString(totalAmount);
                         }
                     }
 
                     TextBox GrdTxtRemarks = (TextBox)e.Row.FindControl("GrdTxtRemarks");
-                    if (!Convert.IsDBNull(DataBinder.Eval(e.Row.DataItem, "Remarks")))
+                    if (GrdTxtRemarks != null)
                         GrdTxtRemarks.Text = DataBinder.Eval(e.Row.DataItem, "Remarks").ToString();
-
-                    if (footerTotalAmount > 0)
-                    {
-                        LblFooterTotalAmount.Text = Convert.ToString(footerTotalAmount);
-                    }
-                    else
-                    {
-                        LblFooterTotalAmount.Text = "0.00";
-                    }
-
-                    if (footerOnlineAmount > 0)
-                    {
-                        LblFooterOnlineAmount.Text = Convert.ToString(footerOnlineAmount);
-
-                        //TextBox GrdTxtAmount = (TextBox)GrdPaymentMode.Rows[0].Cells[2].FindControl("GrdTxtAmount");
-                        //GrdTxtAmount.Text = Convert.ToString(footerOnlineAmount);
-
-                        /*for (int i = 0; i < GrdPaymentMode.Rows.Count; i++)
-                        {
-                            if (GrdPaymentMode.Rows[i].RowType == DataControlRowType.DataRow)
-                            {
-                                TextBox GrdTxt_Amount = (TextBox)GrdPaymentMode.Rows[i].FindControl("GrdTxtAmount");
-                                footerPayModeTotal += Convert.ToDecimal(GrdTxt_Amount.Text);
-                            }
-
-                            if (GrdPaymentMode.Rows[i].RowType == DataControlRowType.Footer)
-                            {
-                                Label LblFooterPaymentTotal = (Label)GrdPaymentMode.FindControl("LblFooterPaymentTotal");
-                                LblFooterPaymentTotal.Text = "Total Amount: " + Convert.ToString(footerPayModeTotal);
-                                LblFooterShortageAmount.Text = (Convert.ToDecimal(LblFooterTotalAmount.Text) - footerPayModeTotal).ToString();
-                            }
-                        }*/
-                    }
-                    else
-                    {
-                        LblFooterOnlineAmount.Text = "0.00";
-                    }
-
-                    LblFooterFinalAmount.Text = Convert.ToString(footerTotalAmount - footerOnlineAmount);
                 }
 
                 // Check if the current row being bound is the footer
@@ -575,12 +465,12 @@ namespace InventoryManagement
                         e.Row.Cells[2].CssClass = "alignFooterTextRight";
                     }
 
-                    if (footerOnlineQuantity > 0)
+                    if (footerTotalAmount > 0)
                     {
-                        Label LblFooterTotalOnlineQty = (Label)e.Row.Cells[3].FindControl("LblFooterTotalOnlineQty");
-                        LblFooterTotalOnlineQty.Text = "Online Quantity: " + Convert.ToString(footerOnlineQuantity);
-                        //e.Row.Cells[3].Text = Convert.ToString(footerOnlineQuantity);
-                        e.Row.Cells[3].CssClass = "alignFooterTextRight";
+                        Label LblFooterTotalAmount = (Label)e.Row.Cells[4].FindControl("LblFooterTotalAmount");
+                        LblFooterTotalAmount.Text = "Total Amount: " + Convert.ToString(footerTotalAmount);
+                        //e.Row.Cells[4].Text = Convert.ToString(footerTotalAmount);
+                        e.Row.Cells[4].CssClass = "alignFooterTextRight";
                     }
                 }
             }
@@ -744,47 +634,30 @@ namespace InventoryManagement
                 {
                     // Find the DropDownList using its ID
                     DropDownList GrdDdlPaymentMode = (DropDownList)e.Row.FindControl("GrdDdlPaymentMode");
-                    GrdDdlPaymentMode.DataSource = (DataTable)ViewState["dtPaymentMode"];
-                    GrdDdlPaymentMode.DataTextField = "PayModeName";
-                    GrdDdlPaymentMode.DataValueField = "PayModeId";
-                    GrdDdlPaymentMode.DataBind();
-                    GrdDdlPaymentMode.Items.Insert(0, new ListItem("-- Select --", ""));
-
-                    if (e.Row.RowIndex == 0)
+                    if (GrdDdlPaymentMode != null)
                     {
-                        GrdDdlPaymentMode.SelectedValue = "BANK_TRANSFER";
-                        e.Row.Enabled = false;
+                        // Populate the DropDownList from your data source
+                        GrdDdlPaymentMode.DataSource = (DataTable)ViewState["dtPaymentMode"];
+                        GrdDdlPaymentMode.DataTextField = "PayModeName";
+                        GrdDdlPaymentMode.DataValueField = "PayModeId";
+                        GrdDdlPaymentMode.DataBind();
 
-                        HtmlInputCheckBox GrdCheckBoxSelect = (HtmlInputCheckBox)e.Row.FindControl("GrdCheckBoxSelect");
-                        GrdCheckBoxSelect.Disabled = true;
-                    }
-                    else
-                    {
-                        ListItem itemToRemove = GrdDdlPaymentMode.Items.FindByValue("BANK_TRANSFER");
-                        GrdDdlPaymentMode.Items.Remove(itemToRemove);
-                    }
+                        // Optional: Add a default "Select" item
+                        GrdDdlPaymentMode.Items.Insert(0, new ListItem("-- Select --", ""));
 
-                    if (!Convert.IsDBNull(DataBinder.Eval(e.Row.DataItem, "PaymentMode")))
-                    {
                         // Set the selected value based on the current row data
                         GrdDdlPaymentMode.SelectedValue = DataBinder.Eval(e.Row.DataItem, "PaymentMode").ToString();
                     }
 
                     TextBox GrdTxtAmount = (TextBox)e.Row.FindControl("GrdTxtAmount");
-
-                    if (e.Row.RowIndex == 0 && !Convert.IsDBNull(DataBinder.Eval(e.Row.DataItem, "Amount")))
+                    if (GrdTxtAmount != null)
                     {
-                        GrdTxtAmount.Text = LblFooterOnlineAmount.Text; // Convert.ToString(footerOnlineAmount);
-                        footerPayModeTotal += Convert.ToDecimal(LblFooterOnlineAmount.Text); // footerOnlineAmount;
-                    }
-                    else
-                    {
-                        if (!Convert.IsDBNull(DataBinder.Eval(e.Row.DataItem, "Amount")))
+                        GrdTxtAmount.Text = DataBinder.Eval(e.Row.DataItem, "Amount").ToString();
+                        decimal Amount = 0.00M;
+                        if (GrdTxtAmount.Text != "")
                         {
-                            GrdTxtAmount.Text = DataBinder.Eval(e.Row.DataItem, "Amount").ToString();
-                            decimal Amount = 0.00M;
                             Amount = Math.Round(Convert.ToDecimal(GrdTxtAmount.Text), 2);
-                            footerPayModeTotal += Amount;
+                            footerPayModeTotal = footerPayModeTotal + Amount;
                         }
                     }
                 }
@@ -796,16 +669,10 @@ namespace InventoryManagement
                     // You can use a calculated variable here
                     if (footerPayModeTotal > 0)
                     {
-                        Label LblFooterPaymentTotal = (Label)e.Row.Cells[2].FindControl("LblFooterPaymentTotal");
-                        LblFooterPaymentTotal.Text = "Total Amount: " + Convert.ToString(footerPayModeTotal);
+                        Label LblFooterAmount = (Label)e.Row.Cells[2].FindControl("LblFooterAmount");
+                        LblFooterAmount.Text = "Total Amount: " + Convert.ToString(footerPayModeTotal);
                         //e.Row.Cells[2].Text = Convert.ToString(footerTotalQuantity);
                         e.Row.Cells[2].CssClass = "alignFooterTextRight";
-
-                        LblFooterShortageAmount.Text = (Convert.ToDecimal(LblFooterTotalAmount.Text) - footerPayModeTotal).ToString();
-                    }
-                    else
-                    {
-                        LblFooterShortageAmount.Text = "0.00";
                     }
                 }
             }
@@ -910,10 +777,6 @@ namespace InventoryManagement
                     if (GrdTxtQuantity.Text != "")
                         dt.Rows[i]["Quantity"] = GrdTxtQuantity.Text;
 
-                    TextBox GrdTxtOnlineQty = (TextBox)GrdDeliveryInfo.Rows[i].FindControl("GrdTxtOnlineQty");
-                    if (GrdTxtOnlineQty.Text != "")
-                        dt.Rows[i]["OnlineQuantity"] = GrdTxtOnlineQty.Text;
-
                     TextBox GrdTxtPrice = (TextBox)GrdDeliveryInfo.Rows[i].FindControl("GrdTxtPrice");
                     if (GrdTxtPrice.Text != "")
                         dt.Rows[i]["Price"] = GrdTxtPrice.Text;
@@ -921,7 +784,7 @@ namespace InventoryManagement
                     TextBox GrdTxtTotalAmount = (TextBox)GrdDeliveryInfo.Rows[i].FindControl("GrdTxtTotalAmount");
                     if (GrdTxtQuantity.Text != "" && GrdTxtPrice.Text != "")
                     {
-                        int quantity = Convert.ToInt32(GrdTxtQuantity.Text);
+                        decimal quantity = Math.Round(Convert.ToDecimal(GrdTxtQuantity.Text), 2);
                         decimal price = Math.Round(Convert.ToDecimal(GrdTxtPrice.Text), 2);
                         decimal totalAmount = Math.Round((quantity * price), 2);
                         dt.Rows[i]["TotalAmount"] = totalAmount;
@@ -962,7 +825,7 @@ namespace InventoryManagement
 
         private void ClearFooterTotals()
         {
-            footerTotalQuantity = 0;
+            footerTotalQuantity = 0.00M;
             footerTotalAmount = 0.00M;
             footerPayModeTotal = 0.00M;
         }
@@ -1001,7 +864,6 @@ namespace InventoryManagement
                         //dt.Rows[i]["Amount"] = Amount;
                     }
                 }
-                dt.AcceptChanges();
             }
             catch (Exception)
             {
@@ -1010,40 +872,6 @@ namespace InventoryManagement
 
             ViewState["dtPaymentInfo"] = dt;
             return dt;
-        }
-
-        protected void GrdDdlProduct_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                // 1. Reference the DropDownList that raised the event
-                DropDownList ddl = (DropDownList)sender;
-
-                // 2. Reference the GridViewRow containing this DropDownList
-                GridViewRow row = (GridViewRow)ddl.NamingContainer;
-
-                // 3. Extract the new selected value
-                int selectedProductId = Convert.ToInt32(ddl.SelectedValue);
-
-                // Find a single row matching a specific ID condition
-                DataTable dtPriceMaster = (DataTable)ViewState["dtPriceMaster"];
-                DataRow specificRow = null;
-                if (dtPriceMaster != null)
-                {
-                    specificRow = dtPriceMaster.AsEnumerable().FirstOrDefault(dtRow => dtRow.Field<int>("productid") == selectedProductId);
-                }
-
-                // 4. Access other data from the same row (e.g., cell text or other controls)
-                if (specificRow != null)
-                {
-                    TextBox GrdTxtPrice = (TextBox)row.FindControl("GrdTxtPrice");
-                    GrdTxtPrice.Text = specificRow[1].ToString();
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
         }
     }
 }

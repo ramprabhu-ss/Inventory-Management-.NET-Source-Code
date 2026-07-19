@@ -18,7 +18,7 @@
                     var row = $(this).closest("tr");
 
                     // Get Quantity and Price values
-                    var quantity = parseInt(row.find("[id*=GrdTxtQuantity]").val()) || 0;
+                    var quantity = parseFloat(row.find("[id*=GrdTxtQuantity]").val()) || 0;
                     var price = parseFloat(row.find("[id*=GrdTxtPrice]").val()) || 0;
 
                     // Calculate total amount
@@ -30,195 +30,61 @@
             });
         }
 
-        function calculateRunningTotal() {
+        function calculateRunningTotals() {
             $(document).ready(function () {
                 // Attach keypress event to Quantity textboxes
                 $("[id*=GrdDeliveryInfo] [id*=GrdTxtQuantity]").on("keyup", function () {
                     var totalQuantity = 0;
-                    var onlineQuantity = 0;
                     var totalAmount = 0;
-                    var onlineAmount = 0;
-                    var FinalAmount = 0;
-
-                    var row = $(this).closest("tr"); // Get the current row of the triggered textbox
-
-                    var actualQty = parseInt($(this).val()) || 0;
-                    var onlineQty = parseInt(row.find("[id*=GrdTxtOnlineQty]").val()) || 0;
-                    var product = row.find("[id*=GrdDdlProduct] option:selected").text();
-
-                    if (actualQty < onlineQty) {
-                        //alert('Quantity cannot be lesser than online quantity for the product ' + product);
-                        row.find("[id*=GrdTxtOnlineQty]").val(actualQty);
-                    }
-
 
                     // Iterate through all Quantity textboxes to calculate the total
                     $("[id*=GrdDeliveryInfo] [id*=GrdTxtQuantity]").each(function () {
-                        totalQuantity += parseInt($(this).val()) || 0;
+                        totalQuantity += parseFloat($(this).val()) || 0;
                     });
 
                     // Update the footer label with the total quantity
-                    $("[id*=LblFooterTotalQuantity]").text("Total Quantity: " + totalQuantity);
+                    $("[id*=LblFooterTotalQuantity]").text("Total Quantity: " + totalQuantity.toFixed(2));
 
-                    // Iterate through all Online Quantity textboxes to calculate the total
-                    $("[id*=GrdDeliveryInfo] [id*=GrdTxtTotalAmount]").each(function () {
-                        // Get the current row of the triggered textbox
-                        var row = $(this).closest("tr");
-
-                        // Get Quantity and Price values
-                        var quantity = parseInt(row.find("[id*=GrdTxtQuantity]").val()) || 0;
-                        var price = parseFloat(row.find("[id*=GrdTxtPrice]").val()) || 0;
-
-                        // Calculate total amount
-                        totalAmount += (quantity * price);
-                    });
-
-                    // Update the footer label with the total quantity
-                    $("[id*=LblFooterTotalAmount]").text(totalAmount.toFixed(2));
-
-
-                    // Iterate through all Online Quantity textboxes to calculate the total Online Quantity
-                    $("[id*=GrdDeliveryInfo] [id*=GrdTxtOnlineQty]").each(function () {
-                        //onlineQuantity += parseInt($(this).val()) || 0;
-
-                        // Get the current row of the triggered textbox
-                        var row = $(this).closest("tr");
-
-                        // Get Quantity and Price values
-                        var quantity = parseInt(row.find("[id*=GrdTxtOnlineQty]").val()) || 0;
-                        var price = parseFloat(row.find("[id*=GrdTxtPrice]").val()) || 0;
-
-                        // Calculate total amount
-                        onlineQuantity += quantity;
-                        onlineAmount += (quantity * price);
-
-                        $("[id*=LblFooterTotalOnlineQty]").text("Online Quantity: " + onlineQuantity);
-                        $("[id*=LblFooterOnlineAmount]").text(onlineAmount.toFixed(2));
-                        $("[id*=LblFooterOnlineAmount]").trigger("change");
-                    });
-
-                    if (totalAmount > 0) {
-                        debugger;
-                        FinalAmount = totalAmount - onlineAmount;
-                        $("[id*=LblFooterFinalAmount]").text(FinalAmount.toFixed(2));
-                    }
-                });
-
-                // Attach keypress event to Price textboxes
-                /*$("[id*=GrdDeliveryInfo] [id*=GrdTxtPrice]").on("keyup", function () {
-                    var totalAmount = 0;
- 
                     // Iterate through all TotalAmount textboxes to calculate the total
                     $("[id*=GrdDeliveryInfo] [id*=GrdTxtTotalAmount]").each(function () {
                         totalAmount += parseFloat($(this).val()) || 0;
                     });
- 
+
                     // Update the footer label with the total quantity
                     $("[id*=LblFooterTotalAmount]").text("Total Amount: " + totalAmount.toFixed(2));
-                });*/
-            });
-        }
+                });
 
-        function calculateOnlineRunningTotal() {
-            $(document).ready(function () {
-                // Attach keypress event to Online Quantity textboxes
-                $("[id*=GrdDeliveryInfo] [id*=GrdTxtOnlineQty]").on("keyup", function () {
-                    var onlineQuantity = 0;
-                    var onlineAmount = 0;
-                    var FinalAmount = 0;
+                // Attach keypress event to Price textboxes
+                $("[id*=GrdDeliveryInfo] [id*=GrdTxtPrice]").on("keyup", function () {
+                    var totalAmount = 0;
 
-                    var row = $(this).closest("tr"); // Get the current row of the triggered textbox
-
-                    var onlineQty = parseInt($(this).val()) || 0;
-                    var actualQty = parseInt(row.find("[id*=GrdTxtQuantity]").val()) || 0;
-                    var product = row.find("[id*=GrdDdlProduct] option:selected").text();
-
-                    if (onlineQty > actualQty) {
-                        //alert('Quantity cannot be lesser than online quantity for the product ' + product);
-                        row.find("[id*=GrdTxtOnlineQty]").val(actualQty);
-                    }
-
-                    // Iterate through all Online Quantity textboxes to calculate the total
-                    $("[id*=GrdDeliveryInfo] [id*=GrdTxtOnlineQty]").each(function () {
-                        onlineQuantity += parseInt($(this).val()) || 0;
-
-                        // Get the current row of the triggered textbox
-                        var row = $(this).closest("tr");
-
-                        // Get Quantity and Price values
-                        var quantity = parseInt(row.find("[id*=GrdTxtOnlineQty]").val()) || 0;
-                        var price = parseFloat(row.find("[id*=GrdTxtPrice]").val()) || 0;
-
-                        // Calculate total amount
-                        onlineAmount += (quantity * price);
+                    // Iterate through all TotalAmount textboxes to calculate the total
+                    $("[id*=GrdDeliveryInfo] [id*=GrdTxtTotalAmount]").each(function () {
+                        totalAmount += parseFloat($(this).val()) || 0;
                     });
 
-                    // Update the footer label with the online total quantity
-                    $("[id*=LblFooterTotalOnlineQty]").text("Online Quantity: " + onlineQuantity);
-
-                    // Update the footer label with the online total amount
-                    $("[id*=LblFooterOnlineAmount]").text(onlineAmount.toFixed(2));
-                    $("[id*=LblFooterOnlineAmount]").trigger("change");
-
-                    //if (onlineAmount > 0) {
-                    debugger;
-                    var totalAmount = $("[id*=LblFooterTotalAmount]").text();
-                    FinalAmount = totalAmount - onlineAmount;
-                    $("[id*=LblFooterFinalAmount]").text(FinalAmount.toFixed(2));
-                    //}
+                    // Update the footer label with the total quantity
+                    $("[id*=LblFooterTotalAmount]").text("Total Amount: " + totalAmount.toFixed(2));
                 });
-            });
-        }
 
-        function calculatePaymentRunningTotal() {
-            $(document).ready(function () {
                 // Attach keypress event to TotalAmount textboxes
                 $("[id*=GrdPaymentMode] [id*=GrdTxtAmount]").on("keyup", function () {
-                    var totalPayment = 0;
+                    var totalAmount = 0;
 
                     // Iterate through all TotalAmount textboxes to calculate the total
                     $("[id*=GrdPaymentMode] [id*=GrdTxtAmount]").each(function () {
-                        totalPayment += parseFloat($(this).val()) || 0;
+                        totalAmount += parseFloat($(this).val()) || 0;
                     });
 
                     // Update the footer label with the total amount
-                    $("[id*=LblFooterPaymentTotal]").text("Total Amount: " + totalPayment.toFixed(2));
-
-                    var totalAmount = $("[id*=LblFooterTotalAmount]").text();
-                    //var FinalAmount = $("[id*=LblFooterFinalAmount]").text();
-                    $("[id*=LblFooterShortageAmount]").text((totalAmount - totalPayment).toFixed(2));
+                    $("[id*=LblFooterAmount]").text("Total Amount: " + totalAmount.toFixed(2));
                 });
             });
         }
 
-        function setOnlineAmountToPaymentGrid() {
-            $(document).ready(function () {
-                // Attach keypress event to Online Amount textboxes
-                $("[id*=LblFooterOnlineAmount]").on("change", function () {
-                    var onlineAmount = parseFloat($(this).text()) || 0;
-                    // Set the online amount to the first row of the PaymentMode grid
-                    var firstRow = $("[id*=GrdPaymentMode] tr").eq(1); // Get the first data row (index 1)
-                    firstRow.find("[id*=GrdTxtAmount]").val(onlineAmount.toFixed(2));
-                    // Trigger the keyup event to recalculate the payment total
-                    firstRow.find("[id*=GrdTxtAmount]").trigger("keyup");
-
-                    // Update the footer label with the total amount
-                    if (onlineAmount > 0) {
-                        var totalAmount = $("[id*=LblFooterTotalAmount]").text();
-                        $("[id*=LblFooterShortageAmount]").text((totalAmount - onlineAmount).toFixed(2));
-                    }
-                });
-            });
-        }
-
-        //function pageLoad(sender, args) {
         // Call the functions to attach the events
         calculateTotalAmount();
-        calculateRunningTotal();
-        calculateOnlineRunningTotal();
-        calculatePaymentRunningTotal();
-        setOnlineAmountToPaymentGrid();
-        //}
+        calculateRunningTotals();
     </script>
 
     <style type="text/css">
@@ -234,7 +100,7 @@
         .alignFooterTextRight {
             /*padding: 1% 2.8% 0% 0% !important;*/
             text-align: right !important;
-            font-weight: 500 !important;
+            font-weight: bold !important;
         }
 
         .removeGridFooterBorder {
@@ -243,8 +109,6 @@
         }
     </style>
 
-    <%--<asp:UpdatePanel ID="AjaxUpdatePanel" runat="server">
-        <ContentTemplate>--%>
     <main class="shadow p-3 mb-5 bg-white rounded pageBody">
         <h4 id="title"><%: Title %></h4>
 
@@ -290,10 +154,9 @@
                             </div>
                         </ItemTemplate>
                     </asp:TemplateField>
-                    <asp:TemplateField HeaderText="Product" HeaderStyle-CssClass="bg-primary text-white">
+                    <asp:TemplateField HeaderText="Product Name" HeaderStyle-CssClass="bg-primary text-white">
                         <ItemTemplate>
-                            <asp:DropDownList ID="GrdDdlProduct" runat="server" AutoPostBack="true" OnSelectedIndexChanged="GrdDdlProduct_SelectedIndexChanged"
-                                EnableViewState="true" class="form-select form-select-sm" TabIndex="1">
+                            <asp:DropDownList ID="GrdDdlProduct" runat="server" AutoPostBack="false" EnableViewState="true" class="form-select form-select-sm" TabIndex="1">
                             </asp:DropDownList>
                         </ItemTemplate>
                         <FooterTemplate>
@@ -303,43 +166,29 @@
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Quantity" HeaderStyle-CssClass="bg-primary text-white" FooterStyle-HorizontalAlign="Right">
                         <ItemTemplate>
-                            <asp:TextBox ID="GrdTxtQuantity" runat="server" TextMode="Number" EnableViewState="true"
-                                min="0" oninput="validity.valid||(value='');" onkeydown="return event.key !== '-';"
-                                class="form-control form-control-sm alignRight" TabIndex="2"></asp:TextBox>
+                            <asp:TextBox ID="GrdTxtQuantity" runat="server" TextMode="Number" EnableViewState="true" class="form-control form-control-sm alignRight" TabIndex="2"></asp:TextBox>
                         </ItemTemplate>
                         <FooterTemplate>
                             <asp:Label ID="LblFooterTotalQuantity" runat="server" class="form-label alignFooterTextRight"></asp:Label>
                         </FooterTemplate>
                     </asp:TemplateField>
-                    <asp:TemplateField HeaderText="Online" HeaderStyle-CssClass="bg-primary text-white" FooterStyle-HorizontalAlign="Right">
-                        <ItemTemplate>
-                            <asp:TextBox ID="GrdTxtOnlineQty" runat="server" TextMode="Number" EnableViewState="true"
-                                min="0" oninput="validity.valid||(value='');" onkeydown="return event.key !== '-';"
-                                class="form-control form-control-sm alignRight" TabIndex="3"></asp:TextBox>
-                        </ItemTemplate>
-                        <FooterTemplate>
-                            <asp:Label ID="LblFooterTotalOnlineQty" runat="server" class="form-label alignFooterTextRight"></asp:Label>
-                        </FooterTemplate>
-                    </asp:TemplateField>
                     <asp:TemplateField HeaderText="Price" HeaderStyle-CssClass="bg-primary text-white">
                         <ItemTemplate>
-                            <asp:TextBox ID="GrdTxtPrice" runat="server" TextMode="Number" ReadOnly="true" EnableViewState="true"
-                                min="0" oninput="validity.valid||(value='');" onkeydown="return event.key !== '-';"
-                                class="form-control form-control-sm alignRight" TabIndex="4"></asp:TextBox>
+                            <asp:TextBox ID="GrdTxtPrice" runat="server" TextMode="Number" EnableViewState="true" class="form-control form-control-sm alignRight" TabIndex="3"></asp:TextBox>
                         </ItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Total Amount" HeaderStyle-CssClass="bg-primary text-white" FooterStyle-HorizontalAlign="Right">
                         <ItemTemplate>
-                            <asp:TextBox ID="GrdTxtTotalAmount" runat="server" TextMode="Number" EnableViewState="true" ReadOnly="true"
-                                min="0" oninput="validity.valid||(value='');" onkeydown="return event.key !== '-';"
-                                class="form-control form-control-sm alignRight" TabIndex="5"></asp:TextBox>
+                            <%--<asp:Label ID="GrdLblTotalAmount" runat="server" Text="0.00" EnableViewState="true" class="form-label" TabIndex="4"></asp:Label>--%>
+                            <asp:TextBox ID="GrdTxtTotalAmount" runat="server" TextMode="Number" EnableViewState="true" ReadOnly="true" class="form-control form-control-sm alignRight" TabIndex="4"></asp:TextBox>
                         </ItemTemplate>
                         <FooterTemplate>
+                            <asp:Label ID="LblFooterTotalAmount" runat="server" class="form-label alignFooterTextRight"></asp:Label>
                         </FooterTemplate>
                     </asp:TemplateField>
-                    <asp:TemplateField HeaderText="Comments" HeaderStyle-CssClass="bg-primary text-white">
+                    <asp:TemplateField HeaderText="Remarks" HeaderStyle-CssClass="bg-primary text-white">
                         <ItemTemplate>
-                            <asp:TextBox ID="GrdTxtRemarks" runat="server" EnableViewState="true" class="form-control form-control-sm" TabIndex="6"></asp:TextBox>
+                            <asp:TextBox ID="GrdTxtRemarks" runat="server" EnableViewState="true" class="form-control form-control-sm" TabIndex="5"></asp:TextBox>
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>
@@ -348,83 +197,45 @@
             <hr />
         </div>
 
-        <div class="table">
-            <div class="row">
-                <div class="col-5">
-                    <asp:GridView ID="GrdPaymentMode" runat="server" AutoGenerateColumns="false" EnableViewState="true" ShowHeaderWhenEmpty="true"
-                        ShowFooter="true" OnRowDataBound="GrdPaymentMode_RowDataBound" Width="100%" CssClass="table table-striped table-bordered table-hover">
-                        <Columns>
-                            <asp:TemplateField HeaderText="" HeaderStyle-CssClass="bg-primary text-white" ItemStyle-HorizontalAlign="Center" ItemStyle-VerticalAlign="Middle">
-                                <ItemTemplate>
-                                    <div class="form-check">
-                                        <input id="GrdCheckBoxSelect" runat="server" class="form-check-input" type="checkbox" value="">
-                                    </div>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Payment Mode" HeaderStyle-CssClass="bg-primary text-white">
-                                <ItemTemplate>
-                                    <asp:DropDownList ID="GrdDdlPaymentMode" runat="server" AutoPostBack="false" EnableViewState="true" class="form-select form-select-sm" TabIndex="1">
-                                    </asp:DropDownList>
-                                </ItemTemplate>
-                                <FooterTemplate>
-                                    <asp:Button ID="btnPaymentAddRow" runat="server" Text="Add Row" OnClick="btnPaymentAddRow_Click" class="btn btn-secondary btn-sm" />
-                                    <asp:Button ID="btnPaymentDeleteRow" runat="server" Text="Delete Row" OnClick="btnPaymentDeleteRow_Click" class="btn btn-secondary btn-sm" />
-                                </FooterTemplate>
-                            </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Amount" HeaderStyle-CssClass="bg-primary text-white" FooterStyle-HorizontalAlign="Right">
-                                <ItemTemplate>
-                                    <asp:TextBox ID="GrdTxtAmount" runat="server" TextMode="Number" EnableViewState="true"
-                                        min="0" oninput="validity.valid||(value='');" onkeydown="return event.key !== '-';"
-                                        class="form-control form-control-sm alignRight" TabIndex="2"></asp:TextBox>
-                                </ItemTemplate>
-                                <FooterTemplate>
-                                    <asp:Label ID="LblFooterPaymentTotal" runat="server" class="form-label alignFooterTextRight"></asp:Label>
-                                </FooterTemplate>
-                            </asp:TemplateField>
-                        </Columns>
-                    </asp:GridView>
-                </div>
-                <div class="col-4">
-                    <asp:Label ID="LblRemarks" runat="server" Text="Remarks:" class="form-label"></asp:Label>
-                    <asp:TextBox ID="TxtRemarks" runat="server" TextMode="MultiLine" EnableViewState="true" class="form-control form-control-sm" TabIndex="10"></asp:TextBox>
-                </div>
-                <div class="col-3">
-                    <ul class="list-group">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span style="font-weight: 600;">Total Amount:</span>
-                            <span class="badge bg-primary badge-pill">
-                                <asp:Label ID="LblFooterTotalAmount" runat="server" class="form-label"></asp:Label>
-                            </span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span style="font-weight: 600;">Online Amount:</span>
-                            <span class="badge bg-primary badge-pill">
-                                <asp:Label ID="LblFooterOnlineAmount" runat="server" class="form-label"></asp:Label>
-                            </span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span style="font-weight: 600;">Final Amount:</span>
-                            <span class="badge bg-success badge-pill">
-                                <asp:Label ID="LblFooterFinalAmount" runat="server" class="form-label"></asp:Label>
-                            </span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span style="font-weight: 600;">Shortage Amount:</span>
-                            <span class="badge bg-danger badge-pill">
-                                <asp:Label ID="LblFooterShortageAmount" runat="server" class="form-label"></asp:Label>
-                            </span>
-                        </li>
-                    </ul>
-                </div>
-                <hr />
-            </div>
+        <div class="table-responsive">
+            <asp:GridView ID="GrdPaymentMode" runat="server" AutoGenerateColumns="false" EnableViewState="true" ShowHeaderWhenEmpty="true"
+                ShowFooter="true" OnRowDataBound="GrdPaymentMode_RowDataBound" Width="40%" CssClass="table table-striped table-bordered table-hover">
+                <Columns>
+                    <asp:TemplateField HeaderText="" HeaderStyle-CssClass="bg-primary text-white" ItemStyle-HorizontalAlign="Center" ItemStyle-VerticalAlign="Middle">
+                        <ItemTemplate>
+                            <div class="form-check">
+                                <input id="GrdCheckBoxSelect" runat="server" class="form-check-input" type="checkbox" value="">
+                            </div>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Payment Mode" HeaderStyle-CssClass="bg-primary text-white">
+                        <ItemTemplate>
+                            <asp:DropDownList ID="GrdDdlPaymentMode" runat="server" AutoPostBack="false" EnableViewState="true" class="form-select form-select-sm" TabIndex="1">
+                            </asp:DropDownList>
+                        </ItemTemplate>
+                        <FooterTemplate>
+                            <asp:Button ID="btnPaymentAddRow" runat="server" Text="Add Row" OnClick="btnPaymentAddRow_Click" class="btn btn-secondary btn-sm" />
+                            <asp:Button ID="btnPaymentDeleteRow" runat="server" Text="Delete Row" OnClick="btnPaymentDeleteRow_Click" class="btn btn-secondary btn-sm" />
+                        </FooterTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Amount" HeaderStyle-CssClass="bg-primary text-white" FooterStyle-HorizontalAlign="Right">
+                        <ItemTemplate>
+                            <asp:TextBox ID="GrdTxtAmount" runat="server" TextMode="Number" EnableViewState="true" class="form-control form-control-sm alignRight" TabIndex="2"></asp:TextBox>
+                        </ItemTemplate>
+                        <FooterTemplate>
+                            <asp:Label ID="LblFooterAmount" runat="server" class="form-label alignFooterTextRight"></asp:Label>
+                        </FooterTemplate>
+                    </asp:TemplateField>
+                </Columns>
+            </asp:GridView>
+            <hr />
         </div>
 
         <div class="text-center">
             <div class="row p-2">
                 <div class="col-12">
                     <asp:Button ID="BtnSave" runat="server" Text="Save" OnClick="BtnSave_Click" class="btn btn-primary btn-sm" />
-                    <asp:Button ID="BtnModify" runat="server" Text="Update" OnClick="BtnModify_Click" class="btn btn-primary btn-sm" />
+                    <asp:Button ID="BtnModify" runat="server" Text="Modify" OnClick="BtnModify_Click" class="btn btn-primary btn-sm" />
                     <asp:Button ID="BtnDelete" runat="server" Text="Delete" OnClientClick="showDeleteConfirmMessage(); return false;" OnClick="BtnDelete_Click" class="btn btn-danger btn-sm" />
                     <asp:Button ID="BtnReset" runat="server" Text="Reset" OnClick="BtnReset_Click" class="btn btn-secondary btn-sm" />
                 </div>
@@ -527,6 +338,5 @@
 
         </script>
     </main>
-    <%--</ContentTemplate>
-    </asp:UpdatePanel>--%>
+
 </asp:Content>
